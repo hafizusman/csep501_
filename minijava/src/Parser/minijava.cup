@@ -44,13 +44,16 @@ parser code {:
 /* Terminals (tokens returned by the scanner) */
 
 /* reserved words: */
-terminal DISPLAY;
+terminal DISPLAY, CLASS, PUBLIC, STATIC, VOID, NEW, RETURN, THIS, IF, ELSE;
 
 /* operators: */
 terminal MULTIPLY, PLUS, MINUS, LESSTHAN, LOGICALAND, BECOMES;
 
 /* delimiters: */
-terminal LPAREN, RPAREN, SEMICOLON;
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMICOLON, DOT;
+
+/* basic types */
+terminal INTEGER_TYPE;
 
 /* tokens with values: */
 terminal String IDENTIFIER;

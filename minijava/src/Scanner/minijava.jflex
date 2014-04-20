@@ -40,10 +40,29 @@ import Parser.sym;
     switch (s.sym) {
       case sym.BECOMES: return "BECOMES";
       case sym.SEMICOLON: return "SEMICOLON";
+      case sym.MULTIPLY: return "MULTIPLY";
       case sym.PLUS: return "PLUS";
+      case sym.MINUS: return "MINUS";
+      case sym.LESSTHAN: return "LESSTHAN";
+      case sym.LOGICALAND: return "LOGICALAND";
       case sym.LPAREN: return "LPAREN";
       case sym.RPAREN: return "RPAREN";
       case sym.DISPLAY: return "DISPLAY";
+      case sym.CLASS: return "CLASS";
+      case sym.PUBLIC: return "PUBLIC";
+      case sym.STATIC: return "STATIC";
+      case sym.VOID: return "VOID";
+      case sym.NEW: return "NEW";
+      case sym.RETURN: return "RETURN";
+      case sym.LBRACKET: return "LBRACKET";
+      case sym.RBRACKET: return "RBRACKET";
+      case sym.DOT: return "DOT";
+      case sym.THIS: return "THIS";
+      case sym.IF: return "IF";
+      case sym.ELSE: return "ELSE";
+      case sym.LCURLY: return "LCURLY";
+      case sym.RCURLY: return "RCURLY";
+      case sym.INTEGER_TYPE: return "INTEGER_TYPE";
       case sym.IDENTIFIER: return "IDENTIFIER(" + (String)s.value + ")";
       case sym.INTEGER_LITERAL: return "INTEGER_LITERAL(" + (String)s.value + ")";
       case sym.EOF: return "<EOF>";
@@ -67,6 +86,18 @@ display = System\.out\.println
 /* reserved words */
 /* (put here so that reserved words take precedence over identifiers) */
 {display} 	{ return symbol(sym.DISPLAY); }
+"class"		{ return symbol(sym.CLASS); }
+"public"	{ return symbol(sym.PUBLIC); }
+"static"	{ return symbol(sym.STATIC); }
+"void"		{ return symbol(sym.VOID); }
+"new"		{ return symbol(sym.NEW); }
+"return"	{ return symbol(sym.RETURN); }
+"this"		{ return symbol(sym.THIS); }
+"if"		{ return symbol(sym.IF); }
+"else"		{ return symbol(sym.ELSE); }
+
+/* basic types */
+"int"		{ return symbol(sym.INTEGER_TYPE); }
 
 /* operators */
 "*" 		{ return symbol(sym.MULTIPLY); }
@@ -79,7 +110,12 @@ display = System\.out\.println
 /* delimiters */
 "(" 		{ return symbol(sym.LPAREN); }
 ")" 		{ return symbol(sym.RPAREN); }
+"[" 		{ return symbol(sym.LBRACKET); }
+"]" 		{ return symbol(sym.RBRACKET); }
+"{" 		{ return symbol(sym.LCURLY); }
+"}" 		{ return symbol(sym.RCURLY); }
 ";" 		{ return symbol(sym.SEMICOLON); }
+"."			{ return symbol(sym.DOT); }
 
 /* identifiers */
 {letter} ({letter}|{digit}|_)*	{ return symbol(sym.IDENTIFIER, yytext()); }
