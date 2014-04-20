@@ -80,4 +80,10 @@
     </java>
   </target>
 
+  <target name="test-myscanner" depends="compile">
+    <java classname="MyScanner" classpath="build/classes;lib/CUP.jar"
+	  fork="true" input="MyExample.java">
+    </java>
+  </target>
+
 </project>
