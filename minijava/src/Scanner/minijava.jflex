@@ -44,7 +44,7 @@ import Parser.sym;
       case sym.LPAREN: return "LPAREN";
       case sym.RPAREN: return "RPAREN";
       case sym.DISPLAY: return "DISPLAY";
-      case sym.IDENTIFIER: return "ID(" + (String)s.value + ")";
+      case sym.IDENTIFIER: return "IDENTIFIER(" + (String)s.value + ")";
       case sym.EOF: return "<EOF>";
       case sym.error: return "<ERROR>";
       default: return "<UNEXPECTED TOKEN " + s.toString() + ">";
