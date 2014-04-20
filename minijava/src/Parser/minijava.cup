@@ -44,16 +44,16 @@ parser code {:
 /* Terminals (tokens returned by the scanner) */
 
 /* reserved words: */
-terminal DISPLAY, CLASS, PUBLIC, STATIC, VOID, NEW, RETURN, THIS, IF, ELSE;
+terminal DISPLAY, CLASS, PUBLIC, STATIC, VOID, NEW, RETURN, THIS, IF, ELSE, TRUE, FALSE, WHILE, EXTENDS, MAIN;
 
 /* operators: */
-terminal MULTIPLY, PLUS, MINUS, LESSTHAN, LOGICALAND, BECOMES;
+terminal MULTIPLY, PLUS, MINUS, LESSTHAN, LOGICAL_AND, LOGICAL_NOT, BECOMES;
 
 /* delimiters: */
-terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMICOLON, DOT;
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMICOLON, DOT, COMMA;
 
 /* basic types */
-terminal INTEGER_TYPE;
+terminal INTEGER_TYPE, BOOLEAN_TYPE, STRING_TYPE;
 
 /* tokens with values: */
 terminal String IDENTIFIER;
