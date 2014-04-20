@@ -45,6 +45,7 @@ import Parser.sym;
       case sym.RPAREN: return "RPAREN";
       case sym.DISPLAY: return "DISPLAY";
       case sym.IDENTIFIER: return "IDENTIFIER(" + (String)s.value + ")";
+      case sym.INTEGER_LITERAL: return "INTEGER_LITERAL(" + (String)s.value + ")";
       case sym.EOF: return "<EOF>";
       case sym.error: return "<ERROR>";
       default: return "<UNEXPECTED TOKEN " + s.toString() + ">";
@@ -57,6 +58,7 @@ letter = [a-zA-Z]
 digit = [0-9]
 eol = [\r\n]
 white = {eol}|[ \t]
+display = System\.out\.println
 
 %%
 
@@ -64,23 +66,30 @@ white = {eol}|[ \t]
 
 /* reserved words */
 /* (put here so that reserved words take precedence over identifiers) */
-"display" { return symbol(sym.DISPLAY); }
+{display} 	{ return symbol(sym.DISPLAY); }
 
 /* operators */
-"+" { return symbol(sym.PLUS); }
-"=" { return symbol(sym.BECOMES); }
+"*" 		{ return symbol(sym.MULTIPLY); }
+"+" 		{ return symbol(sym.PLUS); }
+"-" 		{ return symbol(sym.MINUS); }
+"<" 		{ return symbol(sym.LESSTHAN); }
+"&&" 		{ return symbol(sym.LOGICALAND); }
+"=" 		{ return symbol(sym.BECOMES); }
 
 /* delimiters */
-"(" { return symbol(sym.LPAREN); }
-")" { return symbol(sym.RPAREN); }
-";" { return symbol(sym.SEMICOLON); }
+"(" 		{ return symbol(sym.LPAREN); }
+")" 		{ return symbol(sym.RPAREN); }
+";" 		{ return symbol(sym.SEMICOLON); }
 
 /* identifiers */
-{letter} ({letter}|{digit}|_)* { return symbol(sym.IDENTIFIER, yytext()); }
+{letter} ({letter}|{digit}|_)*	{ return symbol(sym.IDENTIFIER, yytext()); }
+
+/* constants */
+{digit}  ({digit})*  	{ return symbol(sym.INTEGER_LITERAL, yytext()); }
 
 
 /* whitespace */
-{white}+ { /* ignore whitespace */ }
+{white}+ 	{ /* ignore whitespace */ }
 
 /* lexical errors (put last so other matches take precedence) */
 . { System.err.println(

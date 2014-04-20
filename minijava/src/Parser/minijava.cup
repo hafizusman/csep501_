@@ -1,4 +1,5 @@
 /*
+/*
  * CUP specification for the parser for a simple demo language.
  * Change this into the parser for your implementation of MiniJava.
  * CSE 401/P501 Au11.
@@ -46,13 +47,14 @@ parser code {:
 terminal DISPLAY;
 
 /* operators: */
-terminal PLUS, BECOMES;
+terminal MULTIPLY, PLUS, MINUS, LESSTHAN, LOGICALAND, BECOMES;
 
 /* delimiters: */
 terminal LPAREN, RPAREN, SEMICOLON;
 
 /* tokens with values: */
 terminal String IDENTIFIER;
+terminal int INTEGER_LITERAL;
 
 
 /* Nonterminals */
