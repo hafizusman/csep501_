@@ -18,6 +18,7 @@
     <delete dir="build"/>
     <delete file="src/Parser/parser.java"/>
     <delete file="src/Parser/sym.java"/>
+    <delete file="src/Parser/cup.out"/>
     <delete file="src/Scanner/scanner.java"/>
     <delete file="src/Scanner/scanner.java~"/>
   </target>
