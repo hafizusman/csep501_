@@ -44,7 +44,7 @@ parser code {:
 /* Terminals (tokens returned by the scanner) */
 
 /* reserved words: */
-terminal DISPLAY, CLASS, PUBLIC, STATIC, VOID, NEW, RETURN, THIS, IF, ELSE, TRUE, FALSE, WHILE, EXTENDS, MAIN;
+terminal DISPLAY, CLASS, PUBLIC, STATIC, VOID, NEW, RETURN, THIS, IF, ELSE, TRUE, FALSE, WHILE, EXTENDS, MAIN, LENGTH;
 
 /* operators: */
 terminal MULTIPLY, PLUS, MINUS, LESSTHAN, LOGICAL_AND, LOGICAL_NOT, BECOMES;

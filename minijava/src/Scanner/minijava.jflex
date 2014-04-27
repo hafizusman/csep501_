@@ -58,6 +58,7 @@ import Parser.sym;
       case sym.LBRACKET: return "LBRACKET";
       case sym.RBRACKET: return "RBRACKET";
       case sym.DOT: return "DOT";
+      case sym.LENGTH: return "LENGTH";
       case sym.COMMA: return "COMMA";
       case sym.THIS: return "THIS";
       case sym.TRUE: return "TRUE";
@@ -125,6 +126,7 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 "while"		{ return symbol(sym.WHILE); }
 "extends"	{ return symbol(sym.EXTENDS); }
 "main"		{ return symbol(sym.MAIN); }
+"length"	{ return symbol(sym.LENGTH); }
 
 /* basic types */
 "int"		{ return symbol(sym.INTEGER_TYPE); }
