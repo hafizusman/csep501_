@@ -75,8 +75,13 @@
   </target>
 
   <target name="test-parser" depends="compile">
+<!--
     <java classname="TestParser" classpath="build/classes;lib/CUP.jar"
 	  fork="true" input="SamplePrograms/Example.java">
+    </java>
+-->
+    <java classname="TestParser" classpath="build/classes;lib/CUP.jar"
+	  fork="true" input="MyExample.java">
     </java>
   </target>
 
