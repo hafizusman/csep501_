@@ -95,12 +95,12 @@ AssignStatement ::= Identifier:id BECOMES Expression:expr SEMICOLON
 Identifier  ::= IDENTIFIER:id
                 {: RESULT = new Identifier(id, idleft); :};
 
-DisplayStatement ::= DISPLAY:d Expression:expr SEMICOLON
+DisplayStatement ::= DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
                      {: RESULT = new Display(expr, dleft); :};
 
 Expression    ::= IDENTIFIER:name
-            {: RESULT = new IdentifierExp(name, nameleft); :}
-        | Expression:arg1 PLUS Expression:arg2
-            {: RESULT = new Plus(arg1, arg2, arg1left); :}
-        | LPAREN Expression:expr RPAREN
-            {: RESULT = expr; :};
+                  {: RESULT = new IdentifierExp(name, nameleft); :}
+              | Expression:arg1 PLUS Expression:arg2
+                  {: RESULT = new Plus(arg1, arg2, arg1left); :}
+              | LPAREN Expression:expr RPAREN
+                  {: RESULT = expr; :};
