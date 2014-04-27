@@ -6,7 +6,7 @@ public class Display extends Statement {
 
   public Display(Exp re, int ln) {
     super(ln);
-    e=re; 
+    e=re;
   }
   
   public void accept(Visitor v) {

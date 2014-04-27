@@ -72,7 +72,14 @@ nonterminal Identifier Identifier;
 
 /* Precedence declarations */
 
-precedence left PLUS;
+precedence nonassoc LOGICAL_NOT;
+precedence nonassoc LESSTHAN;
+//precedence left LBRACKET;
+precedence left DOT;
+precedence left IDENTIFIER;
+precedence left LOGICAL_AND;
+precedence left PLUS, MINUS;
+precedence left MULTIPLY;
 
 
 /* Productions */
@@ -99,8 +106,43 @@ DisplayStatement ::= DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
                      {: RESULT = new Display(expr, dleft); :};
 
 Expression    ::= IDENTIFIER:name
-                  {: RESULT = new IdentifierExp(name, nameleft); :}
-              | Expression:arg1 PLUS Expression:arg2
-                  {: RESULT = new Plus(arg1, arg2, arg1left); :}
-              | LPAREN Expression:expr RPAREN
-                  {: RESULT = expr; :};
+                    {: RESULT = new IdentifierExp(name, nameleft); :}
+                | LPAREN Expression:expr RPAREN
+                    {: RESULT = expr; :}
+                | Expression:arg1 LOGICAL_AND Expression:arg2
+                    {: RESULT = new And(arg1, arg2, arg1left); :}
+                | Expression:arg1 LESSTHAN Expression:arg2
+                    {: RESULT = new LessThan(arg1, arg2, arg1left); :}
+                | Expression:arg1 PLUS Expression:arg2
+                    {: RESULT = new Plus(arg1, arg2, arg1left); :}
+                | Expression:arg1 MINUS Expression:arg2
+                    {: RESULT = new Minus(arg1, arg2, arg1left); :}
+                | Expression:arg1 MULTIPLY Expression:arg2
+                    {: RESULT = new Times(arg1, arg2, arg1left); :}
+                | Expression:arg1 LBRACKET Expression:arg2 RBRACKET
+                    {: RESULT = new ArrayLookup(arg1, arg2, arg1left); :}
+                | Expression:arg1 DOT LENGTH
+                    {: RESULT = new ArrayLength(arg1, arg1left); :}
+                /*
+                | Expression:arg1 DOT Identifier:arg2 LPAREN ParameterList:arg3 RPAREN
+                    {: RESULT = new Call(arg1, arg2, arg3, arg1left); :}
+                */
+                | LOGICAL_NOT Expression:arg1
+                    {: RESULT = new Not(arg1, arg1left); :}
+                | NEW Identifier:arg1 LPAREN RPAREN
+                    {: RESULT = new NewObject(arg1, arg1left); :}
+                /*
+                | NEW INTEGER_TYPE LBRACKET Expression:arg1 RBRACKET
+                    {: RESULT = new IntArrayType(arg1left); :}
+                */
+                | TRUE:n
+                    {: RESULT = new True(nleft); :}
+                | FALSE:n
+                    {: RESULT = new False(nleft); :}
+                | THIS:n
+                    {: RESULT = new This(nleft); :}
+                ;
+
+/*
+                |	<INTEGER_LITERAL>
+*/
