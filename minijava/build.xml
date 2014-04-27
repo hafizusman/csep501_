@@ -39,8 +39,12 @@
 
   <target name="gen-parser" depends="check.parse.files"
 	  unless="parser.uptodate">
-    <java jar="lib/CUP.jar" fork="true" failonerror="true">
-      <arg value="-destdir"/> <arg value="src/Parser"/>
+    <java jar="lib/CUP.jar" fork="true" failonerror="true" output="src/Parser/cup.out">
+      <arg value="-dump_states"/>
+      <arg value="-dump_grammar"/>
+      <arg value="-dump_tables"/>
+      <arg value="-destdir"/>
+      <arg value="src/Parser"/>
       <arg value="src/Parser/minijava.cup"/>
     </java>
   </target>
