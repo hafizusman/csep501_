@@ -57,15 +57,15 @@ terminal INTEGER_TYPE, BOOLEAN_TYPE, STRING_TYPE;
 
 /* tokens with values: */
 terminal String IDENTIFIER;
-terminal int INTEGER_LITERAL;
+terminal String INTEGER_LITERAL;
 
 
 /* Nonterminals */
 
 nonterminal List<Statement> Program;
 nonterminal Statement Statement;
-nonterminal Assign AssignStatement;
-nonterminal Display DisplayStatement;
+nonterminal Block Block;
+nonterminal BlockStatements;
 nonterminal Exp Expression;
 nonterminal ExpList ExpressionList;
 nonterminal Exp ExpressionListNext;
@@ -74,8 +74,8 @@ nonterminal Identifier Identifier;
 
 /* Precedence declarations */
 
-precedence left LESSTHAN;
-precedence left LOGICAL_AND;
+precedence nonassoc LESSTHAN;
+precedence nonassoc LOGICAL_AND;
 precedence nonassoc LOGICAL_NOT;
 precedence left PLUS;
 precedence left MINUS;
@@ -84,27 +84,45 @@ precedence left MULTIPLY;
 
 /* Productions */
 
-Program ::= Statement:s
-            {: List<Statement> p = new LinkedList<Statement>();
-               p.add(s);
-               RESULT = p; :}
-        | Program:p Statement:s
-            {: p.add(s); RESULT = p; :};
+Program             ::= Statement:s
+                        {: List<Statement> p = new LinkedList<Statement>();
+                            p.add(s);
+                            RESULT = p; :}
+                    | Program:p Statement:s
+                        {: p.add(s); RESULT = p; :}
+                    ;
 
-Statement   ::= AssignStatement:s
-                {: RESULT = s; :}
-            | DisplayStatement:s
-                {: RESULT = s; :};
 
-AssignStatement ::= Identifier:id BECOMES Expression:expr SEMICOLON
-                    {: RESULT = new Assign(id, expr, idleft); :};
-
-//Identifier	::=	<IDENTIFIER>
+//Identifier	    ::=	<IDENTIFIER>
 Identifier          ::= IDENTIFIER:id
-                        {: RESULT = new Identifier(id, idleft); :};
+                        {: RESULT = new Identifier(id, idleft); :}
+                    ;
 
-DisplayStatement ::= DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
-                     {: RESULT = new Display(expr, dleft); :};
+// Statement	::=	"{" ( Statement )* "}"
+//      |	"if" "(" Expression ")" Statement "else" Statement
+//      |	"while" "(" Expression ")" Statement
+//      |	"System.out.println" "(" Expression ")" ";"
+//      |	Identifier "=" Expression ";"
+//      |	Identifier "[" Expression "]" "=" Expression ";"
+Statement           ::= Block:b
+                        {}
+                    | IF LPAREN Expression:ifexpr RPAREN Statement:thenstmt ELSE Statement:elsestmt
+                        {: RESULT = new If(ifexpr, thenstmt, elsestmt, ifexprleft); :}
+                    | WHILE LPAREN Expression:expr RPAREN Statement:stmt
+                        {: RESULT = new While(expr, stmt, exprleft); :}
+                    | DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
+                        {: RESULT = new Display(expr, dleft); :}
+                    | Identifier:name BECOMES Expression:expr SEMICOLON
+                        {: RESULT = new Assign(name, expr, nameleft); :}
+                    | Identifier:name LBRACKET Expression:expr1 RBRACKET BECOMES Expression:expr2 SEMICOLON
+                        {: RESULT = new ArrayAssign(name, expr1, expr2, nameleft); :}
+                    ;
+Block               ::= LCURLY BlockStatements RCURLY
+                    ;
+
+BlockStatements     ::= /* empty */
+                    | Statement:s BlockStatements:b
+                    ;
 
 // Expression	::=	Expression ( "&&" | "<" | "+" | "-" | "*" ) Expression
 //      |	Expression "[" Expression "]"
@@ -119,7 +137,6 @@ DisplayStatement ::= DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
 //      |	"new" Identifier "(" ")"
 //      |	"!" Expression
 //      |	"(" Expression ")"
-
 Expression          ::= Expression:arg1 LOGICAL_AND Expression:arg2
                         {: RESULT = new And(arg1, arg2, arg1left); :}
                     | Expression:arg1 LESSTHAN Expression:arg2
@@ -137,7 +154,7 @@ Expression          ::= Expression:arg1 LOGICAL_AND Expression:arg2
                     | Expression:expr DOT Identifier:name LPAREN ExpressionList:exprlist RPAREN
                         {: RESULT = new Call(expr, name, exprlist, exprleft); :}
                     | INTEGER_LITERAL:val
-                        {: RESULT = new IntegerLiteral(val, valleft); :}
+                        {: RESULT = new IntegerLiteral(Integer.parseInt(val), valleft); :}
                     | TRUE:ln
                         {: RESULT = new True(lnleft); :}
                     | FALSE:ln
@@ -165,12 +182,3 @@ ExpressionListNext  ::= /* empty */
                     | COMMA Expression:expr ExpressionListNext:exprn
 //                        {: RESULT = new Exp(expr, exprleft); :} /* CHECK!!!! Need to append to list*/
                     ;
-
-/*
-Expression    ::= IDENTIFIER:name
-                  {: RESULT = new IdentifierExp(name, nameleft); :}
-              | Expression:arg1 PLUS Expression:arg2
-                  {: RESULT = new Plus(arg1, arg2, arg1left); :}
-              | LPAREN Expression:expr RPAREN
-                  {: RESULT = expr; :};
-*/
