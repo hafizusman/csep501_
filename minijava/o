@@ -1,0 +1,3 @@
+Unexpected internal compiler error: java.lang.ClassCastException: java.util.LinkedList cannot be cast to java.util.ArrayList
+java.lang.ClassCastException: java.util.LinkedList cannot be cast to java.util.ArrayList
+	at MyParser.main(Unknown Source)

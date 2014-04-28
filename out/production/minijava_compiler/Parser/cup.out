@@ -1,0 +1,1832 @@
+Warning : Scanner at 108(25): Unrecognized character '{' -- ignored
+Warning : Scanner at 108(26): Unrecognized character '}' -- ignored
+Warning : Terminal "STATIC" was declared but never used
+Warning : Terminal "CLASS" was declared but never used
+Warning : Terminal "MAIN" was declared but never used
+Warning : Terminal "RETURN" was declared but never used
+Warning : Terminal "STRING_TYPE" was declared but never used
+Warning : Terminal "VOID" was declared but never used
+Warning : Terminal "PUBLIC" was declared but never used
+Warning : Terminal "EXTENDS" was declared but never used
+Warning : Terminal "BOOLEAN_TYPE" was declared but never used
+===== Terminals =====
+[0]EOF [1]error [2]DISPLAY [3]CLASS [4]PUBLIC 
+[5]STATIC [6]VOID [7]NEW [8]RETURN [9]THIS 
+[10]IF [11]ELSE [12]TRUE [13]FALSE [14]WHILE 
+[15]EXTENDS [16]MAIN [17]LENGTH [18]MULTIPLY [19]PLUS 
+[20]MINUS [21]LESSTHAN [22]LOGICAL_AND [23]LOGICAL_NOT [24]BECOMES 
+[25]LPAREN [26]RPAREN [27]LBRACKET [28]RBRACKET [29]LCURLY 
+[30]RCURLY [31]SEMICOLON [32]DOT [33]COMMA [34]INTEGER_TYPE 
+[35]BOOLEAN_TYPE [36]STRING_TYPE [37]IDENTIFIER [38]INTEGER_LITERAL 
+
+===== Non terminals =====
+[0]Program [1]Statement [2]Block [3]BlockStatements [4]Expression 
+[5]ExpressionList [6]ExpressionListNext [7]Identifier 
+
+===== Productions =====
+[0] Program ::= Statement 
+[1] $START ::= Program EOF 
+[2] Program ::= Program Statement 
+[3] Identifier ::= IDENTIFIER 
+[4] Statement ::= Block 
+[5] Statement ::= IF LPAREN Expression RPAREN Statement ELSE Statement 
+[6] Statement ::= WHILE LPAREN Expression RPAREN Statement 
+[7] Statement ::= DISPLAY LPAREN Expression RPAREN SEMICOLON 
+[8] Statement ::= Identifier BECOMES Expression SEMICOLON 
+[9] Statement ::= Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON 
+[10] Block ::= LCURLY BlockStatements RCURLY 
+[11] BlockStatements ::= 
+[12] BlockStatements ::= Statement BlockStatements 
+[13] Expression ::= Expression LOGICAL_AND Expression 
+[14] Expression ::= Expression LESSTHAN Expression 
+[15] Expression ::= Expression PLUS Expression 
+[16] Expression ::= Expression MINUS Expression 
+[17] Expression ::= Expression MULTIPLY Expression 
+[18] Expression ::= Expression LBRACKET Expression RBRACKET 
+[19] Expression ::= Expression DOT LENGTH 
+[20] Expression ::= Expression DOT Identifier LPAREN ExpressionList RPAREN 
+[21] Expression ::= INTEGER_LITERAL 
+[22] Expression ::= TRUE 
+[23] Expression ::= FALSE 
+[24] Expression ::= IDENTIFIER 
+[25] Expression ::= THIS 
+[26] Expression ::= NEW INTEGER_TYPE LBRACKET Expression RBRACKET 
+[27] Expression ::= NEW Identifier LPAREN RPAREN 
+[28] Expression ::= LOGICAL_NOT Expression 
+[29] Expression ::= LPAREN Expression RPAREN 
+[30] ExpressionList ::= 
+[31] ExpressionList ::= Expression ExpressionListNext 
+[32] ExpressionListNext ::= 
+[33] ExpressionListNext ::= COMMA Expression ExpressionListNext 
+
+===== Viable Prefix Recognizer =====
+START lalr_state [0]: {
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Program ::= (*) Program Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) Block , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [$START ::= (*) Program EOF , {EOF }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+  [Program ::= (*) Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+}
+transition on LCURLY to state [9]
+transition on IDENTIFIER to state [8]
+transition on Statement to state [7]
+transition on IF to state [6]
+transition on Identifier to state [5]
+transition on DISPLAY to state [4]
+transition on Program to state [3]
+transition on Block to state [2]
+transition on WHILE to state [1]
+
+-------------------
+lalr_state [1]: {
+  [Statement ::= WHILE (*) LPAREN Expression RPAREN Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on LPAREN to state [77]
+
+-------------------
+lalr_state [2]: {
+  [Statement ::= Block (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [3]: {
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Program ::= Program (*) Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [$START ::= Program (*) EOF , {EOF }]
+  [Statement ::= (*) Block , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+}
+transition on LCURLY to state [9]
+transition on IDENTIFIER to state [8]
+transition on Statement to state [76]
+transition on IF to state [6]
+transition on EOF to state [75]
+transition on Identifier to state [5]
+transition on DISPLAY to state [4]
+transition on Block to state [2]
+transition on WHILE to state [1]
+
+-------------------
+lalr_state [4]: {
+  [Statement ::= DISPLAY (*) LPAREN Expression RPAREN SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on LPAREN to state [71]
+
+-------------------
+lalr_state [5]: {
+  [Statement ::= Identifier (*) LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= Identifier (*) BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on LBRACKET to state [63]
+transition on BECOMES to state [62]
+
+-------------------
+lalr_state [6]: {
+  [Statement ::= IF (*) LPAREN Expression RPAREN Statement ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on LPAREN to state [14]
+
+-------------------
+lalr_state [7]: {
+  [Program ::= Statement (*) , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [8]: {
+  [Identifier ::= IDENTIFIER (*) , {BECOMES LPAREN LBRACKET }]
+}
+
+-------------------
+lalr_state [9]: {
+  [BlockStatements ::= (*) , {RCURLY }]
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Block ::= LCURLY (*) BlockStatements RCURLY , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Block , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [BlockStatements ::= (*) Statement BlockStatements , {RCURLY }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+}
+transition on LCURLY to state [9]
+transition on IDENTIFIER to state [8]
+transition on Statement to state [11]
+transition on BlockStatements to state [10]
+transition on IF to state [6]
+transition on Identifier to state [5]
+transition on DISPLAY to state [4]
+transition on Block to state [2]
+transition on WHILE to state [1]
+
+-------------------
+lalr_state [10]: {
+  [Block ::= LCURLY BlockStatements (*) RCURLY , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on RCURLY to state [13]
+
+-------------------
+lalr_state [11]: {
+  [BlockStatements ::= (*) , {RCURLY }]
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Block , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [BlockStatements ::= Statement (*) BlockStatements , {RCURLY }]
+  [BlockStatements ::= (*) Statement BlockStatements , {RCURLY }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {DISPLAY IF WHILE LCURLY RCURLY IDENTIFIER }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+}
+transition on LCURLY to state [9]
+transition on IDENTIFIER to state [8]
+transition on Statement to state [11]
+transition on BlockStatements to state [12]
+transition on IF to state [6]
+transition on Identifier to state [5]
+transition on DISPLAY to state [4]
+transition on Block to state [2]
+transition on WHILE to state [1]
+
+-------------------
+lalr_state [12]: {
+  [BlockStatements ::= Statement BlockStatements (*) , {RCURLY }]
+}
+
+-------------------
+lalr_state [13]: {
+  [Block ::= LCURLY BlockStatements RCURLY (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [14]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Statement ::= IF LPAREN (*) Expression RPAREN Statement ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [17]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [15]: {
+  [Expression ::= NEW (*) Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= NEW (*) INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Identifier ::= (*) IDENTIFIER , {LPAREN }]
+}
+transition on Identifier to state [56]
+transition on INTEGER_TYPE to state [55]
+transition on IDENTIFIER to state [8]
+
+-------------------
+lalr_state [16]: {
+  [Expression ::= TRUE (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [17]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Statement ::= IF LPAREN Expression (*) RPAREN Statement ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on RPAREN to state [51]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [18]: {
+  [Expression ::= FALSE (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [19]: {
+  [Expression ::= THIS (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [20]: {
+  [Expression ::= IDENTIFIER (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [21]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= LPAREN (*) Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [49]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [22]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= LOGICAL_NOT (*) Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [24]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [23]: {
+  [Expression ::= INTEGER_LITERAL (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [24]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= LOGICAL_NOT Expression (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [25]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression LOGICAL_AND (*) Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [48]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [26]: {
+  [Expression ::= Expression PLUS (*) Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [47]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [27]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression MINUS (*) Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [46]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [28]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression LESSTHAN (*) Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [45]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [29]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression LBRACKET (*) Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [43]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [30]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression MULTIPLY (*) Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [42]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [31]: {
+  [Expression ::= Expression DOT (*) Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Identifier ::= (*) IDENTIFIER , {LPAREN }]
+  [Expression ::= Expression DOT (*) LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on Identifier to state [33]
+transition on IDENTIFIER to state [8]
+transition on LENGTH to state [32]
+
+-------------------
+lalr_state [32]: {
+  [Expression ::= Expression DOT LENGTH (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [33]: {
+  [Expression ::= Expression DOT Identifier (*) LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on LPAREN to state [34]
+
+-------------------
+lalr_state [34]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionList ::= (*) , {RPAREN }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionList ::= (*) Expression ExpressionListNext , {RPAREN }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression DOT Identifier LPAREN (*) ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [36]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+transition on ExpressionList to state [35]
+
+-------------------
+lalr_state [35]: {
+  [Expression ::= Expression DOT Identifier LPAREN ExpressionList (*) RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on RPAREN to state [41]
+
+-------------------
+lalr_state [36]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionList ::= Expression (*) ExpressionListNext , {RPAREN }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionListNext ::= (*) COMMA Expression ExpressionListNext , {RPAREN }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionListNext ::= (*) , {RPAREN }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+}
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on COMMA to state [38]
+transition on DOT to state [31]
+transition on PLUS to state [26]
+transition on MULTIPLY to state [30]
+transition on LOGICAL_AND to state [25]
+transition on ExpressionListNext to state [37]
+transition on MINUS to state [27]
+
+-------------------
+lalr_state [37]: {
+  [ExpressionList ::= Expression ExpressionListNext (*) , {RPAREN }]
+}
+
+-------------------
+lalr_state [38]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionListNext ::= COMMA (*) Expression ExpressionListNext , {RPAREN }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [39]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [39]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionListNext ::= COMMA Expression (*) ExpressionListNext , {RPAREN }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionListNext ::= (*) COMMA Expression ExpressionListNext , {RPAREN }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+  [ExpressionListNext ::= (*) , {RPAREN }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT COMMA }]
+}
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on COMMA to state [38]
+transition on DOT to state [31]
+transition on PLUS to state [26]
+transition on MULTIPLY to state [30]
+transition on LOGICAL_AND to state [25]
+transition on ExpressionListNext to state [40]
+transition on MINUS to state [27]
+
+-------------------
+lalr_state [40]: {
+  [ExpressionListNext ::= COMMA Expression ExpressionListNext (*) , {RPAREN }]
+}
+
+-------------------
+lalr_state [41]: {
+  [Expression ::= Expression DOT Identifier LPAREN ExpressionList RPAREN (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [42]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression MULTIPLY Expression (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [43]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression LBRACKET Expression (*) RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on RBRACKET to state [44]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [44]: {
+  [Expression ::= Expression LBRACKET Expression RBRACKET (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [45]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression LESSTHAN Expression (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [46]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression MINUS Expression (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [47]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression PLUS Expression (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [48]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression LOGICAL_AND Expression (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [49]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= LPAREN Expression (*) RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+transition on RPAREN to state [50]
+
+-------------------
+lalr_state [50]: {
+  [Expression ::= LPAREN Expression RPAREN (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [51]: {
+  [Statement ::= IF LPAREN Expression RPAREN (*) Statement ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {ELSE }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {ELSE }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {ELSE }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {ELSE }]
+  [Statement ::= (*) Block , {ELSE }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {ELSE }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {ELSE }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+}
+transition on Identifier to state [5]
+transition on IF to state [6]
+transition on WHILE to state [1]
+transition on IDENTIFIER to state [8]
+transition on LCURLY to state [9]
+transition on DISPLAY to state [4]
+transition on Statement to state [52]
+transition on Block to state [2]
+
+-------------------
+lalr_state [52]: {
+  [Statement ::= IF LPAREN Expression RPAREN Statement (*) ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on ELSE to state [53]
+
+-------------------
+lalr_state [53]: {
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Block , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+  [Statement ::= IF LPAREN Expression RPAREN Statement ELSE (*) Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on Identifier to state [5]
+transition on IF to state [6]
+transition on WHILE to state [1]
+transition on IDENTIFIER to state [8]
+transition on LCURLY to state [9]
+transition on DISPLAY to state [4]
+transition on Block to state [2]
+transition on Statement to state [54]
+
+-------------------
+lalr_state [54]: {
+  [Statement ::= IF LPAREN Expression RPAREN Statement ELSE Statement (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [55]: {
+  [Expression ::= NEW INTEGER_TYPE (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on LBRACKET to state [59]
+
+-------------------
+lalr_state [56]: {
+  [Expression ::= NEW Identifier (*) LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on LPAREN to state [57]
+
+-------------------
+lalr_state [57]: {
+  [Expression ::= NEW Identifier LPAREN (*) RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+transition on RPAREN to state [58]
+
+-------------------
+lalr_state [58]: {
+  [Expression ::= NEW Identifier LPAREN RPAREN (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [59]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= NEW INTEGER_TYPE LBRACKET (*) Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [60]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [60]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= NEW INTEGER_TYPE LBRACKET Expression (*) RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on RBRACKET to state [61]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [61]: {
+  [Expression ::= NEW INTEGER_TYPE LBRACKET Expression RBRACKET (*) , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET RBRACKET SEMICOLON DOT COMMA }]
+}
+
+-------------------
+lalr_state [62]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Statement ::= Identifier BECOMES (*) Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [69]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [63]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Statement ::= Identifier LBRACKET (*) Expression RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [64]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [64]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+  [Statement ::= Identifier LBRACKET Expression (*) RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET RBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on RBRACKET to state [65]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [65]: {
+  [Statement ::= Identifier LBRACKET Expression RBRACKET (*) BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on BECOMES to state [66]
+
+-------------------
+lalr_state [66]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Statement ::= Identifier LBRACKET Expression RBRACKET BECOMES (*) Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [67]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [67]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Statement ::= Identifier LBRACKET Expression RBRACKET BECOMES Expression (*) SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+transition on SEMICOLON to state [68]
+
+-------------------
+lalr_state [68]: {
+  [Statement ::= Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [69]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Statement ::= Identifier BECOMES Expression (*) SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND LBRACKET SEMICOLON DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on SEMICOLON to state [70]
+transition on LOGICAL_AND to state [25]
+
+-------------------
+lalr_state [70]: {
+  [Statement ::= Identifier BECOMES Expression SEMICOLON (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [71]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Statement ::= DISPLAY LPAREN (*) Expression RPAREN SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [72]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [72]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Statement ::= DISPLAY LPAREN Expression (*) RPAREN SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+transition on RPAREN to state [73]
+
+-------------------
+lalr_state [73]: {
+  [Statement ::= DISPLAY LPAREN Expression RPAREN (*) SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+transition on SEMICOLON to state [74]
+
+-------------------
+lalr_state [74]: {
+  [Statement ::= DISPLAY LPAREN Expression RPAREN SEMICOLON (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [75]: {
+  [$START ::= Program EOF (*) , {EOF }]
+}
+
+-------------------
+lalr_state [76]: {
+  [Program ::= Program Statement (*) , {EOF DISPLAY IF WHILE LCURLY IDENTIFIER }]
+}
+
+-------------------
+lalr_state [77]: {
+  [Expression ::= (*) Expression PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) THIS , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) FALSE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LOGICAL_NOT Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Statement ::= WHILE LPAREN (*) Expression RPAREN Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= (*) Expression MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) INTEGER_LITERAL , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW INTEGER_TYPE LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) IDENTIFIER , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) LPAREN Expression RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) Expression MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) TRUE , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= (*) NEW Identifier LPAREN RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on INTEGER_LITERAL to state [23]
+transition on LOGICAL_NOT to state [22]
+transition on LPAREN to state [21]
+transition on IDENTIFIER to state [20]
+transition on THIS to state [19]
+transition on FALSE to state [18]
+transition on Expression to state [78]
+transition on TRUE to state [16]
+transition on NEW to state [15]
+
+-------------------
+lalr_state [78]: {
+  [Expression ::= Expression (*) MULTIPLY Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LESSTHAN Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) DOT LENGTH , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) MINUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LOGICAL_AND Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) LBRACKET Expression RBRACKET , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Expression ::= Expression (*) PLUS Expression , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+  [Statement ::= WHILE LPAREN Expression (*) RPAREN Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Expression ::= Expression (*) DOT Identifier LPAREN ExpressionList RPAREN , {MULTIPLY PLUS MINUS LESSTHAN LOGICAL_AND RPAREN LBRACKET DOT }]
+}
+transition on DOT to state [31]
+transition on MULTIPLY to state [30]
+transition on LBRACKET to state [29]
+transition on LESSTHAN to state [28]
+transition on MINUS to state [27]
+transition on PLUS to state [26]
+transition on LOGICAL_AND to state [25]
+transition on RPAREN to state [79]
+
+-------------------
+lalr_state [79]: {
+  [Statement ::= (*) Identifier BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) IF LPAREN Expression RPAREN Statement ELSE Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Block ::= (*) LCURLY BlockStatements RCURLY , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) DISPLAY LPAREN Expression RPAREN SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Block , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= WHILE LPAREN Expression RPAREN (*) Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) Identifier LBRACKET Expression RBRACKET BECOMES Expression SEMICOLON , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Statement ::= (*) WHILE LPAREN Expression RPAREN Statement , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+  [Identifier ::= (*) IDENTIFIER , {BECOMES LBRACKET }]
+}
+transition on Identifier to state [5]
+transition on IF to state [6]
+transition on WHILE to state [1]
+transition on IDENTIFIER to state [8]
+transition on LCURLY to state [9]
+transition on DISPLAY to state [4]
+transition on Block to state [2]
+transition on Statement to state [80]
+
+-------------------
+lalr_state [80]: {
+  [Statement ::= WHILE LPAREN Expression RPAREN Statement (*) , {EOF DISPLAY IF ELSE WHILE LCURLY RCURLY IDENTIFIER }]
+}
+
+-------------------
+-------- ACTION_TABLE --------
+From state #0
+ [term 2:SHIFT(to state 4)] [term 10:SHIFT(to state 6)]
+ [term 14:SHIFT(to state 1)] [term 29:SHIFT(to state 9)]
+ [term 37:SHIFT(to state 8)]
+From state #1
+ [term 25:SHIFT(to state 77)]
+From state #2
+ [term 0:REDUCE(with prod 4)] [term 2:REDUCE(with prod 4)]
+ [term 10:REDUCE(with prod 4)] [term 11:REDUCE(with prod 4)]
+ [term 14:REDUCE(with prod 4)] [term 29:REDUCE(with prod 4)]
+ [term 30:REDUCE(with prod 4)] [term 37:REDUCE(with prod 4)]
+From state #3
+ [term 0:SHIFT(to state 75)] [term 2:SHIFT(to state 4)]
+ [term 10:SHIFT(to state 6)] [term 14:SHIFT(to state 1)]
+ [term 29:SHIFT(to state 9)] [term 37:SHIFT(to state 8)]
+From state #4
+ [term 25:SHIFT(to state 71)]
+From state #5
+ [term 24:SHIFT(to state 62)] [term 27:SHIFT(to state 63)]
+From state #6
+ [term 25:SHIFT(to state 14)]
+From state #7
+ [term 0:REDUCE(with prod 0)] [term 2:REDUCE(with prod 0)]
+ [term 10:REDUCE(with prod 0)] [term 14:REDUCE(with prod 0)]
+ [term 29:REDUCE(with prod 0)] [term 37:REDUCE(with prod 0)]
+From state #8
+ [term 24:REDUCE(with prod 3)] [term 25:REDUCE(with prod 3)]
+ [term 27:REDUCE(with prod 3)]
+From state #9
+ [term 2:SHIFT(to state 4)] [term 10:SHIFT(to state 6)]
+ [term 14:SHIFT(to state 1)] [term 29:SHIFT(to state 9)]
+ [term 30:REDUCE(with prod 11)] [term 37:SHIFT(to state 8)]
+From state #10
+ [term 30:SHIFT(to state 13)]
+From state #11
+ [term 2:SHIFT(to state 4)] [term 10:SHIFT(to state 6)]
+ [term 14:SHIFT(to state 1)] [term 29:SHIFT(to state 9)]
+ [term 30:REDUCE(with prod 11)] [term 37:SHIFT(to state 8)]
+From state #12
+ [term 30:REDUCE(with prod 12)]
+From state #13
+ [term 0:REDUCE(with prod 10)] [term 2:REDUCE(with prod 10)]
+ [term 10:REDUCE(with prod 10)] [term 11:REDUCE(with prod 10)]
+ [term 14:REDUCE(with prod 10)] [term 29:REDUCE(with prod 10)]
+ [term 30:REDUCE(with prod 10)] [term 37:REDUCE(with prod 10)]
+From state #14
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #15
+ [term 34:SHIFT(to state 55)] [term 37:SHIFT(to state 8)]
+From state #16
+ [term 18:REDUCE(with prod 22)] [term 19:REDUCE(with prod 22)]
+ [term 20:REDUCE(with prod 22)] [term 21:REDUCE(with prod 22)]
+ [term 22:REDUCE(with prod 22)] [term 26:REDUCE(with prod 22)]
+ [term 27:REDUCE(with prod 22)] [term 28:REDUCE(with prod 22)]
+ [term 31:REDUCE(with prod 22)] [term 32:REDUCE(with prod 22)]
+ [term 33:REDUCE(with prod 22)]
+From state #17
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 26:SHIFT(to state 51)]
+ [term 27:SHIFT(to state 29)] [term 32:SHIFT(to state 31)]
+From state #18
+ [term 18:REDUCE(with prod 23)] [term 19:REDUCE(with prod 23)]
+ [term 20:REDUCE(with prod 23)] [term 21:REDUCE(with prod 23)]
+ [term 22:REDUCE(with prod 23)] [term 26:REDUCE(with prod 23)]
+ [term 27:REDUCE(with prod 23)] [term 28:REDUCE(with prod 23)]
+ [term 31:REDUCE(with prod 23)] [term 32:REDUCE(with prod 23)]
+ [term 33:REDUCE(with prod 23)]
+From state #19
+ [term 18:REDUCE(with prod 25)] [term 19:REDUCE(with prod 25)]
+ [term 20:REDUCE(with prod 25)] [term 21:REDUCE(with prod 25)]
+ [term 22:REDUCE(with prod 25)] [term 26:REDUCE(with prod 25)]
+ [term 27:REDUCE(with prod 25)] [term 28:REDUCE(with prod 25)]
+ [term 31:REDUCE(with prod 25)] [term 32:REDUCE(with prod 25)]
+ [term 33:REDUCE(with prod 25)]
+From state #20
+ [term 18:REDUCE(with prod 24)] [term 19:REDUCE(with prod 24)]
+ [term 20:REDUCE(with prod 24)] [term 21:REDUCE(with prod 24)]
+ [term 22:REDUCE(with prod 24)] [term 26:REDUCE(with prod 24)]
+ [term 27:REDUCE(with prod 24)] [term 28:REDUCE(with prod 24)]
+ [term 31:REDUCE(with prod 24)] [term 32:REDUCE(with prod 24)]
+ [term 33:REDUCE(with prod 24)]
+From state #21
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #22
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #23
+ [term 18:REDUCE(with prod 21)] [term 19:REDUCE(with prod 21)]
+ [term 20:REDUCE(with prod 21)] [term 21:REDUCE(with prod 21)]
+ [term 22:REDUCE(with prod 21)] [term 26:REDUCE(with prod 21)]
+ [term 27:REDUCE(with prod 21)] [term 28:REDUCE(with prod 21)]
+ [term 31:REDUCE(with prod 21)] [term 32:REDUCE(with prod 21)]
+ [term 33:REDUCE(with prod 21)]
+From state #24
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:REDUCE(with prod 28)]
+ [term 22:REDUCE(with prod 28)] [term 26:REDUCE(with prod 28)]
+ [term 27:REDUCE(with prod 28)] [term 28:REDUCE(with prod 28)]
+ [term 31:REDUCE(with prod 28)] [term 32:REDUCE(with prod 28)]
+ [term 33:REDUCE(with prod 28)]
+From state #25
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #26
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #27
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #28
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #29
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #30
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #31
+ [term 17:SHIFT(to state 32)] [term 37:SHIFT(to state 8)]
+From state #32
+ [term 18:REDUCE(with prod 19)] [term 19:REDUCE(with prod 19)]
+ [term 20:REDUCE(with prod 19)] [term 21:REDUCE(with prod 19)]
+ [term 22:REDUCE(with prod 19)] [term 26:REDUCE(with prod 19)]
+ [term 27:REDUCE(with prod 19)] [term 28:REDUCE(with prod 19)]
+ [term 31:REDUCE(with prod 19)] [term 32:REDUCE(with prod 19)]
+ [term 33:REDUCE(with prod 19)]
+From state #33
+ [term 25:SHIFT(to state 34)]
+From state #34
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 26:REDUCE(with prod 30)] [term 37:SHIFT(to state 20)]
+ [term 38:SHIFT(to state 23)]
+From state #35
+ [term 26:SHIFT(to state 41)]
+From state #36
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 26:REDUCE(with prod 32)]
+ [term 27:SHIFT(to state 29)] [term 32:SHIFT(to state 31)]
+ [term 33:SHIFT(to state 38)]
+From state #37
+ [term 26:REDUCE(with prod 31)]
+From state #38
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #39
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 26:REDUCE(with prod 32)]
+ [term 27:SHIFT(to state 29)] [term 32:SHIFT(to state 31)]
+ [term 33:SHIFT(to state 38)]
+From state #40
+ [term 26:REDUCE(with prod 33)]
+From state #41
+ [term 18:REDUCE(with prod 20)] [term 19:REDUCE(with prod 20)]
+ [term 20:REDUCE(with prod 20)] [term 21:REDUCE(with prod 20)]
+ [term 22:REDUCE(with prod 20)] [term 26:REDUCE(with prod 20)]
+ [term 27:REDUCE(with prod 20)] [term 28:REDUCE(with prod 20)]
+ [term 31:REDUCE(with prod 20)] [term 32:REDUCE(with prod 20)]
+ [term 33:REDUCE(with prod 20)]
+From state #42
+ [term 18:REDUCE(with prod 17)] [term 19:REDUCE(with prod 17)]
+ [term 20:REDUCE(with prod 17)] [term 21:REDUCE(with prod 17)]
+ [term 22:REDUCE(with prod 17)] [term 26:REDUCE(with prod 17)]
+ [term 27:REDUCE(with prod 17)] [term 28:REDUCE(with prod 17)]
+ [term 31:REDUCE(with prod 17)] [term 32:REDUCE(with prod 17)]
+ [term 33:REDUCE(with prod 17)]
+From state #43
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 27:SHIFT(to state 29)]
+ [term 28:SHIFT(to state 44)] [term 32:SHIFT(to state 31)]
+From state #44
+ [term 18:REDUCE(with prod 18)] [term 19:REDUCE(with prod 18)]
+ [term 20:REDUCE(with prod 18)] [term 21:REDUCE(with prod 18)]
+ [term 22:REDUCE(with prod 18)] [term 26:REDUCE(with prod 18)]
+ [term 27:REDUCE(with prod 18)] [term 28:REDUCE(with prod 18)]
+ [term 31:REDUCE(with prod 18)] [term 32:REDUCE(with prod 18)]
+ [term 33:REDUCE(with prod 18)]
+From state #45
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:NONASSOC]
+ [term 22:SHIFT(to state 25)] [term 26:REDUCE(with prod 14)]
+ [term 27:REDUCE(with prod 14)] [term 28:REDUCE(with prod 14)]
+ [term 31:REDUCE(with prod 14)] [term 32:REDUCE(with prod 14)]
+ [term 33:REDUCE(with prod 14)]
+From state #46
+ [term 18:SHIFT(to state 30)] [term 19:REDUCE(with prod 16)]
+ [term 20:REDUCE(with prod 16)] [term 21:REDUCE(with prod 16)]
+ [term 22:REDUCE(with prod 16)] [term 26:REDUCE(with prod 16)]
+ [term 27:REDUCE(with prod 16)] [term 28:REDUCE(with prod 16)]
+ [term 31:REDUCE(with prod 16)] [term 32:REDUCE(with prod 16)]
+ [term 33:REDUCE(with prod 16)]
+From state #47
+ [term 18:SHIFT(to state 30)] [term 19:REDUCE(with prod 15)]
+ [term 20:SHIFT(to state 27)] [term 21:REDUCE(with prod 15)]
+ [term 22:REDUCE(with prod 15)] [term 26:REDUCE(with prod 15)]
+ [term 27:REDUCE(with prod 15)] [term 28:REDUCE(with prod 15)]
+ [term 31:REDUCE(with prod 15)] [term 32:REDUCE(with prod 15)]
+ [term 33:REDUCE(with prod 15)]
+From state #48
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:REDUCE(with prod 13)]
+ [term 22:NONASSOC] [term 26:REDUCE(with prod 13)]
+ [term 27:REDUCE(with prod 13)] [term 28:REDUCE(with prod 13)]
+ [term 31:REDUCE(with prod 13)] [term 32:REDUCE(with prod 13)]
+ [term 33:REDUCE(with prod 13)]
+From state #49
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 26:SHIFT(to state 50)]
+ [term 27:SHIFT(to state 29)] [term 32:SHIFT(to state 31)]
+From state #50
+ [term 18:REDUCE(with prod 29)] [term 19:REDUCE(with prod 29)]
+ [term 20:REDUCE(with prod 29)] [term 21:REDUCE(with prod 29)]
+ [term 22:REDUCE(with prod 29)] [term 26:REDUCE(with prod 29)]
+ [term 27:REDUCE(with prod 29)] [term 28:REDUCE(with prod 29)]
+ [term 31:REDUCE(with prod 29)] [term 32:REDUCE(with prod 29)]
+ [term 33:REDUCE(with prod 29)]
+From state #51
+ [term 2:SHIFT(to state 4)] [term 10:SHIFT(to state 6)]
+ [term 14:SHIFT(to state 1)] [term 29:SHIFT(to state 9)]
+ [term 37:SHIFT(to state 8)]
+From state #52
+ [term 11:SHIFT(to state 53)]
+From state #53
+ [term 2:SHIFT(to state 4)] [term 10:SHIFT(to state 6)]
+ [term 14:SHIFT(to state 1)] [term 29:SHIFT(to state 9)]
+ [term 37:SHIFT(to state 8)]
+From state #54
+ [term 0:REDUCE(with prod 5)] [term 2:REDUCE(with prod 5)]
+ [term 10:REDUCE(with prod 5)] [term 11:REDUCE(with prod 5)]
+ [term 14:REDUCE(with prod 5)] [term 29:REDUCE(with prod 5)]
+ [term 30:REDUCE(with prod 5)] [term 37:REDUCE(with prod 5)]
+From state #55
+ [term 27:SHIFT(to state 59)]
+From state #56
+ [term 25:SHIFT(to state 57)]
+From state #57
+ [term 26:SHIFT(to state 58)]
+From state #58
+ [term 18:REDUCE(with prod 27)] [term 19:REDUCE(with prod 27)]
+ [term 20:REDUCE(with prod 27)] [term 21:REDUCE(with prod 27)]
+ [term 22:REDUCE(with prod 27)] [term 26:REDUCE(with prod 27)]
+ [term 27:REDUCE(with prod 27)] [term 28:REDUCE(with prod 27)]
+ [term 31:REDUCE(with prod 27)] [term 32:REDUCE(with prod 27)]
+ [term 33:REDUCE(with prod 27)]
+From state #59
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #60
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 27:SHIFT(to state 29)]
+ [term 28:SHIFT(to state 61)] [term 32:SHIFT(to state 31)]
+From state #61
+ [term 18:REDUCE(with prod 26)] [term 19:REDUCE(with prod 26)]
+ [term 20:REDUCE(with prod 26)] [term 21:REDUCE(with prod 26)]
+ [term 22:REDUCE(with prod 26)] [term 26:REDUCE(with prod 26)]
+ [term 27:REDUCE(with prod 26)] [term 28:REDUCE(with prod 26)]
+ [term 31:REDUCE(with prod 26)] [term 32:REDUCE(with prod 26)]
+ [term 33:REDUCE(with prod 26)]
+From state #62
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #63
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #64
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 27:SHIFT(to state 29)]
+ [term 28:SHIFT(to state 65)] [term 32:SHIFT(to state 31)]
+From state #65
+ [term 24:SHIFT(to state 66)]
+From state #66
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #67
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 27:SHIFT(to state 29)]
+ [term 31:SHIFT(to state 68)] [term 32:SHIFT(to state 31)]
+From state #68
+ [term 0:REDUCE(with prod 9)] [term 2:REDUCE(with prod 9)]
+ [term 10:REDUCE(with prod 9)] [term 11:REDUCE(with prod 9)]
+ [term 14:REDUCE(with prod 9)] [term 29:REDUCE(with prod 9)]
+ [term 30:REDUCE(with prod 9)] [term 37:REDUCE(with prod 9)]
+From state #69
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 27:SHIFT(to state 29)]
+ [term 31:SHIFT(to state 70)] [term 32:SHIFT(to state 31)]
+From state #70
+ [term 0:REDUCE(with prod 8)] [term 2:REDUCE(with prod 8)]
+ [term 10:REDUCE(with prod 8)] [term 11:REDUCE(with prod 8)]
+ [term 14:REDUCE(with prod 8)] [term 29:REDUCE(with prod 8)]
+ [term 30:REDUCE(with prod 8)] [term 37:REDUCE(with prod 8)]
+From state #71
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #72
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 26:SHIFT(to state 73)]
+ [term 27:SHIFT(to state 29)] [term 32:SHIFT(to state 31)]
+From state #73
+ [term 31:SHIFT(to state 74)]
+From state #74
+ [term 0:REDUCE(with prod 7)] [term 2:REDUCE(with prod 7)]
+ [term 10:REDUCE(with prod 7)] [term 11:REDUCE(with prod 7)]
+ [term 14:REDUCE(with prod 7)] [term 29:REDUCE(with prod 7)]
+ [term 30:REDUCE(with prod 7)] [term 37:REDUCE(with prod 7)]
+From state #75
+ [term 0:REDUCE(with prod 1)]
+From state #76
+ [term 0:REDUCE(with prod 2)] [term 2:REDUCE(with prod 2)]
+ [term 10:REDUCE(with prod 2)] [term 14:REDUCE(with prod 2)]
+ [term 29:REDUCE(with prod 2)] [term 37:REDUCE(with prod 2)]
+From state #77
+ [term 7:SHIFT(to state 15)] [term 9:SHIFT(to state 19)]
+ [term 12:SHIFT(to state 16)] [term 13:SHIFT(to state 18)]
+ [term 23:SHIFT(to state 22)] [term 25:SHIFT(to state 21)]
+ [term 37:SHIFT(to state 20)] [term 38:SHIFT(to state 23)]
+From state #78
+ [term 18:SHIFT(to state 30)] [term 19:SHIFT(to state 26)]
+ [term 20:SHIFT(to state 27)] [term 21:SHIFT(to state 28)]
+ [term 22:SHIFT(to state 25)] [term 26:SHIFT(to state 79)]
+ [term 27:SHIFT(to state 29)] [term 32:SHIFT(to state 31)]
+From state #79
+ [term 2:SHIFT(to state 4)] [term 10:SHIFT(to state 6)]
+ [term 14:SHIFT(to state 1)] [term 29:SHIFT(to state 9)]
+ [term 37:SHIFT(to state 8)]
+From state #80
+ [term 0:REDUCE(with prod 6)] [term 2:REDUCE(with prod 6)]
+ [term 10:REDUCE(with prod 6)] [term 11:REDUCE(with prod 6)]
+ [term 14:REDUCE(with prod 6)] [term 29:REDUCE(with prod 6)]
+ [term 30:REDUCE(with prod 6)] [term 37:REDUCE(with prod 6)]
+------------------------------
+-------- REDUCE_TABLE --------
+From state #0
+ [non term 0->state 3] [non term 1->state 7] [non term 2->state 2]
+ [non term 7->state 5]
+From state #1
+From state #2
+From state #3
+ [non term 1->state 76] [non term 2->state 2] [non term 7->state 5]
+From state #4
+From state #5
+From state #6
+From state #7
+From state #8
+From state #9
+ [non term 1->state 11] [non term 2->state 2] [non term 3->state 10]
+ [non term 7->state 5]
+From state #10
+From state #11
+ [non term 1->state 11] [non term 2->state 2] [non term 3->state 12]
+ [non term 7->state 5]
+From state #12
+From state #13
+From state #14
+ [non term 4->state 17]
+From state #15
+ [non term 7->state 56]
+From state #16
+From state #17
+From state #18
+From state #19
+From state #20
+From state #21
+ [non term 4->state 49]
+From state #22
+ [non term 4->state 24]
+From state #23
+From state #24
+From state #25
+ [non term 4->state 48]
+From state #26
+ [non term 4->state 47]
+From state #27
+ [non term 4->state 46]
+From state #28
+ [non term 4->state 45]
+From state #29
+ [non term 4->state 43]
+From state #30
+ [non term 4->state 42]
+From state #31
+ [non term 7->state 33]
+From state #32
+From state #33
+From state #34
+ [non term 4->state 36] [non term 5->state 35]
+From state #35
+From state #36
+ [non term 6->state 37]
+From state #37
+From state #38
+ [non term 4->state 39]
+From state #39
+ [non term 6->state 40]
+From state #40
+From state #41
+From state #42
+From state #43
+From state #44
+From state #45
+From state #46
+From state #47
+From state #48
+From state #49
+From state #50
+From state #51
+ [non term 1->state 52] [non term 2->state 2] [non term 7->state 5]
+From state #52
+From state #53
+ [non term 1->state 54] [non term 2->state 2] [non term 7->state 5]
+From state #54
+From state #55
+From state #56
+From state #57
+From state #58
+From state #59
+ [non term 4->state 60]
+From state #60
+From state #61
+From state #62
+ [non term 4->state 69]
+From state #63
+ [non term 4->state 64]
+From state #64
+From state #65
+From state #66
+ [non term 4->state 67]
+From state #67
+From state #68
+From state #69
+From state #70
+From state #71
+ [non term 4->state 72]
+From state #72
+From state #73
+From state #74
+From state #75
+From state #76
+From state #77
+ [non term 4->state 78]
+From state #78
+From state #79
+ [non term 1->state 80] [non term 2->state 2] [non term 7->state 5]
+From state #80
+-----------------------------
+------- CUP v0.11a beta 20060608 Parser Generation Summary -------
+  0 errors and 11 warnings
+  39 terminals, 8 non-terminals, and 34 productions declared, 
+  producing 81 unique parse states.
+  9 terminals declared but not used.
+  0 non-terminals declared but not used.
+  0 productions never reduced.
+  0 conflicts detected (0 expected).
+  Code written to "parser.java", and "sym.java".
+---------------------------------------------------- (v0.11a beta 20060608)

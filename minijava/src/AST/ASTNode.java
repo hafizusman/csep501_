@@ -6,7 +6,7 @@ abstract public class ASTNode {
   
   // The line number where the node is in the source file, for use
   // in printing error messages about this AST node
-  protected int line_number;
+  public int line_number;
   
   
   // Constructor

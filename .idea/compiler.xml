@@ -4,6 +4,7 @@
     <option name="DEFAULT_COMPILER" value="Javac" />
     <excludeFromCompile>
       <file url="file://$PROJECT_DIR$/minijava/SamplePrograms/Example.java" />
+      <file url="file://$PROJECT_DIR$/minijava/src/TestParser.java" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>

@@ -1,5 +1,4 @@
-a = b;
-
+/*
 while
 (
 a
@@ -14,6 +13,8 @@ u
 }
 
 //if (x < 10) { m = 12; } else { m = 9; }
+*/
+a = b;
 b = a + (foo + bar) + baz;
 System.out.println(baz);
 System.out.println(b);
