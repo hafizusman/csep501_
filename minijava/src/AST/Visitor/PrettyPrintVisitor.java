@@ -274,10 +274,14 @@ public class PrettyPrintVisitor implements Visitor {
 
   // Exp e1,e2;
   public void visit(ArrayLookup n) {
+    System.out.print("ArrayLookup(" + n.line_number + ")\n");
+
+    this.IndentLevel++; this.Indent();
     n.e1.accept(this);
-    System.out.print("[");
+    System.out.print("\n");
+
+    this.Indent();
     n.e2.accept(this);
-    System.out.print("]");
   }
 
   // Exp e;

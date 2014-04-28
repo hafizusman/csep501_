@@ -79,6 +79,7 @@ precedence nonassoc LOGICAL_AND;
 precedence nonassoc LOGICAL_NOT;
 precedence left PLUS;
 precedence left MINUS;
+precedence left LBRACKET;
 precedence left MULTIPLY;
 
 
