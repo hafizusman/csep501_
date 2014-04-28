@@ -183,9 +183,11 @@ public class PrettyPrintVisitor implements Visitor {
   // Exp e;
   // Statement s;
   public void visit(While n) {
-    System.out.print("while (");
+    System.out.print("While(" + n.line_number + ")\n");
+    this.IndentLevel++; this.Indent();
     n.e.accept(this);
-    System.out.print(") ");
+    System.out.print("\n");
+    this.Indent();
     n.s.accept(this);
   }
 
@@ -200,10 +202,12 @@ public class PrettyPrintVisitor implements Visitor {
   // Exp e;
   public void visit(Assign n) {
     System.out.print("Assign(" + n.line_number + ")\n");
+
     this.IndentLevel++; this.Indent();
     n.i.accept(this);
     System.out.print("\n");
-    this.IndentLevel++; this.Indent();
+
+    this.Indent();
     n.e.accept(this);
   }
 
@@ -215,11 +219,11 @@ public class PrettyPrintVisitor implements Visitor {
     n.i.accept(this);
     System.out.print("\n");
 
-    this.IndentLevel++; this.Indent();
+    this.Indent();
     n.e1.accept(this);
     System.out.print("\n");
 
-    this.IndentLevel++; this.Indent();
+    this.Indent();
     n.e2.accept(this);
   }
 

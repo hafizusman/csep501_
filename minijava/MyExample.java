@@ -11,19 +11,24 @@ u
 10
 ;
 }
-
-//if (x < 10) { m = 12; } else { m = 9; }
 */
+//if (x < 10) { m = 12; } else { m = 9; }
+
 a = b;
+c2 = c && d;
+c3 = !f && g;
+h = h1 - h2;
+i = 12;
+j = j3 * j4;
+x = true && !f;
+x = this;
+a[x - y] = 10-a;
+y = a.length;
+p = new int[100];
+p2 = new int[x - 100];
+q = new MyClass();
+//x = q.myFunc();
 b = a + (foo + bar) + baz;
 System.out.println(baz);
 System.out.println(b);
 
-a = 12;
-x = true;
-x = this;
-a[10] = 999;
-y = a.length;
-p = new int[100];
-q = new MyClass();
-//x = q.myFunc();
