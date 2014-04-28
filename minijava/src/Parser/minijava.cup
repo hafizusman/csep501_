@@ -67,18 +67,18 @@ nonterminal Statement Statement;
 nonterminal Assign AssignStatement;
 nonterminal Display DisplayStatement;
 nonterminal Exp Expression;
+nonterminal ExpList ExpressionList;
+nonterminal Exp ExpressionListNext;
 nonterminal Identifier Identifier;
 
 
 /* Precedence declarations */
 
-precedence nonassoc LOGICAL_NOT;
-precedence nonassoc LESSTHAN;
-//precedence left LBRACKET;
-precedence left DOT;
-precedence left IDENTIFIER;
+precedence left LESSTHAN;
 precedence left LOGICAL_AND;
-precedence left PLUS, MINUS;
+precedence nonassoc LOGICAL_NOT;
+precedence left PLUS;
+precedence left MINUS;
 precedence left MULTIPLY;
 
 
@@ -99,50 +99,78 @@ Statement   ::= AssignStatement:s
 AssignStatement ::= Identifier:id BECOMES Expression:expr SEMICOLON
                     {: RESULT = new Assign(id, expr, idleft); :};
 
-Identifier  ::= IDENTIFIER:id
-                {: RESULT = new Identifier(id, idleft); :};
+//Identifier	::=	<IDENTIFIER>
+Identifier          ::= IDENTIFIER:id
+                        {: RESULT = new Identifier(id, idleft); :};
 
 DisplayStatement ::= DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
                      {: RESULT = new Display(expr, dleft); :};
 
-Expression    ::= IDENTIFIER:name
-                    {: RESULT = new IdentifierExp(name, nameleft); :}
-                | LPAREN Expression:expr RPAREN
-                    {: RESULT = expr; :}
-                | Expression:arg1 LOGICAL_AND Expression:arg2
-                    {: RESULT = new And(arg1, arg2, arg1left); :}
-                | Expression:arg1 LESSTHAN Expression:arg2
-                    {: RESULT = new LessThan(arg1, arg2, arg1left); :}
-                | Expression:arg1 PLUS Expression:arg2
-                    {: RESULT = new Plus(arg1, arg2, arg1left); :}
-                | Expression:arg1 MINUS Expression:arg2
-                    {: RESULT = new Minus(arg1, arg2, arg1left); :}
-                | Expression:arg1 MULTIPLY Expression:arg2
-                    {: RESULT = new Times(arg1, arg2, arg1left); :}
-                | Expression:arg1 LBRACKET Expression:arg2 RBRACKET
-                    {: RESULT = new ArrayLookup(arg1, arg2, arg1left); :}
-                | Expression:arg1 DOT LENGTH
-                    {: RESULT = new ArrayLength(arg1, arg1left); :}
-                /*
-                | Expression:arg1 DOT Identifier:arg2 LPAREN ParameterList:arg3 RPAREN
-                    {: RESULT = new Call(arg1, arg2, arg3, arg1left); :}
-                */
-                | LOGICAL_NOT Expression:arg1
-                    {: RESULT = new Not(arg1, arg1left); :}
-                | NEW Identifier:arg1 LPAREN RPAREN
-                    {: RESULT = new NewObject(arg1, arg1left); :}
-                /*
-                | NEW INTEGER_TYPE LBRACKET Expression:arg1 RBRACKET
-                    {: RESULT = new IntArrayType(arg1left); :}
-                */
-                | TRUE:n
-                    {: RESULT = new True(nleft); :}
-                | FALSE:n
-                    {: RESULT = new False(nleft); :}
-                | THIS:n
-                    {: RESULT = new This(nleft); :}
-                ;
+// Expression	::=	Expression ( "&&" | "<" | "+" | "-" | "*" ) Expression
+//      |	Expression "[" Expression "]"
+//      |	Expression "." "length"
+//      |	Expression "." Identifier "(" ( Expression ( "," Expression )* )? ")"
+//      |	<INTEGER_LITERAL>
+//      |	"true"
+//      |	"false"
+//      |	Identifier
+//      |	"this"
+//      |	"new" "int" "[" Expression "]"
+//      |	"new" Identifier "(" ")"
+//      |	"!" Expression
+//      |	"(" Expression ")"
+
+Expression          ::= Expression:arg1 LOGICAL_AND Expression:arg2
+                        {: RESULT = new And(arg1, arg2, arg1left); :}
+                    | Expression:arg1 LESSTHAN Expression:arg2
+                        {: RESULT = new LessThan(arg1, arg2, arg1left); :}
+                    | Expression:arg1 PLUS Expression:arg2
+                        {: RESULT = new Plus(arg1, arg2, arg1left); :}
+                    | Expression:arg1 MINUS Expression:arg2
+                        {: RESULT = new Minus(arg1, arg2, arg1left); :}
+                    | Expression:arg1 MULTIPLY Expression:arg2
+                        {: RESULT = new Times(arg1, arg2, arg1left); :}
+                    | Expression:arg1 LBRACKET Expression:arg2 RBRACKET
+                        {: RESULT = new ArrayLookup(arg1, arg2, arg1left); :}
+                    | Expression:arg1 DOT LENGTH
+                        {: RESULT = new ArrayLength(arg1, arg1left); :}
+                    | Expression:expr DOT Identifier:name LPAREN ExpressionList:exprlist RPAREN
+                        {: RESULT = new Call(expr, name, exprlist, exprleft); :}
+                    | INTEGER_LITERAL:val
+                        {: RESULT = new IntegerLiteral(val, valleft); :}
+                    | TRUE:ln
+                        {: RESULT = new True(lnleft); :}
+                    | FALSE:ln
+                        {: RESULT = new False(lnleft); :}
+                    | IDENTIFIER:name
+                        {: RESULT = new IdentifierExp(name, nameleft); :}
+                    | THIS:ln
+                        {: RESULT = new This(lnleft); :}
+                    | NEW INTEGER_TYPE LBRACKET Expression:expr RBRACKET
+                        {: RESULT = new NewArray(expr, exprleft); :} /* CHECK!!!! */
+                    | NEW Identifier:name LPAREN RPAREN
+                        {: RESULT = new NewObject(name, nameleft); :} /* CHECK!!!! */
+                    | LOGICAL_NOT Expression:arg1
+                        {: RESULT = new Not(arg1, arg1left); :}
+                    | LPAREN Expression:expr RPAREN
+                        {: RESULT = expr; :} /* CHECK!!!! */
+                    ;
+
+//      |	Expression "." Identifier "(" ( Expression ( "," Expression )* )? ")"
+ExpressionList      ::= /* empty */
+                    | Expression:expr ExpressionListNext
+                        {: RESULT = new ExpList(exprleft); :} /* CHECK!!!! Need to append to list*/
+                    ;
+ExpressionListNext  ::= /* empty */
+                    | COMMA Expression:expr ExpressionListNext:exprn
+//                        {: RESULT = new Exp(expr, exprleft); :} /* CHECK!!!! Need to append to list*/
+                    ;
 
 /*
-                |	<INTEGER_LITERAL>
+Expression    ::= IDENTIFIER:name
+                  {: RESULT = new IdentifierExp(name, nameleft); :}
+              | Expression:arg1 PLUS Expression:arg2
+                  {: RESULT = new Plus(arg1, arg2, arg1left); :}
+              | LPAREN Expression:expr RPAREN
+                  {: RESULT = expr; :};
 */
