@@ -191,32 +191,36 @@ public class PrettyPrintVisitor implements Visitor {
 
   // Exp e;
   public void visit(Print n) {
-    Indent(); System.out.print("System.out.println(" + n.line_number + ")\n");
-    this.IndentLevel++;
+    System.out.print("System.out.println(" + n.line_number + ")\n");
+    this.IndentLevel++; this.Indent();
     n.e.accept(this);
   }
 
   // Identifier i;
   // Exp e;
   public void visit(Assign n) {
-    Indent(); System.out.print("Assign(" + n.line_number + ")\n");
-    this.IndentLevel++;
+    System.out.print("Assign(" + n.line_number + ")\n");
+    this.IndentLevel++; this.Indent();
     n.i.accept(this);
-    System.out.print(" = ");
+    System.out.print("\n");
+    this.IndentLevel++; this.Indent();
     n.e.accept(this);
   }
 
   // Identifier i;
   // Exp e1,e2;
   public void visit(ArrayAssign n) {
-    Indent(); System.out.print("ArrayAssign(" + n.line_number + ")\n");
-    this.IndentLevel++;
+    System.out.print("ArrayAssign(" + n.line_number + ")\n");
+    this.IndentLevel++; this.Indent();
     n.i.accept(this);
-    System.out.print("[");
+    System.out.print("\n");
+
+    this.IndentLevel++; this.Indent();
     n.e1.accept(this);
-    System.out.print("] = ");
+    System.out.print("\n");
+
+    this.IndentLevel++; this.Indent();
     n.e2.accept(this);
-    System.out.print(";");
   }
 
   // Exp e1,e2;
@@ -274,8 +278,9 @@ public class PrettyPrintVisitor implements Visitor {
 
   // Exp e;
   public void visit(ArrayLength n) {
+    System.out.print("ArrayLength(" + n.line_number + ")\n");
+    this.IndentLevel++; this.Indent();
     n.e.accept(this);
-    System.out.print(".length");
   }
 
   // Exp e;
@@ -295,7 +300,7 @@ public class PrettyPrintVisitor implements Visitor {
 
   // int i;
   public void visit(IntegerLiteral n) {
-    Indent(); System.out.print(n.i);
+    System.out.print(n.i);
   }
 
   public void visit(True n) {
@@ -308,7 +313,7 @@ public class PrettyPrintVisitor implements Visitor {
 
   // String s;
   public void visit(IdentifierExp n) {
-    Indent(); System.out.print(n.s);
+    System.out.print(n.s);
   }
 
   public void visit(This n) {
@@ -317,16 +322,14 @@ public class PrettyPrintVisitor implements Visitor {
 
   // Exp e;
   public void visit(NewArray n) {
-    Indent(); System.out.print("NewArray(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    Indent(); System.out.print("NewArraySize(");
+    System.out.print("NewArray(" + n.line_number + ")\n");
+    this.IndentLevel++; Indent();
     n.e.accept(this);
-    Indent(); System.out.print(")");
   }
 
   // Identifier i;
   public void visit(NewObject n) {
-    Indent(); System.out.print("NewObject(" + n.line_number + ")\n");
+    System.out.print("NewObject(" + n.line_number + ")\n");
     this.IndentLevel++;
     Indent(); System.out.print(n.i.s);
   }
@@ -339,6 +342,6 @@ public class PrettyPrintVisitor implements Visitor {
 
   // String s;
   public void visit(Identifier n) {
-    Indent(); System.out.print(n.s);
+    System.out.print(n.s);
   }
 }

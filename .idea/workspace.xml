@@ -23,12 +23,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="PrettyPrintVisitor.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="PrettyPrintVisitor.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/PrettyPrintVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.218509" vertical-offset="5406" max-vertical-offset="5950">
-              <caret line="323" column="33" selection-start-line="323" selection-start-column="33" selection-end-line="323" selection-end-column="33" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="4556" max-vertical-offset="5950">
+              <caret line="274" column="22" selection-start-line="274" selection-start-column="22" selection-end-line="274" selection-end-column="22" />
               <folding>
+                <element signature="method#Indent#0;class#PrettyPrintVisitor#0" expanded="false" />
                 <element signature="e#3563#3564#0" expanded="true" />
                 <element signature="e#3599#3600#0" expanded="true" />
                 <element signature="e#3637#3638#0" expanded="true" />
@@ -37,12 +38,18 @@
                 <element signature="e#3745#3746#0" expanded="true" />
                 <element signature="e#3801#3802#0" expanded="true" />
                 <element signature="e#3832#3833#0" expanded="true" />
-                <element signature="e#6945#6946#0" expanded="true" />
-                <element signature="e#6979#6980#0" expanded="true" />
-                <element signature="e#7011#7012#0" expanded="true" />
                 <element signature="e#7046#7047#0" expanded="true" />
-                <element signature="e#7173#7174#0" expanded="true" />
-                <element signature="e#7207#7208#0" expanded="true" />
+                <element signature="e#7077#7078#0" expanded="true" />
+                <element signature="e#7108#7109#0" expanded="true" />
+                <element signature="e#7142#7143#0" expanded="true" />
+                <element signature="e#7174#7175#0" expanded="true" />
+                <element signature="e#7209#7210#0" expanded="true" />
+                <element signature="e#7264#7265#0" expanded="true" />
+                <element signature="e#7295#7296#0" expanded="true" />
+                <element signature="e#7326#7327#0" expanded="true" />
+                <element signature="e#7360#7361#0" expanded="true" />
+                <element signature="e#7855#7856#0" expanded="true" />
+                <element signature="e#7886#7887#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -106,14 +113,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MyExample.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="MyExample.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/minijava/MyExample.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
+            <state vertical-scroll-proportion="0.1311054" vertical-offset="0" max-vertical-offset="389">
               <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="24" />
-              <folding>
-                <element signature="e#0#272#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -141,8 +146,8 @@
       <file leaf-file-name="Visitor.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/Visitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="363" max-vertical-offset="816">
-              <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="816">
+              <caret line="28" column="14" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -606,7 +611,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/minijava/src/AST/Visitor/PrettyPrintVisitor.java</url>
-          <line>328</line>
+          <line>331</line>
           <properties />
           <option name="timeStamp" value="8" />
         </line-breakpoint>
@@ -935,26 +940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/minijava/src/Parser/parser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3309" max-vertical-offset="12682">
-          <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
-          <folding>
-            <element signature="e#11364#11365#0" expanded="true" />
-            <element signature="e#13229#13230#0" expanded="true" />
-            <element signature="e#13259#13260#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/minijava/src/Scanner/scanner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59383035" vertical-offset="8269" max-vertical-offset="16218">
-          <caret line="515" column="27" selection-start-line="515" selection-start-column="27" selection-end-line="515" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/minijava/lib/CUP.jar!/java_cup/runtime/lr_parser.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.31283423" vertical-offset="1430" max-vertical-offset="1836">
@@ -968,16 +953,6 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="2525" max-vertical-offset="3230">
           <caret line="178" column="97" selection-start-line="178" selection-start-column="93" selection-end-line="178" selection-end-column="97" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/minijava/MyExample.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#272#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1001,14 +976,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/Visitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="363" max-vertical-offset="816">
-          <caret line="38" column="14" selection-start-line="38" selection-start-column="14" selection-end-line="38" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/minijava/src/AST/NewObject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
@@ -1029,11 +996,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/Visitor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="816">
+          <caret line="28" column="14" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/PrettyPrintVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.218509" vertical-offset="5406" max-vertical-offset="5950">
-          <caret line="323" column="33" selection-start-line="323" selection-start-column="33" selection-end-line="323" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="4556" max-vertical-offset="5950">
+          <caret line="274" column="22" selection-start-line="274" selection-start-column="22" selection-end-line="274" selection-end-column="22" />
           <folding>
+            <element signature="method#Indent#0;class#PrettyPrintVisitor#0" expanded="false" />
             <element signature="e#3563#3564#0" expanded="true" />
             <element signature="e#3599#3600#0" expanded="true" />
             <element signature="e#3637#3638#0" expanded="true" />
@@ -1042,13 +1018,27 @@
             <element signature="e#3745#3746#0" expanded="true" />
             <element signature="e#3801#3802#0" expanded="true" />
             <element signature="e#3832#3833#0" expanded="true" />
-            <element signature="e#6945#6946#0" expanded="true" />
-            <element signature="e#6979#6980#0" expanded="true" />
-            <element signature="e#7011#7012#0" expanded="true" />
             <element signature="e#7046#7047#0" expanded="true" />
-            <element signature="e#7173#7174#0" expanded="true" />
-            <element signature="e#7207#7208#0" expanded="true" />
+            <element signature="e#7077#7078#0" expanded="true" />
+            <element signature="e#7108#7109#0" expanded="true" />
+            <element signature="e#7142#7143#0" expanded="true" />
+            <element signature="e#7174#7175#0" expanded="true" />
+            <element signature="e#7209#7210#0" expanded="true" />
+            <element signature="e#7264#7265#0" expanded="true" />
+            <element signature="e#7295#7296#0" expanded="true" />
+            <element signature="e#7326#7327#0" expanded="true" />
+            <element signature="e#7360#7361#0" expanded="true" />
+            <element signature="e#7855#7856#0" expanded="true" />
+            <element signature="e#7886#7887#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/minijava/MyExample.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1311054" vertical-offset="0" max-vertical-offset="389">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
