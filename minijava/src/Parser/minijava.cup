@@ -75,10 +75,11 @@ nonterminal Identifier Identifier;
 /* Precedence declarations */
 
 precedence nonassoc LESSTHAN;
-precedence nonassoc LOGICAL_AND;
-precedence nonassoc LOGICAL_NOT;
+precedence left LOGICAL_AND;
 precedence left PLUS;
 precedence left MINUS;
+precedence nonassoc LOGICAL_NOT;
+precedence nonassoc DOT;
 precedence left LBRACKET;
 precedence left MULTIPLY;
 

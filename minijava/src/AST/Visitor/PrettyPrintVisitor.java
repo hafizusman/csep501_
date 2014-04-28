@@ -184,9 +184,12 @@ public class PrettyPrintVisitor implements Visitor {
   // Statement s;
   public void visit(While n) {
     System.out.print("While(" + n.line_number + ")\n");
-    this.IndentLevel++; this.Indent();
+
+    this.IndentLevel++;
+    this.Indent();
     n.e.accept(this);
     System.out.print("\n");
+
     this.Indent();
     n.s.accept(this);
   }
@@ -203,7 +206,8 @@ public class PrettyPrintVisitor implements Visitor {
   public void visit(Assign n) {
     System.out.print("Assign(" + n.line_number + ")\n");
 
-    this.IndentLevel++; this.Indent();
+    this.IndentLevel++;
+    this.Indent();
     n.i.accept(this);
     System.out.print("\n");
 
@@ -215,7 +219,8 @@ public class PrettyPrintVisitor implements Visitor {
   // Exp e1,e2;
   public void visit(ArrayAssign n) {
     System.out.print("ArrayAssign(" + n.line_number + ")\n");
-    this.IndentLevel++; this.Indent();
+    this.IndentLevel++;
+    this.Indent();
     n.i.accept(this);
     System.out.print("\n");
 
@@ -287,7 +292,8 @@ public class PrettyPrintVisitor implements Visitor {
   // Exp e;
   public void visit(ArrayLength n) {
     System.out.print("ArrayLength(" + n.line_number + ")\n");
-    this.IndentLevel++; this.Indent();
+    this.IndentLevel++;
+    this.Indent();
     n.e.accept(this);
   }
 
@@ -331,7 +337,8 @@ public class PrettyPrintVisitor implements Visitor {
   // Exp e;
   public void visit(NewArray n) {
     System.out.print("NewArray(" + n.line_number + ")\n");
-    this.IndentLevel++; Indent();
+    this.IndentLevel++;
+    Indent();
     n.e.accept(this);
   }
 
@@ -339,12 +346,15 @@ public class PrettyPrintVisitor implements Visitor {
   public void visit(NewObject n) {
     System.out.print("NewObject(" + n.line_number + ")\n");
     this.IndentLevel++;
-    Indent(); System.out.print(n.i.s);
+    Indent();
+    System.out.print(n.i.s);
   }
 
   // Exp e;
   public void visit(Not n) {
-    System.out.print("!");
+    System.out.print("Not(" + n.line_number + ")\n");
+    this.IndentLevel++;
+    this.Indent();
     n.e.accept(this);
   }
 
