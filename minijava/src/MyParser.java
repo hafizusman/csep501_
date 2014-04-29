@@ -37,13 +37,13 @@ public class MyParser {
                 root = p.parse();
                 //root = p.debug_parse();
                 if (true) {
-                    ClassDecl program = (ClassDecl) root.value;
+                    MainClass program = (MainClass) root.value;
                     program.accept(new PrettyPrintVisitor());
                 }
                 else {
-                    MethodDeclList program = (MethodDeclList) root.value;
+                    ClassDeclList program = (ClassDeclList) root.value;
                     for (int i = 0; i < program.size(); i++) {
-                        MethodDecl d = program.get(i);
+                        ClassDecl d = program.get(i);
                         d.accept(new PrettyPrintVisitor());
                         System.out.print("\n");
                     }

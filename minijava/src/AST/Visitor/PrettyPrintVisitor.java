@@ -34,16 +34,28 @@ public class PrettyPrintVisitor implements Visitor {
   // Identifier i1,i2;
   // Statement s;
   public void visit(MainClass n) {
-    System.out.print("class ");
+    int localindent = 0;
+    System.out.print("MainClass(" + n.line_number + ")\n");
+    this.IndentLevel++;
+    Indent();
     n.i1.accept(this);
-    System.out.println(" {");
-    System.out.print("  public static void main (String [] ");
+    System.out.print("\n");
+
+    Indent();
+    System.out.print("MainClass name:");
+    System.out.print("\n");
+    this.IndentLevel++;
+    Indent();
     n.i2.accept(this);
-    System.out.println(") {");
-    System.out.print("    ");
+    this.IndentLevel--;
+    System.out.print("\n");
+
+    Indent();
+    System.out.print("MainClass statements: ");
+    System.out.print("\n");
+    this.IndentLevel++;
+    Indent();
     n.s.accept(this);
-    System.out.println("  }");
-    System.out.println("}");
   }
 
   // Identifier i;
@@ -99,6 +111,50 @@ public class PrettyPrintVisitor implements Visitor {
   // VarDeclList vl;
   // MethodDeclList ml;
   public void visit(ClassDeclExtends n) {
+      int localindent = 0;
+      System.out.print("ClassDeclExtends(" + n.line_number + ")\n");
+      this.IndentLevel++;
+      localindent = this.IndentLevel;
+      this.Indent();
+      n.i.accept(this);
+      System.out.print(" extends ");
+      n.j.accept(this);
+
+      if (n.vl != null) {
+          System.out.print("\n");
+          Indent();
+          System.out.print("ClassDeclExtends Vars(" + n.vl.line_number + "):\n");
+          this.IndentLevel++;
+          localindent = this.IndentLevel;
+          for (int i = 0; i < n.vl.size(); i++) {
+              this.IndentLevel = localindent;
+              Indent();
+              n.vl.get(i).accept(this);
+              if (i + 1 < n.vl.size()) {
+                  System.out.print("\n");
+              }
+          }
+          this.IndentLevel--;
+          this.IndentLevel--;
+          localindent = this.IndentLevel;
+      }
+
+
+      this.IndentLevel = localindent;
+      if (n.ml != null) {
+          System.out.print("\n");
+          Indent();
+          System.out.print("ClassDeclExtends Methods(" + n.ml.line_number + "):\n");
+          this.IndentLevel++;
+          localindent = this.IndentLevel;
+          for (int i = 0; i < n.ml.size(); i++) {
+              this.IndentLevel = localindent;
+              System.out.print("\n");
+              Indent();
+              n.ml.get(i).accept(this);
+          }
+      }
+/*
     System.out.print("class ");
     n.i.accept(this);
     System.out.println(" extends ");
@@ -115,6 +171,7 @@ public class PrettyPrintVisitor implements Visitor {
     }
     System.out.println();
     System.out.println("}");
+*/
   }
 
   // Type t;

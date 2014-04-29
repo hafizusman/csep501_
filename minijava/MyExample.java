@@ -1,3 +1,24 @@
+class MyMainClass
+{
+    public static void main(String [] args)
+    {
+        System.out.println(new MyOtherClass());
+    }
+}
+
+/*
+class FooClass extends AClass
+{
+    int a;
+
+    public boolean bfunc()
+    {
+        x = 10;
+        return xyz;
+    }
+}
+*/
+/*
 class AClass
 {
     int class_var;
@@ -23,7 +44,7 @@ while(a<12)
 
 while(!b)
 {}
-*/
+
 
 
         if (x < 10) {
@@ -50,7 +71,7 @@ q = new MyClass();
 b = a + (foo + bar) + baz;
 System.out.println(baz);
 System.out.println(b);
-*/
+
 //    a = b;
 //    y = 12;
 //    x = q.myFunc(a+100 - 20*cd, cd, a[10], new obj(), another.function(call));
@@ -58,3 +79,4 @@ System.out.println(b);
         return f;
     }
 }
+*/

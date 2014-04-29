@@ -63,7 +63,7 @@ terminal String INTEGER_LITERAL;
 /* Nonterminals */
 
 //nonterminal ArrayList<Statement> Program;
-nonterminal ClassDecl Program;
+nonterminal MainClass Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
@@ -77,6 +77,8 @@ nonterminal Type Type;
 nonterminal MethodDecl MethodDeclaration;
 nonterminal MethodDeclList MethodDeclarationList;
 nonterminal ClassDecl ClassDeclaration;
+nonterminal ClassDeclList ClassDeclarationList;
+nonterminal MainClass MainClassDecl;
 
 /* Precedence declarations */
 
@@ -100,9 +102,28 @@ precedence left MULTIPLY;
           //              {: p.add(s); RESULT = p; :}
             //        ;
 
-Program ::= ClassDeclaration:md
+Program ::= MainClassDecl:md
         {:RESULT=md;:};
 
+//MainClass	::=	"class" Identifier "{" "public" "static" "void" "main" "(" "String" "[" "]" Identifier ")" "{" Statement "}" "}"
+MainClassDecl       ::= CLASS:c Identifier:id1 LCURLY
+                            PUBLIC STATIC VOID MAIN LPAREN STRING_TYPE LBRACKET RBRACKET Identifier:id2 RPAREN
+                            LCURLY Statement:s RCURLY
+                            RCURLY
+                        {: RESULT = new MainClass(id1, id2, s, cleft); :}
+                    ;
+
+ClassDeclarationList::=/* empty */
+                    | ClassDeclarationList:cdl ClassDeclaration:c
+                        {:
+                        if (cdl == null)
+                        {
+                            cdl = new ClassDeclList(cleft);
+                        }
+                        cdl.add(c);
+                        RESULT = cdl;
+                        :}
+                    ;
 //ClassDeclaration	::=	"class" Identifier ( "extends" Identifier )? "{" ( VarDeclaration )* ( MethodDeclaration )* "}"
 ClassDeclaration    ::= CLASS:c Identifier:id1 EXTENDS Identifier:id2
                         LCURLY
