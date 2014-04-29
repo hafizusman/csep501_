@@ -1,4 +1,4 @@
-b = !a && c;
+/*
 while
 (
 a
@@ -11,11 +11,14 @@ u
 10
 ;
 }
+ */
 
 //if (x < 10) { m = 12; } else { m = 9; }
-/*
+
 a = b;
 c2 = c && d;
+u = my.yourfunc();
+x = q.myFunc(a+100, cd, a[10], new obj(), another.function(call));
 c3 = !f && g;
 h = h1 - h2;
 i = 12;
@@ -32,4 +35,3 @@ q = new MyClass();
 b = a + (foo + bar) + baz;
 System.out.println(baz);
 System.out.println(b);
-*/

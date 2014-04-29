@@ -68,7 +68,7 @@ nonterminal Block Block;
 nonterminal BlockStatements;
 nonterminal Exp Expression;
 nonterminal ExpList ExpressionList;
-nonterminal Exp ExpressionListNext;
+//nonterminal ExpList ExpressionListNext;
 nonterminal Identifier Identifier;
 
 
@@ -177,10 +177,15 @@ Expression          ::= Expression:arg1 LOGICAL_AND Expression:arg2
 
 //      |	Expression "." Identifier "(" ( Expression ( "," Expression )* )? ")"
 ExpressionList      ::= /* empty */
-                    | Expression:expr ExpressionListNext
-                        {: RESULT = new ExpList(exprleft); :} /* CHECK!!!! Need to append to list*/
-                    ;
-ExpressionListNext  ::= /* empty */
-                    | COMMA Expression:expr ExpressionListNext:exprn
-//                        {: RESULT = new Exp(expr, exprleft); :} /* CHECK!!!! Need to append to list*/
+                    | Expression:expr
+                        {:
+                        ExpList e = new ExpList(exprleft);
+                        e.add(expr);
+                        RESULT = e;
+                        :}
+                    | Expression:expr COMMA ExpressionList:exprn
+                        {:
+                        exprn.add(expr);
+                        RESULT = exprn;
+                        :}
                     ;

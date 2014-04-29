@@ -8,6 +8,11 @@ import java.io.FileReader;
 import java.util.*;
 
 public class MyParser {
+    public void mYfunc()
+    {
+        System.out.println("QWERRTY");
+    }
+
     public static void main(String [] args) {
         try {
             // create a scanner on the input file

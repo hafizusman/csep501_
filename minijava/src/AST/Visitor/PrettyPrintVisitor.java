@@ -301,15 +301,31 @@ public class PrettyPrintVisitor implements Visitor {
   // Identifier i;
   // ExpList el;
   public void visit(Call n) {
+    int mylocalindent = 0;
+
+    System.out.print("Call(" + n.line_number + ")\n");
+    this.IndentLevel++;
+    Indent();
     n.e.accept(this);
-    System.out.print(".");
+    System.out.print("\n");
+
+    Indent();
     n.i.accept(this);
-    System.out.print("(");
-    for ( int i = 0; i < n.el.size(); i++ ) {
-        n.el.get(i).accept(this);
-        if ( i+1 < n.el.size() ) { System.out.print(", "); }
+
+    if (n.el != null) {
+        System.out.print("\n");
+        this.IndentLevel++;
+        mylocalindent = this.IndentLevel;
+
+        for (int i = 0; i < n.el.size(); i++) {
+            this.IndentLevel = mylocalindent; //cuz the sub-nodes might increase indentation
+            Indent();
+            n.el.get(i).accept(this);
+            if (i + 1 < n.el.size()) {
+                System.out.print("\n");
+            }
+        }
     }
-    System.out.print(")");
   }
 
   // int i;
