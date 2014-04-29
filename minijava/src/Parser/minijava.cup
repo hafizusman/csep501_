@@ -63,7 +63,7 @@ terminal String INTEGER_LITERAL;
 /* Nonterminals */
 
 //nonterminal ArrayList<Statement> Program;
-nonterminal MainClass Program;
+nonterminal Program Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
@@ -102,8 +102,10 @@ precedence left MULTIPLY;
           //              {: p.add(s); RESULT = p; :}
             //        ;
 
-Program ::= MainClassDecl:md
-        {:RESULT=md;:};
+//Goal	::=	MainClass ( ClassDeclaration )* <EOF>
+Program             ::= MainClassDecl:mcd ClassDeclarationList:cdl
+                        {: RESULT=new Program(mcd, cdl, mcdleft); :}
+                    ;
 
 //MainClass	::=	"class" Identifier "{" "public" "static" "void" "main" "(" "String" "[" "]" Identifier ")" "{" Statement "}" "}"
 MainClassDecl       ::= CLASS:c Identifier:id1 LCURLY

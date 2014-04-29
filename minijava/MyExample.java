@@ -6,7 +6,7 @@ class MyMainClass
     }
 }
 
-/*
+
 class FooClass extends AClass
 {
     int a;
@@ -17,8 +17,7 @@ class FooClass extends AClass
         return xyz;
     }
 }
-*/
-/*
+
 class AClass
 {
     int class_var;
@@ -34,17 +33,16 @@ class AClass
         int a;
         boolean b;
         int[] c;
-/*
-while(a<12)
+
+        while(a<12)
         {
-        a = b;
-        c2 = c && d;
-        u = my.yourfunc();
+            a = b;
+            c2 = c && d;
+            u = my.yourfunc();
         }
 
-while(!b)
-{}
-
+        while(!b)
+        {}
 
 
         if (x < 10) {
@@ -75,8 +73,7 @@ System.out.println(b);
 //    a = b;
 //    y = 12;
 //    x = q.myFunc(a+100 - 20*cd, cd, a[10], new obj(), another.function(call));
-
+*/
         return f;
     }
 }
-*/

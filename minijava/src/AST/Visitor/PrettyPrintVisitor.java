@@ -24,10 +24,21 @@ public class PrettyPrintVisitor implements Visitor {
   // MainClass m;
   // ClassDeclList cl;
   public void visit(Program n) {
+    int localindent = 0;
+    System.out.print("Program(" + n.line_number + ")\n");
+    this.IndentLevel++;
+    Indent();
     n.m.accept(this);
-    for ( int i = 0; i < n.cl.size(); i++ ) {
-        System.out.println();
-        n.cl.get(i).accept(this);
+
+    if (n.cl != null) {
+        System.out.print("\n");
+        this.IndentLevel++;
+        localindent = this.IndentLevel;
+        for (int i = 0; i < n.cl.size(); i++) {
+            Indent();
+            n.cl.get(i).accept(this);
+            this.IndentLevel = localindent;
+        }
     }
   }
 
@@ -56,6 +67,8 @@ public class PrettyPrintVisitor implements Visitor {
     this.IndentLevel++;
     Indent();
     n.s.accept(this);
+
+    this.IndentLevel = 1; // hack
   }
 
   // Identifier i;
@@ -104,6 +117,7 @@ public class PrettyPrintVisitor implements Visitor {
             n.ml.get(i).accept(this);
         }
     }
+      this.IndentLevel = 1; // hack
   }
 
   // Identifier i;
@@ -154,24 +168,8 @@ public class PrettyPrintVisitor implements Visitor {
               n.ml.get(i).accept(this);
           }
       }
-/*
-    System.out.print("class ");
-    n.i.accept(this);
-    System.out.println(" extends ");
-    n.j.accept(this);
-    System.out.println(" { ");
-    for ( int i = 0; i < n.vl.size(); i++ ) {
-        System.out.print("  ");
-        n.vl.get(i).accept(this);
-        if ( i+1 < n.vl.size() ) { System.out.println(); }
-    }
-    for ( int i = 0; i < n.ml.size(); i++ ) {
-        System.out.println();
-        n.ml.get(i).accept(this);
-    }
-    System.out.println();
-    System.out.println("}");
-*/
+      System.out.print("\n");
+      this.IndentLevel = 1; // hack
   }
 
   // Type t;

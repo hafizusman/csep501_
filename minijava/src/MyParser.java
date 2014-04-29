@@ -37,7 +37,7 @@ public class MyParser {
                 root = p.parse();
                 //root = p.debug_parse();
                 if (true) {
-                    MainClass program = (MainClass) root.value;
+                    Program program = (Program) root.value;
                     program.accept(new PrettyPrintVisitor());
                 }
                 else {

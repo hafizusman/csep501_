@@ -1,0 +1,92 @@
+Program(1)
+  MainClass(1)
+    MyMainClass
+    MainClass name:
+      args
+    MainClass statements: 
+      System.out.println(5)
+        NewObject(5)
+          MyOtherClass
+    ClassDeclExtends(10)
+      FooClass extends AClass
+      ClassDeclExtends Vars(12):
+        VarDecl(12)
+          int a
+      ClassDeclExtends Methods(14):
+
+        MethodDecl(14)
+          boolean
+          bfunc
+          Formal List: 
+
+          Assign(16)
+            x
+            10
+          ReturnExpr(17)
+            xyz
+    ClassDeclSimple(21)
+      AClass
+      ClassDeclSimple Vars(23):
+        VarDecl(23)
+          int class_var
+      ClassDeclSimple Methods(25):
+
+        MethodDecl(25)
+          int
+          AnotherMethodToParse
+          Formal List: 
+
+          VarDecl(26)
+            int x
+          Assign(28)
+            y
+            (z + 10)
+          ReturnExpr(29)
+            (100 - i10)
+        MethodDecl(32)
+          int
+          TheMethodToParse
+          Formal List: 
+            int [] myarr
+            int myint
+            boolean mybool
+          VarDecl(33)
+            int a
+          VarDecl(34)
+            boolean b
+          VarDecl(35)
+            int [] c
+          While(37)
+            (a < 12)
+            Block(39)
+              Assign(39)
+                a
+                b
+              Assign(40)
+                c2
+                (c && d)
+              Assign(41)
+                u
+                Call(41)
+                  my
+                  yourfunc
+          While(44)
+            Not(44)
+              b
+
+          If(48)
+            Condition:
+              (x < 10)
+            ThenExpr:
+              Block(49)
+                Assign(49)
+                  m
+                  12
+            ElseExpr:
+              Block(51)
+                Assign(51)
+                  m
+                  9
+          ReturnExpr(77)
+            f
+Parsing completed
