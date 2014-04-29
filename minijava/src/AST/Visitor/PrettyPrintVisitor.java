@@ -111,6 +111,7 @@ public class PrettyPrintVisitor implements Visitor {
     System.out.print("MethodDecl(" + n.line_number + ")\n");
 
     this.IndentLevel++;
+    localindent = this.IndentLevel;
     Indent();
     n.t.accept(this);
     System.out.print("\n");
@@ -119,9 +120,9 @@ public class PrettyPrintVisitor implements Visitor {
     n.i.accept(this);
     System.out.print("\n");
 
+    Indent();
+    System.out.print("Formal List: \n");
     if (n.fl != null) {
-        Indent();
-        System.out.print("Formal List: \n");
         this.IndentLevel++;
         localindent = this.IndentLevel;
 
@@ -145,7 +146,6 @@ public class PrettyPrintVisitor implements Visitor {
             System.out.print("\n");
             this.IndentLevel = localindent;
         }
-        localindent = this.IndentLevel;
     }
 
     if (n.sl != null) {

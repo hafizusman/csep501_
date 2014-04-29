@@ -63,7 +63,7 @@ terminal String INTEGER_LITERAL;
 /* Nonterminals */
 
 //nonterminal ArrayList<Statement> Program;
-nonterminal MethodDecl Program;
+nonterminal MethodDeclList Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
@@ -75,6 +75,8 @@ nonterminal VarDecl VariableDeclaration;
 nonterminal VarDeclList VariableDeclarationList;
 nonterminal Type Type;
 nonterminal MethodDecl MethodDeclaration;
+nonterminal MethodDeclList MethodDeclarationList;
+
 
 /* Precedence declarations */
 
@@ -98,7 +100,7 @@ precedence left MULTIPLY;
           //              {: p.add(s); RESULT = p; :}
             //        ;
 
-Program ::= MethodDeclaration:md
+Program ::= MethodDeclarationList:md
         {:RESULT=md;:};
 
 // Type	::=	"int" "[" "]"
@@ -115,14 +117,26 @@ Type                ::= INTEGER_TYPE:ln LBRACKET RBRACKET
                         {: RESULT = new IdentifierType(name, nameleft); :}
                     ;
 
+MethodDeclarationList::=/* empty */
+                    | MethodDeclarationList:mdl MethodDeclaration:m
+                        {:
+                        if (mdl == null)
+                        {
+                            mdl = new MethodDeclList(mleft);
+                        }
+                        mdl.add(m);
+                        RESULT = mdl;
+                        :}
+                    ;
+
 // MethodDeclaration	::=	"public" Type Identifier "(" ( Type Identifier ( "," Type Identifier )* )? ")" "{" ( VarDeclaration )* ( Statement )* "return" Expression ";" "}"
 MethodDeclaration   ::= PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
                         LCURLY
-                     //       VariableDeclarationList:vdl
+                            VariableDeclarationList:vdl
                             BlockStatements:s
                             RETURN Expression:retexp SEMICOLON
                         RCURLY
-                        {: RESULT = new MethodDecl(t, name, fdl, null, s, retexp, tleft); :}
+                        {: RESULT = new MethodDecl(t, name, fdl, vdl, s, retexp, tleft); :}
                     ;
 FormalDeclarationList::= /* empty */
                     | FormalDeclaration:f
@@ -131,7 +145,7 @@ FormalDeclarationList::= /* empty */
                         fd.add(f);
                         RESULT = fd;
                         :}
-                    | FormalDeclaration:fd COMMA FormalDeclarationList:fdl
+                    | FormalDeclarationList:fdl COMMA FormalDeclaration:fd
                         {:
                         fdl.add(fd);
                         RESULT = fdl;
@@ -142,7 +156,7 @@ FormalDeclaration   ::= Type:t Identifier:id
                     ;
 
 VariableDeclarationList::= /* empty */
-                    | VariableDeclaration:v VariableDeclarationList:vdl
+                    | VariableDeclarationList:vdl VariableDeclaration:v
                         {:
                         if (vdl == null)
                         {
@@ -189,7 +203,7 @@ BlockStatements     ::= /* empty */
                         sl.add(s);
                         RESULT = sl;
                         :}
-                    | Statement:s BlockStatements:bs
+                    | BlockStatements:bs Statement:s
                         {:
                         bs.add(s);
                         RESULT = bs;
@@ -253,7 +267,7 @@ ExpressionList      ::= /* empty */
                         e.add(expr);
                         RESULT = e;
                         :}
-                    | Expression:expr COMMA ExpressionList:exprn
+                    | ExpressionList:exprn COMMA Expression:expr
                         {:
                         exprn.add(expr);
                         RESULT = exprn;

@@ -1,3 +1,10 @@
+public int AnotherMethodToParse()
+{
+    int x;
+
+    y = z+10;
+    return 100 - i10;
+}
 
 public int TheMethodToParse(int[] myarr, int myint, boolean mybool)
 {

@@ -63,7 +63,7 @@ terminal String INTEGER_LITERAL;
 /* Nonterminals */
 
 //nonterminal ArrayList<Statement> Program;
-nonterminal MethodDecl Program;
+nonterminal MethodDeclList Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
@@ -75,6 +75,8 @@ nonterminal VarDecl VariableDeclaration;
 nonterminal VarDeclList VariableDeclarationList;
 nonterminal Type Type;
 nonterminal MethodDecl MethodDeclaration;
+nonterminal MethodDeclList MethodDeclarationList;
+
 
 /* Precedence declarations */
 
@@ -98,7 +100,7 @@ precedence left MULTIPLY;
           //              {: p.add(s); RESULT = p; :}
             //        ;
 
-Program ::= MethodDeclaration:md
+Program ::= MethodDeclarationList:md
         {:RESULT=md;:};
 
 // Type	::=	"int" "[" "]"
@@ -113,6 +115,18 @@ Type                ::= INTEGER_TYPE:ln LBRACKET RBRACKET
                         {: RESULT = new IntegerType(lnleft); :}
                     | IDENTIFIER:name
                         {: RESULT = new IdentifierType(name, nameleft); :}
+                    ;
+
+MethodDeclarationList::=/* empty */
+                    | MethodDeclarationList:mdl MethodDeclaration:m
+                        {:
+                        if (mdl == null)
+                        {
+                            mdl = new MethodDeclList(mleft);
+                        }
+                        mdl.add(m);
+                        RESULT = mdl;
+                        :}
                     ;
 
 // MethodDeclaration	::=	"public" Type Identifier "(" ( Type Identifier ( "," Type Identifier )* )? ")" "{" ( VarDeclaration )* ( Statement )* "return" Expression ";" "}"
