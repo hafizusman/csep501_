@@ -118,11 +118,11 @@ Type                ::= INTEGER_TYPE:ln LBRACKET RBRACKET
 // MethodDeclaration	::=	"public" Type Identifier "(" ( Type Identifier ( "," Type Identifier )* )? ")" "{" ( VarDeclaration )* ( Statement )* "return" Expression ";" "}"
 MethodDeclaration   ::= PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
                         LCURLY
-                     //       VariableDeclarationList:vdl
+                            VariableDeclarationList:vdl
                             BlockStatements:s
                             RETURN Expression:retexp SEMICOLON
                         RCURLY
-                        {: RESULT = new MethodDecl(t, name, fdl, null, s, retexp, tleft); :}
+                        {: RESULT = new MethodDecl(t, name, fdl, vdl, s, retexp, tleft); :}
                     ;
 FormalDeclarationList::= /* empty */
                     | FormalDeclaration:f
@@ -142,7 +142,7 @@ FormalDeclaration   ::= Type:t Identifier:id
                     ;
 
 VariableDeclarationList::= /* empty */
-                    | VariableDeclaration:v VariableDeclarationList:vdl
+                    | VariableDeclarationList:vdl VariableDeclaration:v
                         {:
                         if (vdl == null)
                         {

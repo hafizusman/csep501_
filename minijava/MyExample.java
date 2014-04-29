@@ -1,5 +1,9 @@
 public int func(int x)
 {
+    int a;
+    boolean b;
+    int []c;
+
     a = b;
     y = 12;
     return f;
