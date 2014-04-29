@@ -131,7 +131,7 @@ FormalDeclarationList::= /* empty */
                         fd.add(f);
                         RESULT = fd;
                         :}
-                    | FormalDeclaration:fd COMMA FormalDeclarationList:fdl
+                    | FormalDeclarationList:fdl COMMA FormalDeclaration:fd
                         {:
                         fdl.add(fd);
                         RESULT = fdl;
@@ -189,7 +189,7 @@ BlockStatements     ::= /* empty */
                         sl.add(s);
                         RESULT = sl;
                         :}
-                    | Statement:s BlockStatements:bs
+                    | BlockStatements:bs Statement:s
                         {:
                         bs.add(s);
                         RESULT = bs;
