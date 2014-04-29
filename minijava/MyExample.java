@@ -1,4 +1,4 @@
-public int func(int x)
+public int TheMethodToParse(int[] myarr, int myint, boolean mybool)
 {
     int a;
     boolean b;
