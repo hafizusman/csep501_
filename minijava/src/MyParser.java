@@ -22,14 +22,30 @@ public class MyParser {
             Symbol root;
 	    // replace p.parse() with p.debug_parse() in next line to see trace of
 	    // parser shift/reduce actions during parse
-            root = p.parse();
-            //root = p.debug_parse();
-            ArrayList<Statement> program = (ArrayList<Statement>)root.value;
-            for (Statement statement: program) {
-                statement.accept(new PrettyPrintVisitor());
-				System.out.print("\n");
+            if (false)
+            {
+                root = p.parse();
+                //root = p.debug_parse();
+                ArrayList<Statement> program = (ArrayList<Statement>)root.value;
+                for (Statement statement: program) {
+                    statement.accept(new PrettyPrintVisitor());
+                    System.out.print("\n");
+                }
             }
-            System.out.print("\nParsing completed"); 
+            else
+            {
+                root = p.parse();
+                //root = p.debug_parse();
+                MethodDecl program = (MethodDecl)root.value;
+                program.accept(new PrettyPrintVisitor());
+                //for (int i = 0; i < program.size(); i++)
+                //{
+                 //   VarDecl s1 = program.get(i);
+                  //  s1.accept(new PrettyPrintVisitor());
+                   // System.out.print("\n");
+                //}
+            }
+            System.out.print("\nParsing completed");
         } catch (Exception e) {
             // yuck: some kind of error in the compiler implementation
             // that we're not expecting (a bug!)

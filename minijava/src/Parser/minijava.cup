@@ -62,13 +62,19 @@ terminal String INTEGER_LITERAL;
 
 /* Nonterminals */
 
-nonterminal ArrayList<Statement> Program;
+//nonterminal ArrayList<Statement> Program;
+nonterminal MethodDecl Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
 nonterminal ExpList ExpressionList;
 nonterminal Identifier Identifier;
-
+nonterminal Formal FormalDeclaration;
+nonterminal FormalList FormalDeclarationList;
+nonterminal VarDecl VariableDeclaration;
+nonterminal VarDeclList VariableDeclarationList;
+nonterminal Type Type;
+nonterminal MethodDecl MethodDeclaration;
 
 /* Precedence declarations */
 
@@ -84,14 +90,72 @@ precedence left MULTIPLY;
 
 /* Productions */
 
-Program             ::= Statement:s
-                        {: ArrayList<Statement> p = new ArrayList<Statement>();
-                            p.add(s);
-                            RESULT = p; :}
-                    | Program:p Statement:s
-                        {: p.add(s); RESULT = p; :}
+//Program             ::= Statement:s
+  //                      {: ArrayList<Statement> p = new ArrayList<Statement>();
+    //                        p.add(s);
+      //                      RESULT = p; :}
+        //            | Program:p Statement:s
+          //              {: p.add(s); RESULT = p; :}
+            //        ;
+
+Program ::= MethodDeclaration:md
+        {:RESULT=md;:};
+
+// Type	::=	"int" "[" "]"
+//      |	"boolean"
+//      |	"int"
+//      |	Identifier
+Type                ::= INTEGER_TYPE:ln LBRACKET RBRACKET
+                        {: RESULT = new IntArrayType(lnleft); :}
+                    | BOOLEAN_TYPE:ln
+                        {: RESULT = new BooleanType(lnleft); :}
+                    | INTEGER_TYPE:ln
+                        {: RESULT = new IntegerType(lnleft); :}
+                    | IDENTIFIER:name
+                        {: RESULT = new IdentifierType(name, nameleft); :}
                     ;
 
+// MethodDeclaration	::=	"public" Type Identifier "(" ( Type Identifier ( "," Type Identifier )* )? ")" "{" ( VarDeclaration )* ( Statement )* "return" Expression ";" "}"
+MethodDeclaration   ::= PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
+                        LCURLY
+                     //       VariableDeclarationList:vdl
+                            BlockStatements:s
+                            RETURN Expression:retexp SEMICOLON
+                        RCURLY
+                        {: RESULT = new MethodDecl(t, name, fdl, null, s, retexp, tleft); :}
+                    ;
+FormalDeclarationList::= /* empty */
+                    | FormalDeclaration:f
+                        {:
+                        FormalList fd = new FormalList(fleft);
+                        fd.add(f);
+                        RESULT = fd;
+                        :}
+                    | FormalDeclaration:fd COMMA FormalDeclarationList:fdl
+                        {:
+                        fdl.add(fd);
+                        RESULT = fdl;
+                        :}
+                    ;
+FormalDeclaration   ::= Type:t Identifier:id
+                        {: RESULT = new Formal(t, id, tleft); :}
+                    ;
+
+VariableDeclarationList::= /* empty */
+                    | VariableDeclaration:v VariableDeclarationList:vdl
+                        {:
+                        if (vdl == null)
+                        {
+                            vdl = new VarDeclList(vleft);
+                        }
+                        vdl.add(v);
+                        RESULT = vdl;
+                        :}
+                    ;
+// VarDeclaration	::=	Type Identifier ";"
+VariableDeclaration ::= Type:t Identifier:id SEMICOLON
+                        {: RESULT = new VarDecl(t, id, tleft); :}
+                    ;
 
 //Identifier	    ::=	<IDENTIFIER>
 Identifier          ::= IDENTIFIER:id
@@ -178,7 +242,7 @@ Expression          ::= Expression:arg1 LOGICAL_AND Expression:arg2
                     | LOGICAL_NOT Expression:arg1
                         {: RESULT = new Not(arg1, arg1left); :}
                     | LPAREN Expression:expr RPAREN
-                        {: RESULT = expr; :} /* CHECK!!!! */
+                        {: RESULT = expr; :}
                     ;
 
 //      |	Expression "." Identifier "(" ( Expression ( "," Expression )* )? ")"

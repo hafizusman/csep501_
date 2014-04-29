@@ -92,10 +92,12 @@ public class PrettyPrintVisitor implements Visitor {
   // Type t;
   // Identifier i;
   public void visit(VarDecl n) {
-    n.t.accept(this);
-    System.out.print(" ");
-    n.i.accept(this);
-    System.out.print(";");
+      System.out.print("VarDecl(" + n.line_number + ")\n");
+      this.IndentLevel++;
+      this.Indent();
+      n.t.accept(this);
+      System.out.print(" ");
+      n.i.accept(this);
   }
 
   // Type t;
@@ -115,10 +117,12 @@ public class PrettyPrintVisitor implements Visitor {
         if (i+1 < n.fl.size()) { System.out.print(", "); }
     }
     System.out.println(") { ");
-    for ( int i = 0; i < n.vl.size(); i++ ) {
-        System.out.print("    ");
-        n.vl.get(i).accept(this);
-        System.out.println("");
+    if (n.vl != null) {
+        for (int i = 0; i < n.vl.size(); i++) {
+            System.out.print("    ");
+            n.vl.get(i).accept(this);
+            System.out.println("");
+        }
     }
     for ( int i = 0; i < n.sl.size(); i++ ) {
         System.out.print("    ");
@@ -193,7 +197,6 @@ public class PrettyPrintVisitor implements Visitor {
     n.e.accept(this);
 
     if (n.s != null) {
-        System.out.print("\n");
         this.Indent();
         n.s.accept(this);
     }

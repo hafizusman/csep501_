@@ -1,3 +1,11 @@
+public int func(int x)
+{
+    a = b;
+    y = 12;
+    return f;
+}
+
+/*
 while(a<12)
         {
         a = b;
@@ -7,7 +15,7 @@ while(a<12)
 
 while(!b)
 {}
-
+*/
 
 //if (x < 10) { m = 12; } else { m = 9; }
 /*
