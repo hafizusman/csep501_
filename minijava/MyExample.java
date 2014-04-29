@@ -1,16 +1,18 @@
-public int AnotherMethodToParse()
+class AClass
 {
-    int x;
+    int class_var;
 
-    y = z+10;
-    return 100 - i10;
-}
+    public int AnotherMethodToParse() {
+        int x;
 
-public int TheMethodToParse(int[] myarr, int myint, boolean mybool)
-{
-    int a;
-    boolean b;
-    int []c;
+        y = z + 10;
+        return 100 - i10;
+    }
+
+    public int TheMethodToParse(int[] myarr, int myint, boolean mybool) {
+        int a;
+        boolean b;
+        int[] c;
 /*
 while(a<12)
         {
@@ -24,10 +26,11 @@ while(!b)
 */
 
 
-if (x < 10)
-        { m = 12; }
-else
-{ m = 9; }
+        if (x < 10) {
+            m = 12;
+        } else {
+            m = 9;
+        }
 
 
 /*
@@ -52,6 +55,6 @@ System.out.println(b);
 //    y = 12;
 //    x = q.myFunc(a+100 - 20*cd, cd, a[10], new obj(), another.function(call));
 
-    return f;
+        return f;
+    }
 }
-

@@ -50,20 +50,48 @@ public class PrettyPrintVisitor implements Visitor {
   // VarDeclList vl;
   // MethodDeclList ml;
   public void visit(ClassDeclSimple n) {
-    System.out.print("class ");
+    int localindent = 0;
+    System.out.print("ClassDeclSimple(" + n.line_number + ")\n");
+    this.IndentLevel++;
+    localindent = this.IndentLevel;
+    this.Indent();
     n.i.accept(this);
-    System.out.println(" { ");
-    for ( int i = 0; i < n.vl.size(); i++ ) {
-        System.out.print("  ");
-        n.vl.get(i).accept(this);
-        if ( i+1 < n.vl.size() ) { System.out.println(); }
+
+
+    if (n.vl != null) {
+        System.out.print("\n");
+        Indent();
+        System.out.print("ClassDeclSimple Vars(" + n.vl.line_number + "):\n");
+        this.IndentLevel++;
+        localindent = this.IndentLevel;
+        for (int i = 0; i < n.vl.size(); i++) {
+            this.IndentLevel = localindent;
+            Indent();
+            n.vl.get(i).accept(this);
+            if (i + 1 < n.vl.size()) {
+                System.out.print("\n");
+            }
+        }
+        this.IndentLevel--;
+        this.IndentLevel--;
+        localindent = this.IndentLevel;
     }
-    for ( int i = 0; i < n.ml.size(); i++ ) {
-        System.out.println();
-        n.ml.get(i).accept(this);
+
+
+    this.IndentLevel = localindent;
+    if (n.ml != null) {
+        System.out.print("\n");
+        Indent();
+        System.out.print("ClassDeclSimple Methods(" + n.ml.line_number + "):\n");
+        this.IndentLevel++;
+        localindent = this.IndentLevel;
+        for (int i = 0; i < n.ml.size(); i++) {
+            this.IndentLevel = localindent;
+            System.out.print("\n");
+            Indent();
+            n.ml.get(i).accept(this);
+        }
     }
-    System.out.println();
-    System.out.println("}");
   }
 
   // Identifier i;

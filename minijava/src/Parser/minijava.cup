@@ -63,7 +63,7 @@ terminal String INTEGER_LITERAL;
 /* Nonterminals */
 
 //nonterminal ArrayList<Statement> Program;
-nonterminal MethodDeclList Program;
+nonterminal ClassDecl Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
@@ -76,7 +76,7 @@ nonterminal VarDeclList VariableDeclarationList;
 nonterminal Type Type;
 nonterminal MethodDecl MethodDeclaration;
 nonterminal MethodDeclList MethodDeclarationList;
-
+nonterminal ClassDecl ClassDeclaration;
 
 /* Precedence declarations */
 
@@ -100,8 +100,23 @@ precedence left MULTIPLY;
           //              {: p.add(s); RESULT = p; :}
             //        ;
 
-Program ::= MethodDeclarationList:md
+Program ::= ClassDeclaration:md
         {:RESULT=md;:};
+
+//ClassDeclaration	::=	"class" Identifier ( "extends" Identifier )? "{" ( VarDeclaration )* ( MethodDeclaration )* "}"
+ClassDeclaration    ::= CLASS:c Identifier:id1 EXTENDS Identifier:id2
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            MethodDeclarationList:mdl
+                        RCURLY
+                        {: RESULT = new ClassDeclExtends(id1, id2, vdl, mdl, cleft); :}
+                    | CLASS:c Identifier:id
+                        LCURLY
+                          VariableDeclarationList:vdl
+                          MethodDeclarationList:mdl
+                        RCURLY
+                        {: RESULT = new ClassDeclSimple(id, vdl, mdl, cleft); :}
+                    ;
 
 // Type	::=	"int" "[" "]"
 //      |	"boolean"

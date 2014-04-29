@@ -36,15 +36,17 @@ public class MyParser {
             {
                 root = p.parse();
                 //root = p.debug_parse();
-                //MethodDecl program = (MethodDecl)root.value;
-                //program.accept(new PrettyPrintVisitor());
-
-                MethodDeclList program = (MethodDeclList)root.value;
-                for (int i = 0; i < program.size(); i++)
-                {
-                    MethodDecl d = program.get(i);
-                    d.accept(new PrettyPrintVisitor());
-                    System.out.print("\n");
+                if (true) {
+                    ClassDecl program = (ClassDecl) root.value;
+                    program.accept(new PrettyPrintVisitor());
+                }
+                else {
+                    MethodDeclList program = (MethodDeclList) root.value;
+                    for (int i = 0; i < program.size(); i++) {
+                        MethodDecl d = program.get(i);
+                        d.accept(new PrettyPrintVisitor());
+                        System.out.print("\n");
+                    }
                 }
             }
             System.out.print("\nParsing completed");
