@@ -64,11 +64,9 @@ terminal String INTEGER_LITERAL;
 
 nonterminal ArrayList<Statement> Program;
 nonterminal Statement Statement;
-nonterminal Block Block;
-nonterminal BlockStatements;
+nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
 nonterminal ExpList ExpressionList;
-//nonterminal ExpList ExpressionListNext;
 nonterminal Identifier Identifier;
 
 
@@ -106,12 +104,13 @@ Identifier          ::= IDENTIFIER:id
 //      |	"System.out.println" "(" Expression ")" ";"
 //      |	Identifier "=" Expression ";"
 //      |	Identifier "[" Expression "]" "=" Expression ";"
-Statement           ::= Block:b
-                        {}
-                    | IF LPAREN Expression:ifexpr RPAREN Statement:thenstmt ELSE Statement:elsestmt
-                        {: RESULT = new If(ifexpr, thenstmt, elsestmt, ifexprleft); :}
-                    | WHILE LPAREN Expression:expr RPAREN Statement:stmt
-                        {: RESULT = new While(expr, stmt, exprleft); :}
+Statement           ::= LCURLY RCURLY
+                    | LCURLY BlockStatements:bs RCURLY
+                        {: RESULT = new Block(bs, bsleft); :}
+                    | IF:i LPAREN Expression:ifexpr RPAREN Statement:thenstmt ELSE Statement:elsestmt
+                        {: RESULT = new If(ifexpr, thenstmt, elsestmt, ileft); :}
+                    | WHILE:w LPAREN Expression:expr RPAREN Statement:stmt
+                        {: RESULT = new While(expr, stmt, wleft); :}
                     | DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
                         {: RESULT = new Print(expr, dleft); :}
                     | Identifier:name BECOMES Expression:expr SEMICOLON
@@ -119,11 +118,18 @@ Statement           ::= Block:b
                     | Identifier:name LBRACKET Expression:expr1 RBRACKET BECOMES Expression:expr2 SEMICOLON
                         {: RESULT = new ArrayAssign(name, expr1, expr2, nameleft); :}
                     ;
-Block               ::= LCURLY BlockStatements RCURLY
-                    ;
-
 BlockStatements     ::= /* empty */
-                    | Statement:s BlockStatements:b
+                    Statement:s
+                        {:
+                        StatementList sl = new StatementList(sleft);
+                        sl.add(s);
+                        RESULT = sl;
+                        :}
+                    | Statement:s BlockStatements:bs
+                        {:
+                        bs.add(s);
+                        RESULT = bs;
+                        :}
                     ;
 
 // Expression	::=	Expression ( "&&" | "<" | "+" | "-" | "*" ) Expression

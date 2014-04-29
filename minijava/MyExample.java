@@ -1,23 +1,16 @@
-/*
-while
-(
-a
-<
-12
-)
-{
-u
-=
-10
-;
-}
- */
+while(a<12)
+        {
+        a = b;
+        c2 = c && d;
+        u = my.yourfunc();
+        }
+
+while(!b)
+{}
+
 
 //if (x < 10) { m = 12; } else { m = 9; }
-
-a = b;
-c2 = c && d;
-u = my.yourfunc();
+/*
 x = q.myFunc(a+100, cd, a[10], new obj(), another.function(call));
 c3 = !f && g;
 h = h1 - h2;
@@ -31,7 +24,7 @@ y = a.length;
 p = new int[100];
 p2 = new int[x - 100];
 q = new MyClass();
-//x = q.myFunc();
 b = a + (foo + bar) + baz;
 System.out.println(baz);
 System.out.println(b);
+*/

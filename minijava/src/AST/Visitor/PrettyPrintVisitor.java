@@ -158,13 +158,16 @@ public class PrettyPrintVisitor implements Visitor {
 
   // StatementList sl;
   public void visit(Block n) {
-    System.out.println("{ ");
-    for ( int i = 0; i < n.sl.size(); i++ ) {
-        System.out.print("      ");
+    System.out.print("Block(" + n.line_number + ")\n");
+    this.IndentLevel++;
+
+    int localindent = this.IndentLevel;
+    for (int i = 0; i < n.sl.size(); i++) {
+        this.IndentLevel = localindent; // cuz subnodes might change the indentation
+        Indent();
         n.sl.get(i).accept(this);
-        System.out.println();
+        System.out.print("\n");
     }
-    System.out.print("    } ");
   }
 
   // Exp e;
@@ -188,10 +191,12 @@ public class PrettyPrintVisitor implements Visitor {
     this.IndentLevel++;
     this.Indent();
     n.e.accept(this);
-    System.out.print("\n");
 
-    this.Indent();
-    n.s.accept(this);
+    if (n.s != null) {
+        System.out.print("\n");
+        this.Indent();
+        n.s.accept(this);
+    }
   }
 
   // Exp e;
