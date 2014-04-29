@@ -199,20 +199,40 @@ public class PrettyPrintVisitor implements Visitor {
         this.IndentLevel = localindent; // cuz subnodes might change the indentation
         Indent();
         n.sl.get(i).accept(this);
-        System.out.print("\n");
+        if (i < n.sl.size()-1) {
+            System.out.print("\n");
+        }
     }
   }
 
   // Exp e;
   // Statement s1,s2;
   public void visit(If n) {
-    System.out.print("if (");
+    int localindent = 0;
+    System.out.print("If(" + n.line_number + ")\n");
+    this.IndentLevel++;
+    localindent = this.IndentLevel;
+
+    Indent();
+    System.out.print("Condition:\n");
+    this.IndentLevel++;
+    Indent();
     n.e.accept(this);
-    System.out.println(") ");
-    System.out.print("    ");
+    System.out.print("\n");
+
+    this.IndentLevel = localindent;
+    Indent();
+    System.out.print("ThenExpr:\n");
+    this.IndentLevel++;
+    Indent();
     n.s1.accept(this);
-    System.out.println();
-    System.out.print("    else ");
+    System.out.print("\n");
+
+    this.IndentLevel = localindent;
+    Indent();
+    System.out.print("ElseExpr:\n");
+    this.IndentLevel++;
+    Indent();
     n.s2.accept(this);
   }
 
@@ -224,7 +244,7 @@ public class PrettyPrintVisitor implements Visitor {
     this.IndentLevel++;
     this.Indent();
     n.e.accept(this);
-
+    System.out.print("\n");
     if (n.s != null) {
         this.Indent();
         n.s.accept(this);

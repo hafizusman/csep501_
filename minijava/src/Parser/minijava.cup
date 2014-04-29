@@ -253,7 +253,7 @@ ExpressionList      ::= /* empty */
                         e.add(expr);
                         RESULT = e;
                         :}
-                    | Expression:expr COMMA ExpressionList:exprn
+                    | ExpressionList:exprn COMMA Expression:expr
                         {:
                         exprn.add(expr);
                         RESULT = exprn;
