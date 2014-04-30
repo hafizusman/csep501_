@@ -6,13 +6,6 @@ import AST.*;
 // HP 10/11
 
 public class PrettyPrintVisitor implements Visitor {
-  private Integer IndentLevel = 0;
-
-  private void Indent()
-  {
-      for(int i = 0; i < this.IndentLevel; i++)
-          System.out.print("  ");
-  }
 
   // Display added for toy example language.  Not used in regular MiniJava
   public void visit(Display n) {
@@ -20,170 +13,82 @@ public class PrettyPrintVisitor implements Visitor {
     n.e.accept(this);
     System.out.print(";");
   }
-
+  
   // MainClass m;
   // ClassDeclList cl;
   public void visit(Program n) {
-    int localindent = 0;
-    System.out.print("Program(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    Indent();
     n.m.accept(this);
-
-    if (n.cl != null) {
-        System.out.print("\n");
-        this.IndentLevel++;
-        localindent = this.IndentLevel;
-        for (int i = 0; i < n.cl.size(); i++) {
-            Indent();
-            n.cl.get(i).accept(this);
-            this.IndentLevel = localindent;
-        }
+    for ( int i = 0; i < n.cl.size(); i++ ) {
+        System.out.println();
+        n.cl.get(i).accept(this);
     }
   }
-
+  
   // Identifier i1,i2;
   // Statement s;
   public void visit(MainClass n) {
-    int localindent = 0;
-    System.out.print("MainClass(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    Indent();
-    System.out.print("MainClass class name: ");
+    System.out.print("class ");
     n.i1.accept(this);
-    System.out.print("\n");
-
-    Indent();
-    System.out.print("MainClass main formal list: int "); //int is assumed
+    System.out.println(" {");
+    System.out.print("  public static void main (String [] ");
     n.i2.accept(this);
-    System.out.print("\n");
-
-    Indent();
-    System.out.print("MainClass main body: ");
-    System.out.print("\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.println(") {");
+    System.out.print("    ");
     n.s.accept(this);
-
-    this.IndentLevel = 1; // hack
+    System.out.println("  }");
+    System.out.println("}");
   }
 
   // Identifier i;
   // VarDeclList vl;
   // MethodDeclList ml;
   public void visit(ClassDeclSimple n) {
-    int localindent = 0;
-    System.out.print("ClassDeclSimple(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    localindent = this.IndentLevel;
-    this.Indent();
-    System.out.print("ClassDeclSimple class name: ");
+    System.out.print("class ");
     n.i.accept(this);
-
-
-    if (n.vl != null) {
-        System.out.print("\n");
-        Indent();
-        System.out.print("ClassDeclSimple Vars(" + n.vl.line_number + "):\n");
-        this.IndentLevel++;
-        localindent = this.IndentLevel;
-        for (int i = 0; i < n.vl.size(); i++) {
-            this.IndentLevel = localindent;
-            Indent();
-            n.vl.get(i).accept(this);
-            if (i + 1 < n.vl.size()) {
-                System.out.print("\n");
-            }
-        }
-        this.IndentLevel--;
-        this.IndentLevel--;
-        localindent = this.IndentLevel;
+    System.out.println(" { ");
+    for ( int i = 0; i < n.vl.size(); i++ ) {
+        System.out.print("  ");
+        n.vl.get(i).accept(this);
+        if ( i+1 < n.vl.size() ) { System.out.println(); }
     }
-
-
-    this.IndentLevel = localindent;
-    if (n.ml != null) {
-        System.out.print("\n");
-        Indent();
-        System.out.print("ClassDeclSimple Methods(" + n.ml.line_number + "):\n");
-        this.IndentLevel++;
-        localindent = this.IndentLevel;
-        for (int i = 0; i < n.ml.size(); i++) {
-            this.IndentLevel = localindent;
-            System.out.print("\n");
-            Indent();
-            n.ml.get(i).accept(this);
-        }
+    for ( int i = 0; i < n.ml.size(); i++ ) {
+        System.out.println();
+        n.ml.get(i).accept(this);
     }
-      this.IndentLevel = 1; // hack
+    System.out.println();
+    System.out.println("}");
   }
-
+ 
   // Identifier i;
   // Identifier j;
   // VarDeclList vl;
   // MethodDeclList ml;
   public void visit(ClassDeclExtends n) {
-      int localindent = 0;
-      System.out.print("ClassDeclExtends(" + n.line_number + ")\n");
-      this.IndentLevel++;
-      localindent = this.IndentLevel;
-      this.Indent();
-      System.out.print("ClassDeclExtends class name: ");
-      n.i.accept(this);
-      System.out.print("\n");
-      this.IndentLevel++;
-      Indent();
-      System.out.print(" extends: ");
-      n.j.accept(this);
-      this.IndentLevel--;
-
-      if (n.vl != null) {
-          System.out.print("\n");
-          Indent();
-          System.out.print("ClassDeclExtends Vars(" + n.vl.line_number + "):\n");
-          this.IndentLevel++;
-          localindent = this.IndentLevel;
-          for (int i = 0; i < n.vl.size(); i++) {
-              this.IndentLevel = localindent;
-              Indent();
-              n.vl.get(i).accept(this);
-              if (i + 1 < n.vl.size()) {
-                  System.out.print("\n");
-              }
-          }
-          this.IndentLevel--;
-          this.IndentLevel--;
-          localindent = this.IndentLevel;
-      }
-
-
-      this.IndentLevel = localindent;
-      if (n.ml != null) {
-          System.out.print("\n");
-          Indent();
-          System.out.print("ClassDeclExtends Methods(" + n.ml.line_number + "):\n");
-          this.IndentLevel++;
-          localindent = this.IndentLevel;
-          for (int i = 0; i < n.ml.size(); i++) {
-              this.IndentLevel = localindent;
-              System.out.print("\n");
-              Indent();
-              n.ml.get(i).accept(this);
-          }
-      }
-      System.out.print("\n");
-      this.IndentLevel = 1; // hack
+    System.out.print("class ");
+    n.i.accept(this);
+    System.out.println(" extends ");
+    n.j.accept(this);
+    System.out.println(" { ");
+    for ( int i = 0; i < n.vl.size(); i++ ) {
+        System.out.print("  ");
+        n.vl.get(i).accept(this);
+        if ( i+1 < n.vl.size() ) { System.out.println(); }
+    }
+    for ( int i = 0; i < n.ml.size(); i++ ) {
+        System.out.println();
+        n.ml.get(i).accept(this);
+    }
+    System.out.println();
+    System.out.println("}");
   }
 
   // Type t;
   // Identifier i;
   public void visit(VarDecl n) {
-      System.out.print("VarDecl(" + n.line_number + ")\n");
-      this.IndentLevel++;
-      this.Indent();
-      n.t.accept(this);
-      System.out.print(" ");
-      n.i.accept(this);
+    n.t.accept(this);
+    System.out.print(" ");
+    n.i.accept(this);
+    System.out.print(";");
   }
 
   // Type t;
@@ -193,63 +98,30 @@ public class PrettyPrintVisitor implements Visitor {
   // StatementList sl;
   // Exp e;
   public void visit(MethodDecl n) {
-    int localindent = 0;
-    System.out.print("MethodDecl(" + n.line_number + ")\n");
-
-    this.IndentLevel++;
-    localindent = this.IndentLevel;
-    Indent();
-    System.out.print("MethodDecl type: ");
+    System.out.print("  public ");
     n.t.accept(this);
-    System.out.print("\n");
-
-    Indent();
-    System.out.print("MethodDecl name: ");
+    System.out.print(" ");
     n.i.accept(this);
-    System.out.print("\n");
-
-    Indent();
-    System.out.print("Formal List: \n");
-    if (n.fl != null) {
-        this.IndentLevel++;
-        localindent = this.IndentLevel;
-
-        for ( int i = 0; i < n.fl.size(); i++ ) {
-            Indent();
-            n.fl.get(i).accept(this);
-            if (i+1 < n.fl.size()) {
-                System.out.print("\n");
-            }
-            this.IndentLevel = localindent;
-        }
-        this.IndentLevel--;
-        localindent = this.IndentLevel;
+    System.out.print(" (");
+    for ( int i = 0; i < n.fl.size(); i++ ) {
+        n.fl.get(i).accept(this);
+        if (i+1 < n.fl.size()) { System.out.print(", "); }
     }
-    System.out.print("\n");
-
-    if (n.vl != null) {
-        for (int i = 0; i < n.vl.size(); i++) {
-            Indent();
-            n.vl.get(i).accept(this);
-            System.out.print("\n");
-            this.IndentLevel = localindent;
-        }
+    System.out.println(") { ");
+    for ( int i = 0; i < n.vl.size(); i++ ) {
+        System.out.print("    ");
+        n.vl.get(i).accept(this);
+        System.out.println("");
     }
-
-    if (n.sl != null) {
-        for (int i = 0; i < n.sl.size(); i++) {
-            Indent();
-            n.sl.get(i).accept(this);
-            this.IndentLevel = localindent;
-            System.out.print("\n");
-        }
+    for ( int i = 0; i < n.sl.size(); i++ ) {
+        System.out.print("    ");
+        n.sl.get(i).accept(this);
+        if ( i < n.sl.size() ) { System.out.println(""); }
     }
-
-    Indent();
-    System.out.print("ReturnExpr(" + n.e.line_number + ")\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.print("    return ");
     n.e.accept(this);
+    System.out.println(";");
+    System.out.print("  }");
   }
 
   // Type t;
@@ -279,102 +151,62 @@ public class PrettyPrintVisitor implements Visitor {
 
   // StatementList sl;
   public void visit(Block n) {
-    System.out.print("Block(" + n.line_number + ")\n");
-    this.IndentLevel++;
-
-    int localindent = this.IndentLevel;
-    for (int i = 0; i < n.sl.size(); i++) {
-        this.IndentLevel = localindent; // cuz subnodes might change the indentation
-        Indent();
+    System.out.println("{ ");
+    for ( int i = 0; i < n.sl.size(); i++ ) {
+        System.out.print("      ");
         n.sl.get(i).accept(this);
-        if (i < n.sl.size()-1) {
-            System.out.print("\n");
-        }
+        System.out.println();
     }
+    System.out.print("    } ");
   }
 
   // Exp e;
   // Statement s1,s2;
   public void visit(If n) {
-    int localindent = 0;
-    System.out.print("If(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    localindent = this.IndentLevel;
-
-    Indent();
-    System.out.print("Condition:\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.print("if (");
     n.e.accept(this);
-    System.out.print("\n");
-
-    this.IndentLevel = localindent;
-    Indent();
-    System.out.print("ThenExpr:\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.println(") ");
+    System.out.print("    ");
     n.s1.accept(this);
-    System.out.print("\n");
-
-    this.IndentLevel = localindent;
-    Indent();
-    System.out.print("ElseExpr:\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.println();
+    System.out.print("    else ");
     n.s2.accept(this);
   }
 
   // Exp e;
   // Statement s;
   public void visit(While n) {
-    System.out.print("While(" + n.line_number + ")\n");
-
-    this.IndentLevel++;
-    this.Indent();
+    System.out.print("while (");
     n.e.accept(this);
-    System.out.print("\n");
-    if (n.s != null) {
-        this.Indent();
-        n.s.accept(this);
-    }
+    System.out.print(") ");
+    n.s.accept(this);
   }
 
   // Exp e;
   public void visit(Print n) {
-    System.out.print("System.out.println(" + n.line_number + ")\n");
-    this.IndentLevel++; this.Indent();
+    System.out.print("System.out.println(");
     n.e.accept(this);
+    System.out.print(");");
   }
-
+  
   // Identifier i;
   // Exp e;
   public void visit(Assign n) {
-    System.out.print("Assign(" + n.line_number + ")\n");
-
-    this.IndentLevel++;
-    this.Indent();
     n.i.accept(this);
-    System.out.print("\n");
-
-    this.Indent();
+    System.out.print(" = ");
     n.e.accept(this);
+    System.out.print(";");
   }
 
   // Identifier i;
   // Exp e1,e2;
   public void visit(ArrayAssign n) {
-    System.out.print("ArrayAssign(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    this.Indent();
     n.i.accept(this);
-    System.out.print("\n");
-
-    this.Indent();
+    System.out.print("[");
     n.e1.accept(this);
-    System.out.print("\n");
-
-    this.Indent();
+    System.out.print("] = ");
     n.e2.accept(this);
+    System.out.print(";");
   }
 
   // Exp e1,e2;
@@ -424,53 +256,31 @@ public class PrettyPrintVisitor implements Visitor {
 
   // Exp e1,e2;
   public void visit(ArrayLookup n) {
-    System.out.print("ArrayLookup(" + n.line_number + ")\n");
-
-    this.IndentLevel++; this.Indent();
     n.e1.accept(this);
-    System.out.print("\n");
-
-    this.Indent();
+    System.out.print("[");
     n.e2.accept(this);
+    System.out.print("]");
   }
 
   // Exp e;
   public void visit(ArrayLength n) {
-    System.out.print("ArrayLength(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    this.Indent();
     n.e.accept(this);
+    System.out.print(".length");
   }
 
   // Exp e;
   // Identifier i;
   // ExpList el;
   public void visit(Call n) {
-    int mylocalindent = 0;
-
-    System.out.print("Call(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    Indent();
     n.e.accept(this);
-    System.out.print("\n");
-
-    Indent();
+    System.out.print(".");
     n.i.accept(this);
-
-    if (n.el != null) {
-        System.out.print("\n");
-        this.IndentLevel++;
-        mylocalindent = this.IndentLevel;
-
-        for (int i = 0; i < n.el.size(); i++) {
-            this.IndentLevel = mylocalindent; //cuz the sub-nodes might increase indentation
-            Indent();
-            n.el.get(i).accept(this);
-            if (i + 1 < n.el.size()) {
-                System.out.print("\n");
-            }
-        }
+    System.out.print("(");
+    for ( int i = 0; i < n.el.size(); i++ ) {
+        n.el.get(i).accept(this);
+        if ( i+1 < n.el.size() ) { System.out.print(", "); }
     }
+    System.out.print(")");
   }
 
   // int i;
@@ -497,25 +307,21 @@ public class PrettyPrintVisitor implements Visitor {
 
   // Exp e;
   public void visit(NewArray n) {
-    System.out.print("NewArray(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.print("new int [");
     n.e.accept(this);
+    System.out.print("]");
   }
 
   // Identifier i;
   public void visit(NewObject n) {
-    System.out.print("NewObject(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.print("new ");
     System.out.print(n.i.s);
+    System.out.print("()");
   }
 
   // Exp e;
   public void visit(Not n) {
-    System.out.print("Not(" + n.line_number + ")\n");
-    this.IndentLevel++;
-    this.Indent();
+    System.out.print("!");
     n.e.accept(this);
   }
 
