@@ -62,8 +62,7 @@ terminal String INTEGER_LITERAL;
 
 /* Nonterminals */
 
-//nonterminal ArrayList<Statement> Program;
-nonterminal MethodDeclList Program;
+nonterminal Program Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
 nonterminal Exp Expression;
@@ -76,7 +75,9 @@ nonterminal VarDeclList VariableDeclarationList;
 nonterminal Type Type;
 nonterminal MethodDecl MethodDeclaration;
 nonterminal MethodDeclList MethodDeclarationList;
-
+nonterminal ClassDecl ClassDeclaration;
+nonterminal ClassDeclList ClassDeclarationList;
+nonterminal MainClass MainClassDecl;
 
 /* Precedence declarations */
 
@@ -92,16 +93,44 @@ precedence left MULTIPLY;
 
 /* Productions */
 
-//Program             ::= Statement:s
-  //                      {: ArrayList<Statement> p = new ArrayList<Statement>();
-    //                        p.add(s);
-      //                      RESULT = p; :}
-        //            | Program:p Statement:s
-          //              {: p.add(s); RESULT = p; :}
-            //        ;
+//Goal	::=	MainClass ( ClassDeclaration )* <EOF>
+Program             ::= MainClassDecl:mcd ClassDeclarationList:cdl
+                        {: RESULT=new Program(mcd, cdl, mcdleft); :}
+                    ;
 
-Program ::= MethodDeclarationList:md
-        {:RESULT=md;:};
+//MainClass	::=	"class" Identifier "{" "public" "static" "void" "main" "(" "String" "[" "]" Identifier ")" "{" Statement "}" "}"
+MainClassDecl       ::= CLASS:c Identifier:id1 LCURLY
+                            PUBLIC STATIC VOID MAIN LPAREN STRING_TYPE LBRACKET RBRACKET Identifier:id2 RPAREN
+                            LCURLY Statement:s RCURLY
+                            RCURLY
+                        {: RESULT = new MainClass(id1, id2, s, cleft); :}
+                    ;
+
+ClassDeclarationList::=/* empty */
+                    | ClassDeclarationList:cdl ClassDeclaration:c
+                        {:
+                        if (cdl == null)
+                        {
+                            cdl = new ClassDeclList(cleft);
+                        }
+                        cdl.add(c);
+                        RESULT = cdl;
+                        :}
+                    ;
+//ClassDeclaration	::=	"class" Identifier ( "extends" Identifier )? "{" ( VarDeclaration )* ( MethodDeclaration )* "}"
+ClassDeclaration    ::= CLASS:c Identifier:id1 EXTENDS Identifier:id2
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            MethodDeclarationList:mdl
+                        RCURLY
+                        {: RESULT = new ClassDeclExtends(id1, id2, vdl, mdl, cleft); :}
+                    | CLASS:c Identifier:id
+                        LCURLY
+                          VariableDeclarationList:vdl
+                          MethodDeclarationList:mdl
+                        RCURLY
+                        {: RESULT = new ClassDeclSimple(id, vdl, mdl, cleft); :}
+                    ;
 
 // Type	::=	"int" "[" "]"
 //      |	"boolean"
@@ -137,7 +166,13 @@ MethodDeclaration   ::= PUBLIC Type:t Identifier:name LPAREN FormalDeclarationLi
                             RETURN Expression:retexp SEMICOLON
                         RCURLY
                         {: RESULT = new MethodDecl(t, name, fdl, vdl, s, retexp, tleft); :}
-                    ;
+                        | PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            RETURN Expression:retexp SEMICOLON
+                        RCURLY
+                        {: RESULT = new MethodDecl(t, name, fdl, vdl, null, retexp, tleft); :}
+                        ;
 FormalDeclarationList::= /* empty */
                     | FormalDeclaration:f
                         {:
@@ -196,8 +231,7 @@ Statement           ::= LCURLY RCURLY
                     | Identifier:name LBRACKET Expression:expr1 RBRACKET BECOMES Expression:expr2 SEMICOLON
                         {: RESULT = new ArrayAssign(name, expr1, expr2, nameleft); :}
                     ;
-BlockStatements     ::= /* empty */
-                    Statement:s
+BlockStatements     ::= Statement:s
                         {:
                         StatementList sl = new StatementList(sleft);
                         sl.add(s);
