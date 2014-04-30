@@ -49,20 +49,17 @@ public class PrettyPrintVisitor implements Visitor {
     System.out.print("MainClass(" + n.line_number + ")\n");
     this.IndentLevel++;
     Indent();
+    System.out.print("MainClass class name: ");
     n.i1.accept(this);
     System.out.print("\n");
 
     Indent();
-    System.out.print("MainClass name:");
-    System.out.print("\n");
-    this.IndentLevel++;
-    Indent();
+    System.out.print("MainClass main formal list: int "); //int is assumed
     n.i2.accept(this);
-    this.IndentLevel--;
     System.out.print("\n");
 
     Indent();
-    System.out.print("MainClass statements: ");
+    System.out.print("MainClass main body: ");
     System.out.print("\n");
     this.IndentLevel++;
     Indent();
@@ -80,6 +77,7 @@ public class PrettyPrintVisitor implements Visitor {
     this.IndentLevel++;
     localindent = this.IndentLevel;
     this.Indent();
+    System.out.print("ClassDeclSimple class name: ");
     n.i.accept(this);
 
 
@@ -130,9 +128,14 @@ public class PrettyPrintVisitor implements Visitor {
       this.IndentLevel++;
       localindent = this.IndentLevel;
       this.Indent();
+      System.out.print("ClassDeclExtends class name: ");
       n.i.accept(this);
-      System.out.print(" extends ");
+      System.out.print("\n");
+      this.IndentLevel++;
+      Indent();
+      System.out.print(" extends: ");
       n.j.accept(this);
+      this.IndentLevel--;
 
       if (n.vl != null) {
           System.out.print("\n");
@@ -196,10 +199,12 @@ public class PrettyPrintVisitor implements Visitor {
     this.IndentLevel++;
     localindent = this.IndentLevel;
     Indent();
+    System.out.print("MethodDecl type: ");
     n.t.accept(this);
     System.out.print("\n");
 
     Indent();
+    System.out.print("MethodDecl name: ");
     n.i.accept(this);
     System.out.print("\n");
 

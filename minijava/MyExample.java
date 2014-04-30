@@ -4,7 +4,7 @@ class Factorial{
     }
 }
 
-class Fac {
+class Fac extends Factorial {
 
     public int ComputeFac(int num) {
         int num_aux;
