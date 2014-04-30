@@ -8,11 +8,6 @@ import java.io.FileReader;
 import java.util.*;
 
 public class MyParser {
-    public void mYfunc()
-    {
-        System.out.println("QWERRTY");
-    }
-
     public static void main(String [] args) {
         try {
             // create a scanner on the input file
@@ -20,16 +15,21 @@ public class MyParser {
             //scanner s = new scanner(new FileReader("C:\\eclipse\\csep501_\\minijava\\MyExample.java"));
             parser p = new parser(s);
             Symbol root;
-
             // replace p.parse() with p.debug_parse() in next line to see trace of
             // parser shift/reduce actions during parse
             root = p.parse();
             //root = p.debug_parse();
 
             Program program = (Program) root.value;
-            program.accept(new PrettyPrintVisitor());
 
-            System.out.print("\nParsing completed");
+            if (args[0].startsWith("ast")) {
+                //program.accept(new PrettyPrintVisitor());
+            }
+            else if (args[0].startsWith("pp")) {
+                program.accept(new PrettyPrintVisitor());
+                System.out.print("\nParsing completed\n");
+            }
+
         } catch (Exception e) {
             // yuck: some kind of error in the compiler implementation
             // that we're not expecting (a bug!)
