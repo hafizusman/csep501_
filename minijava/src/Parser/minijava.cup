@@ -62,7 +62,6 @@ terminal String INTEGER_LITERAL;
 
 /* Nonterminals */
 
-//nonterminal ArrayList<Statement> Program;
 nonterminal Program Program;
 nonterminal Statement Statement;
 nonterminal StatementList BlockStatements;
@@ -93,14 +92,6 @@ precedence left MULTIPLY;
 
 
 /* Productions */
-
-//Program             ::= Statement:s
-  //                      {: ArrayList<Statement> p = new ArrayList<Statement>();
-    //                        p.add(s);
-      //                      RESULT = p; :}
-        //            | Program:p Statement:s
-          //              {: p.add(s); RESULT = p; :}
-            //        ;
 
 //Goal	::=	MainClass ( ClassDeclaration )* <EOF>
 Program             ::= MainClassDecl:mcd ClassDeclarationList:cdl
@@ -175,7 +166,13 @@ MethodDeclaration   ::= PUBLIC Type:t Identifier:name LPAREN FormalDeclarationLi
                             RETURN Expression:retexp SEMICOLON
                         RCURLY
                         {: RESULT = new MethodDecl(t, name, fdl, vdl, s, retexp, tleft); :}
-                    ;
+                        | PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            RETURN Expression:retexp SEMICOLON
+                        RCURLY
+                        {: RESULT = new MethodDecl(t, name, fdl, vdl, null, retexp, tleft); :}
+                        ;
 FormalDeclarationList::= /* empty */
                     | FormalDeclaration:f
                         {:
@@ -234,8 +231,7 @@ Statement           ::= LCURLY RCURLY
                     | Identifier:name LBRACKET Expression:expr1 RBRACKET BECOMES Expression:expr2 SEMICOLON
                         {: RESULT = new ArrayAssign(name, expr1, expr2, nameleft); :}
                     ;
-BlockStatements     ::= /* empty */
-                    Statement:s
+BlockStatements     ::= Statement:s
                         {:
                         StatementList sl = new StatementList(sleft);
                         sl.add(s);
