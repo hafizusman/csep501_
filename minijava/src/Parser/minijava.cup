@@ -83,12 +83,11 @@ nonterminal MainClass MainClassDecl;
 
 precedence nonassoc LESSTHAN;
 precedence left LOGICAL_AND;
-precedence left PLUS;
-precedence left MINUS;
+precedence left PLUS, MINUS;
 precedence nonassoc LOGICAL_NOT;
 precedence nonassoc DOT;
-precedence left LBRACKET;
 precedence left MULTIPLY;
+precedence left LBRACKET;
 
 
 /* Productions */
