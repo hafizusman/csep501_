@@ -51,7 +51,8 @@ public class MyParser
     {
         int error = ~NO_ERROR;
 
-        program.accept(new SymbolTableVisitor());
+        SemanticAnalysis sa = new SemanticAnalysis();
+        error = sa.pass1(program);
 
         return error;
     }
