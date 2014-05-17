@@ -7,8 +7,12 @@ import java_cup.runtime.Symbol;
 import java.io.FileReader;
 import java.util.*;
 
-public class MyParser {
+public class MyParser
+{
+    private final static int NO_ERROR = 0;
+
     public static void main(String [] args) {
+        int error = 1;
         try {
             // create a scanner on the input file
             //scanner s = new scanner(System.in);
@@ -28,7 +32,9 @@ public class MyParser {
             else if (args[0].startsWith("pp")) {
                 program.accept(new PrettyPrintVisitor());
             }
-
+            else if (args[0].startsWith("check")) {
+                error = SemanticChecks(program);
+            }
         } catch (Exception e) {
             // yuck: some kind of error in the compiler implementation
             // that we're not expecting (a bug!)
@@ -37,6 +43,17 @@ public class MyParser {
             // print out a stack dump
             e.printStackTrace();
         }
+
+        System.exit(error);
+    }
+
+    public static int SemanticChecks(Program program)
+    {
+        int error = ~NO_ERROR;
+
+        program.accept(new SymbolTableVisitor());
+
+        return error;
     }
 }
 
@@ -103,4 +120,14 @@ an overriding method can return a subtype of the return type of the method that 
 You should check to make sure that no two methods in a class have the same name. This should be pretty easy to tack on without adding an extra visitor.
 
 !!! The list we provided is meant more as a starting point than a complete list.
+
+MORE CHECKS (ref slides)
+Has a variable been declared before it is used?
+Are types consistent in an expression?
+In the assignment x=y, is y assignable to x?
+Does a method call have right number and types of parameters?
+In a selector p.q, is q a method or field of object p?
+Is variable x guaranteed to be initialized before it is used?
+Could p be null when p.q is executed?
+
  */

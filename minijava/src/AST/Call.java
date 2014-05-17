@@ -8,7 +8,13 @@ public class Call extends Exp {
   
   public Call(Exp ae, Identifier ai, ExpList ael, int ln) {
     super(ln);
-    e=ae; i=ai; el=ael;
+    e=ae;
+    i=ai;
+
+    if (ael != null)
+        el=ael;
+    else
+        el=new ExpList(LINENUM_UNDEFINED);
   }
 
   public void accept(Visitor v) {

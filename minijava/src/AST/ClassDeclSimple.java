@@ -8,7 +8,16 @@ public class ClassDeclSimple extends ClassDecl {
  
   public ClassDeclSimple(Identifier ai, VarDeclList avl, MethodDeclList aml, int ln) {
     super(ln);
-    i=ai; vl=avl; ml=aml;
+    i=ai;
+    if (avl != null)
+        vl=avl;
+    else
+        vl = new VarDeclList(LINENUM_UNDEFINED);
+
+    if (aml != null)
+        ml=aml;
+    else
+        ml = new MethodDeclList(LINENUM_UNDEFINED);
   }
 
   public void accept(Visitor v) {

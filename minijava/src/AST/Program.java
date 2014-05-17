@@ -7,7 +7,12 @@ public class Program extends ASTNode {
 
   public Program(MainClass am, ClassDeclList acl, int ln) {
     super(ln);
-    m=am; cl=acl; 
+    m=am;
+
+    if (acl!=null)
+        cl=acl;
+    else
+        cl=new ClassDeclList(LINENUM_UNDEFINED);
   }
 
   public void accept(Visitor v) {

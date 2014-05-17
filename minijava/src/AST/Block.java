@@ -6,7 +6,10 @@ public class Block extends Statement {
 
   public Block(StatementList asl, int ln) {
     super(ln);
-    sl=asl;
+    if (asl != null)
+        sl=asl;
+    else
+        sl = new StatementList(LINENUM_UNDEFINED);
   }
 
   public void accept(Visitor v) {
