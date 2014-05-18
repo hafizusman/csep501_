@@ -6,36 +6,51 @@ import java.util.Map;
 import java.util.Set;
 
 
-class LocalInfo
+class VarInfo
 {
     SymbolType type;
-    int ln;
+    public int ln;
     public int seqnum;
-    public LocalInfo(int line_number)
+    public VarInfo(int line_number)
     {
         seqnum = -1;
         type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
         ln = line_number;
     }
+    public VarInfo()
+    {
+        this(-1);
+    }
 }
 
-class FieldInfo
+class LocalInfo extends VarInfo
 {
-    SymbolType type;
-    int ln;
-    public int seqnum;
+    public LocalInfo(int line_number)
+    {
+        super(line_number);
+    }
+    public LocalInfo()
+    {
+        this(-1);
+    }
+}
+
+class FieldInfo extends VarInfo
+{
     public FieldInfo(int line_number)
     {
-        seqnum = -1;
-        type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
-        ln = line_number;
+        super(line_number);
+    }
+    public FieldInfo()
+    {
+        this(-1);
     }
 }
 
 class MethodInfo
 {
     SymbolType type;
-    int ln;
+    public int ln;
     public SymbolType returnType;
     int ordinal;
     int localsSeqNum;
@@ -48,6 +63,10 @@ class MethodInfo
         localsSeqNum = 1;
         locals = new HashMap<String, LocalInfo>();
         ordinal = -1;
+    }
+    public MethodInfo()
+    {
+        this(-1);
     }
 
     public void enterLocal(String s, LocalInfo li)
@@ -79,7 +98,7 @@ class MethodInfo
 class ClassInfo
 {
     SymbolType type;
-    int ln;
+    public int ln;
     int fieldOrdinal;
     int methodOrdinal;
     HashMap <String, FieldInfo> fields;
@@ -96,6 +115,10 @@ class ClassInfo
         methods = new HashMap<String, MethodInfo>();
         methodOrdinal = 1;
         fieldOrdinal = 1;
+    }
+    public ClassInfo()
+    {
+        this(-1);
     }
 
     public void enterMethod(String s, MethodInfo mi)

@@ -6,6 +6,10 @@ import java.util.HashMap;
 
 public class SymbolTableVisitor implements Visitor
 {
+  private FieldInfo currentFI;
+  private LocalInfo currentLI;
+  private VarInfo currentVI; // REMEMBER to set this before calling accept!
+  private ClassInfo currentCI;
   private MethodInfo currentMI;
   public SymbolTable symtable;
 
@@ -22,9 +26,12 @@ public class SymbolTableVisitor implements Visitor
   {
     symtable  = new SymbolTable();
 
+    currentCI = new ClassInfo();
+
     n.m.accept(this);
 
     for ( int i = 0; i < n.cl.size(); i++ ) {
+        currentCI = new ClassInfo();
         n.cl.get(i).accept(this);
     }
   }
@@ -33,16 +40,14 @@ public class SymbolTableVisitor implements Visitor
   // Statement s;
   public void visit(MainClass n)
   {
-    ClassInfo ci = new ClassInfo(n.line_number);
-
     n.i1.accept(this);
-    symtable.enter(n.i1.s, ci);
+    currentCI.ln = n.i1.line_number;
+    symtable.enter(n.i1.s, currentCI);
 
+    currentMI = new MethodInfo(n.i2.line_number); //line number is a guess since main keyword doesn't return line number
+    currentCI.enterMethod("main", currentMI); //main is implied
 
-    MethodInfo mi = new MethodInfo(n.i2.line_number); //line number is a guess since main keyword doesn't return line number
-    ci.enterMethod("main", mi); //main is implied
-
-    n.i2.accept(this);
+    n.i2.accept(this); // todo: add this String to the formal list
 
     n.s.accept(this);
   }
@@ -52,20 +57,17 @@ public class SymbolTableVisitor implements Visitor
   // MethodDeclList ml;
   public void visit(ClassDeclSimple n)
   {
-    ClassInfo ci = new ClassInfo(n.line_number);
     n.i.accept(this);
-    symtable.enter(n.i.s, ci);
+    currentCI.ln = n.i.line_number;
+    symtable.enter(n.i.s, currentCI);
 
     for ( int i = 0; i < n.vl.size(); i++ ) {
+        currentFI = new FieldInfo();
+        currentVI = currentFI;
         n.vl.get(i).accept(this);
-        FieldInfo fi = new FieldInfo(n.vl.get(i).line_number);
-        ci.enterField(n.vl.get(i).i.s, fi);
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        MethodInfo mi = new MethodInfo(n.ml.get(i).line_number);
-        ci.enterMethod(n.ml.get(i).i.s, mi);
-        currentMI = mi;
-
+        currentMI = new MethodInfo();
         n.ml.get(i).accept(this);
     }
   }
@@ -76,24 +78,20 @@ public class SymbolTableVisitor implements Visitor
   // MethodDeclList ml;
   public void visit(ClassDeclExtends n)
   {
-    ClassInfo ci = new ClassInfo(n.line_number);
-
     n.i.accept(this);
-    symtable.enter(n.i.s, ci);
+    currentCI.ln = n.i.line_number;
+    symtable.enter(n.i.s, currentCI);
 
     n.j.accept(this);
-    symtable.lookup(n.i.s).baseClass = n.j.s;
+    currentCI.baseClass = n.j.s;
 
     for ( int i = 0; i < n.vl.size(); i++ ) {
+        currentFI = new FieldInfo();
+        currentVI = currentFI;
         n.vl.get(i).accept(this);
-        FieldInfo fi = new FieldInfo(n.vl.get(i).line_number);
-        ci.enterField(n.vl.get(i).i.s, fi);
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        MethodInfo mi = new MethodInfo(n.ml.get(i).line_number);
-        ci.enterMethod(n.ml.get(i).i.s, mi);
-        currentMI = mi;
-
+        currentMI = new MethodInfo();
         n.ml.get(i).accept(this);
     }
   }
@@ -104,7 +102,11 @@ public class SymbolTableVisitor implements Visitor
     n.t.accept(this);
 
     n.i.accept(this);
-    
+    currentVI.ln = n.i.line_number;
+    if(currentVI instanceof FieldInfo)
+        currentCI.enterField(n.i.s, (FieldInfo)currentVI);
+    else if (currentVI instanceof LocalInfo)
+        currentMI.enterLocal(n.i.s, (LocalInfo)currentVI);
   }
 
   // Type t;
@@ -118,18 +120,19 @@ public class SymbolTableVisitor implements Visitor
     n.t.accept(this);
     
     n.i.accept(this);
-    
+    currentMI.ln = n.i.line_number;
+    currentCI.enterMethod(n.i.s, currentMI);
+
     for ( int i = 0; i < n.fl.size(); i++ ) {
+        currentLI = new LocalInfo();
+        currentVI = currentLI;
         n.fl.get(i).accept(this);
-        LocalInfo li = new LocalInfo(n.fl.line_number);
-        currentMI.enterLocal(n.fl.get(i).i.s, li);
     }
     
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        
+        currentLI = new LocalInfo();
+        currentVI = currentLI;
         n.vl.get(i).accept(this);
-        LocalInfo li = new LocalInfo(n.vl.line_number);
-        currentMI.enterLocal(n.vl.get(i).i.s, li);
     }
     for ( int i = 0; i < n.sl.size(); i++ ) {
         
@@ -137,8 +140,6 @@ public class SymbolTableVisitor implements Visitor
     }
     
     n.e.accept(this);
-
-
   }
 
   // Type t;
@@ -147,6 +148,13 @@ public class SymbolTableVisitor implements Visitor
     n.t.accept(this);
     
     n.i.accept(this);
+    currentVI.ln = n.i.line_number;
+    if(currentVI instanceof FieldInfo)
+        throw new RuntimeException(); //shouldn't happen! formal should always be LocalInfo or the like...
+        //currentCI.enterField(n.i.s, (FieldInfo)currentVI);
+    else if (currentVI instanceof LocalInfo)
+        currentMI.enterLocal(n.i.s, (LocalInfo)currentVI);
+
   }
 
   public void visit(IntArrayType n) {

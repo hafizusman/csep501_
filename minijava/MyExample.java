@@ -5,7 +5,7 @@ class Factorial{
 }
 
 class Fac
-extends Factorial
+        extends Factorial
 {
     int x;
     int j;
