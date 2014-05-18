@@ -16,3 +16,18 @@ extends Factorial
     }
 
 }
+
+class Factorial2
+{
+    int b;
+    int c;
+    public int func()
+    {
+        int y;
+        return x;
+    }
+    public int func2(int y)
+    {
+        return y;
+    }
+}

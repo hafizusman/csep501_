@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 public class SymbolTableVisitor implements Visitor
 {
+  private MethodInfo currentMI;
   public SymbolTable symtable;
 
   // Display added for toy example language.  Not used in regular MiniJava
@@ -32,15 +33,18 @@ public class SymbolTableVisitor implements Visitor
   // Statement s;
   public void visit(MainClass n)
   {
+    ClassInfo ci = new ClassInfo(n.line_number);
+
     n.i1.accept(this);
-    symtable.enter(n.i1.s, new ClassInfo(n.line_number));
+    symtable.enter(n.i1.s, ci);
+
+
+    MethodInfo mi = new MethodInfo(n.i2.line_number); //line number is a guess since main keyword doesn't return line number
+    ci.enterMethod("main", mi); //main is implied
 
     n.i2.accept(this);
 
-
     n.s.accept(this);
-
-
   }
 
   // Identifier i;
@@ -48,14 +52,21 @@ public class SymbolTableVisitor implements Visitor
   // MethodDeclList ml;
   public void visit(ClassDeclSimple n)
   {
+    ClassInfo ci = new ClassInfo(n.line_number);
     n.i.accept(this);
-    symtable.enter(n.i.s, new ClassInfo(n.line_number));
+    symtable.enter(n.i.s, ci);
 
     for ( int i = 0; i < n.vl.size(); i++ ) {
         n.vl.get(i).accept(this);
+        FieldInfo fi = new FieldInfo(n.vl.get(i).line_number);
+        ci.enterField(n.vl.get(i).i.s, fi);
     }
 
     for ( int i = 0; i < n.ml.size(); i++ ) {
+        MethodInfo mi = new MethodInfo(n.ml.get(i).line_number);
+        ci.enterMethod(n.ml.get(i).i.s, mi);
+        currentMI = mi;
+
         n.ml.get(i).accept(this);
     }
   }
@@ -66,16 +77,24 @@ public class SymbolTableVisitor implements Visitor
   // MethodDeclList ml;
   public void visit(ClassDeclExtends n)
   {
+    ClassInfo ci = new ClassInfo(n.line_number);
+
     n.i.accept(this);
-    symtable.enter(n.i.s, new ClassInfo(n.line_number));
+    symtable.enter(n.i.s, ci);
 
     n.j.accept(this);
     symtable.lookup(n.i.s).baseClass = n.j.s;
 
     for ( int i = 0; i < n.vl.size(); i++ ) {
         n.vl.get(i).accept(this);
+        FieldInfo fi = new FieldInfo(n.vl.get(i).line_number);
+        ci.enterField(n.vl.get(i).i.s, fi);
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
+        MethodInfo mi = new MethodInfo(n.ml.get(i).line_number);
+        ci.enterMethod(n.ml.get(i).i.s, mi);
+        currentMI = mi;
+
         n.ml.get(i).accept(this);
     }
   }
@@ -84,7 +103,7 @@ public class SymbolTableVisitor implements Visitor
   // Identifier i;
   public void visit(VarDecl n) {
     n.t.accept(this);
-    
+
     n.i.accept(this);
     
   }
@@ -96,30 +115,31 @@ public class SymbolTableVisitor implements Visitor
   // StatementList sl;
   // Exp e;
   public void visit(MethodDecl n) {
-    
+
     n.t.accept(this);
     
     n.i.accept(this);
     
     for ( int i = 0; i < n.fl.size(); i++ ) {
         n.fl.get(i).accept(this);
-        if (i+1 < n.fl.size()) {  }
+        LocalInfo li = new LocalInfo(n.fl.line_number);
+        currentMI.enterLocal(n.fl.get(i).i.s, li);
     }
     
     for ( int i = 0; i < n.vl.size(); i++ ) {
         
         n.vl.get(i).accept(this);
-        
+        LocalInfo li = new LocalInfo(n.vl.line_number);
+        currentMI.enterLocal(n.vl.get(i).i.s, li);
     }
     for ( int i = 0; i < n.sl.size(); i++ ) {
         
         n.sl.get(i).accept(this);
-        if ( i < n.sl.size() ) {  }
     }
     
     n.e.accept(this);
-    
-    
+
+
   }
 
   // Type t;

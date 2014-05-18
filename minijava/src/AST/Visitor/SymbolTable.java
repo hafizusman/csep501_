@@ -5,10 +5,80 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+
+class LocalInfo
+{
+    SymbolType type;
+    int ln;
+    public int seqnum;
+    public LocalInfo(int line_number)
+    {
+        seqnum = 0;
+        type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
+        ln = line_number;
+    }
+}
+
+class FieldInfo
+{
+    SymbolType type;
+    int ln;
+    public FieldInfo(int line_number)
+    {
+        type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
+        ln = line_number;
+    }
+}
+
+class MethodInfo
+{
+    SymbolType type;
+    int ln;
+    public SymbolType returnType;
+    int localsSeqNum;
+    HashMap <String, LocalInfo> locals;
+
+    public MethodInfo(int line_number)
+    {
+        type = new MethodSymbolType();
+        ln = line_number;
+        localsSeqNum = 1;
+        locals = new HashMap<String, LocalInfo>();
+    }
+
+    public void enterLocal(String s, LocalInfo li)
+    {
+        if (locals.containsKey(s)) {
+            System.out.println("ERROR: duplicate local declaration of " + "\"" + s + "\"" + " at lines " + li.ln + " and " + locals.get(s).ln);
+            throw new SemanticException();
+        }
+        li.seqnum = localsSeqNum++;
+        locals.put(s, li);
+    }
+
+    public void dump()
+    {
+        //System.out.println("    METHOD INFO:"); //todo: open
+        //System.out.println("      return type: " + returnType.toString());
+        if (locals.size() > 0) {
+            System.out.println("    METHOD INFO: <LOCALS>");
+            for (Map.Entry<String, LocalInfo> entry : locals.entrySet()) {
+                LocalInfo val = entry.getValue();
+                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+                //val.dump();
+            }
+        }
+
+    }
+}
+
 class ClassInfo
 {
     SymbolType type;
     int ln;
+    HashMap <String, FieldInfo> fields;
+    HashMap <String, MethodInfo> methods;
+
     public String baseClass;
 
     public ClassInfo(int line_number)
@@ -16,7 +86,53 @@ class ClassInfo
         type = new ClassSymbolType();
         ln = line_number;
         baseClass = null;
+        fields = new HashMap<String, FieldInfo>();
+        methods = new HashMap<String, MethodInfo>();
     }
+
+    public void enterMethod(String s, MethodInfo mi)
+    {
+        if (methods.containsKey(s)) {
+            System.out.println("ERROR: duplicate method declaration of " + "\"" + s + "\"" + " at lines " + mi.ln + " and " + methods.get(s).ln);
+            throw new SemanticException();
+        }
+        methods.put(s, mi);
+    }
+
+    public void enterField(String s, FieldInfo fi)
+    {
+        if (fields.containsKey(s)) {
+            System.out.println("ERROR: duplicate field declaration of " + "\"" + s + "\"" + " at lines " + fi.ln + " and " + fields.get(s).ln);
+            throw new SemanticException();
+        }
+        fields.put(s, fi);
+    }
+
+    public MethodInfo lookupMethod(String s)
+    {
+        return methods.get(s);
+    }
+
+    public void dump() {
+        if (fields.size() > 0) {
+            System.out.println("  CLASS SYM TABLE: <FIELD>");
+            for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
+                FieldInfo val = entry.getValue();
+                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+                //val.dump();
+            }
+        }
+
+        if (methods.size() > 0) {
+            System.out.println("  CLASS SYM TABLE: <METHOD>");
+            for (Map.Entry<String, MethodInfo> entry : methods.entrySet()) {
+                MethodInfo val = entry.getValue();
+                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+                val.dump();
+            }
+        }
+    }
+
 }
 
 public class SymbolTable
@@ -51,7 +167,7 @@ public class SymbolTable
                 System.out.println(" extends " + val.baseClass);
             else
                 System.out.println();
-            //val.dump();
+            val.dump();
         }
     }
 }
