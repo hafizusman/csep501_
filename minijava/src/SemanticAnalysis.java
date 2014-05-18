@@ -7,7 +7,17 @@ import java.util.HashMap;
 public class SemanticAnalysis
 {
     private final static int NO_ERROR = 0;
+    private SymbolTable symtable;
+    private TypeSystem typesys;
 
+    public SemanticAnalysis()
+    {
+        typesys = new TypeSystem();
+        typesys.init();
+        this.symtable = null;
+    }
+
+    // build symbol table, check duplicate symbols
     public int pass1(Program p)
     {
         int err = NO_ERROR;
@@ -15,7 +25,30 @@ public class SemanticAnalysis
 
         try {
             p.accept(vis);
-            vis.symtable.dump();
+            this.symtable = vis.getSymbolTable();
+            symtable.dump();
+        }
+        catch (SemanticException e)
+        {
+            err = ~NO_ERROR;
+        }
+
+        return err;
+    }
+
+    public int pass2(Program p)
+    {
+        int err = NO_ERROR;
+        TypeSystemVisitor vis = new TypeSystemVisitor();
+
+        if (symtable == null) {
+            System.out.println("ERROR: run pass1 first to setup sym table");
+            throw new RuntimeException();
+        }
+
+        try {
+            vis.setSymbolTable(this.symtable);
+            p.accept(vis);
         }
         catch (SemanticException e)
         {

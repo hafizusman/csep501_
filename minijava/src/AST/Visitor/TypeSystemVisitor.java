@@ -2,20 +2,15 @@ package AST.Visitor;
 
 import AST.*;
 
-import java.util.HashMap;
+// Sample print visitor from MiniJava web site with small modifications for UW CSE.
+// HP 10/11
 
-public class SymbolTableVisitor implements Visitor
-{
-  private FieldInfo currentFI;
-  private LocalInfo currentLI;
-  private VarInfo currentVI; // REMEMBER to set this base class reference before calling accept!
-  private ClassInfo currentCI;
-  private MethodInfo currentMI;
+public class TypeSystemVisitor implements Visitor {
   private SymbolTable symtable;
 
-  public SymbolTable getSymbolTable()
+  public void setSymbolTable(SymbolTable st)
   {
-      return symtable;
+      this.symtable = st;
   }
 
   // Display added for toy example language.  Not used in regular MiniJava
@@ -24,94 +19,82 @@ public class SymbolTableVisitor implements Visitor
     n.e.accept(this);
     
   }
-
+  
   // MainClass m;
   // ClassDeclList cl;
-  public void visit(Program n)
-  {
-    symtable  = new SymbolTable();
-
-    currentCI = new ClassInfo();
-
+  public void visit(Program n) {
     n.m.accept(this);
-
     for ( int i = 0; i < n.cl.size(); i++ ) {
-        currentCI = new ClassInfo();
+        
         n.cl.get(i).accept(this);
     }
   }
-
+  
   // Identifier i1,i2;
   // Statement s;
-  public void visit(MainClass n)
-  {
+  public void visit(MainClass n) {
+    
     n.i1.accept(this);
-    currentCI.ln = n.i1.line_number;
-    symtable.enter(n.i1.s, currentCI);
-
-    currentMI = new MethodInfo(n.i2.line_number); //line number is a guess since main keyword doesn't return line number
-    currentCI.enterMethod("main", currentMI); //main is implied
-
-    n.i2.accept(this); // todo: add this String to the formal list
-
+    
+    
+    n.i2.accept(this);
+    
+    
     n.s.accept(this);
+    
+    
   }
 
   // Identifier i;
   // VarDeclList vl;
   // MethodDeclList ml;
-  public void visit(ClassDeclSimple n)
-  {
+  public void visit(ClassDeclSimple n) {
+    
     n.i.accept(this);
-    currentCI.ln = n.i.line_number;
-    symtable.enter(n.i.s, currentCI);
-
+    
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        currentFI = new FieldInfo();
-        currentVI = currentFI;
+        
         n.vl.get(i).accept(this);
+        if ( i+1 < n.vl.size() ) {  }
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        currentMI = new MethodInfo();
+        
         n.ml.get(i).accept(this);
     }
+    
+    
   }
-
+ 
   // Identifier i;
   // Identifier j;
   // VarDeclList vl;
   // MethodDeclList ml;
-  public void visit(ClassDeclExtends n)
-  {
+  public void visit(ClassDeclExtends n) {
+    
     n.i.accept(this);
-    currentCI.ln = n.i.line_number;
-    symtable.enter(n.i.s, currentCI);
-
+    
     n.j.accept(this);
-    currentCI.baseClass = n.j.s;
-
+    
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        currentFI = new FieldInfo();
-        currentVI = currentFI;
+        
         n.vl.get(i).accept(this);
+        if ( i+1 < n.vl.size() ) {  }
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        currentMI = new MethodInfo();
+        
         n.ml.get(i).accept(this);
     }
+    
+    
   }
 
   // Type t;
   // Identifier i;
   public void visit(VarDecl n) {
     n.t.accept(this);
-
+    
     n.i.accept(this);
-    currentVI.ln = n.i.line_number;
-    if(currentVI instanceof FieldInfo)
-        currentCI.enterField(n.i.s, (FieldInfo)currentVI);
-    else if (currentVI instanceof LocalInfo)
-        currentMI.enterLocal(n.i.s, (LocalInfo)currentVI);
+    
   }
 
   // Type t;
@@ -121,29 +104,30 @@ public class SymbolTableVisitor implements Visitor
   // StatementList sl;
   // Exp e;
   public void visit(MethodDecl n) {
-
+    
     n.t.accept(this);
     
     n.i.accept(this);
-    currentMI.ln = n.i.line_number;
-    currentCI.enterMethod(n.i.s, currentMI);
-
+    
     for ( int i = 0; i < n.fl.size(); i++ ) {
-        currentVI = new FormalInfo();
         n.fl.get(i).accept(this);
+        if (i+1 < n.fl.size()) {  }
     }
     
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        currentLI = new LocalInfo();
-        currentVI = currentLI;
+        
         n.vl.get(i).accept(this);
+        
     }
     for ( int i = 0; i < n.sl.size(); i++ ) {
         
         n.sl.get(i).accept(this);
+        if ( i < n.sl.size() ) {  }
     }
     
     n.e.accept(this);
+    
+    
   }
 
   // Type t;
@@ -152,11 +136,6 @@ public class SymbolTableVisitor implements Visitor
     n.t.accept(this);
     
     n.i.accept(this);
-    currentVI.ln = n.i.line_number;
-    if(!(currentVI instanceof FormalInfo))
-        throw new RuntimeException(); //shouldn't happen! formal should always be FormalInfo
-
-    currentMI.enterFormal(n.i.s, (FormalInfo)currentVI);
   }
 
   public void visit(IntArrayType n) {
@@ -215,7 +194,7 @@ public class SymbolTableVisitor implements Visitor
     n.e.accept(this);
     
   }
-
+  
   // Identifier i;
   // Exp e;
   public void visit(Assign n) {

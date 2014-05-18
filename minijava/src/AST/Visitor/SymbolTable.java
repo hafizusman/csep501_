@@ -8,7 +8,7 @@ import java.util.Set;
 
 class VarInfo
 {
-    SymbolType type;
+    public SymbolType type;
     public int ln;
     public int seqnum;
     public VarInfo(int line_number)
@@ -61,7 +61,7 @@ class FieldInfo extends VarInfo
 
 class MethodInfo
 {
-    SymbolType type;
+    public SymbolType type;
     public int ln;
     public SymbolType returnType;
     int ordinal;
