@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class SymbolTableVisitor implements Visitor
 {
-  public GlobalSymbolTable gst;
+  public SymbolTable symtable;
 
   // Display added for toy example language.  Not used in regular MiniJava
   public void visit(Display n) {
@@ -19,7 +19,8 @@ public class SymbolTableVisitor implements Visitor
   // ClassDeclList cl;
   public void visit(Program n)
   {
-    gst  = new GlobalSymbolTable();
+    symtable  = new SymbolTable();
+
     n.m.accept(this);
 
     for ( int i = 0; i < n.cl.size(); i++ ) {
@@ -31,15 +32,8 @@ public class SymbolTableVisitor implements Visitor
   // Statement s;
   public void visit(MainClass n)
   {
-    ClassSymbolTable cst = new ClassSymbolTable();
-    MethodSymbolTable mst = new MethodSymbolTable(); //for main() since it must be present
-
-    gst.enter(n.i1.s, cst);
     n.i1.accept(this);
-
-    // main class can not have any fields
-    // auto-add a main method
-    cst.enterMethod("main", mst);
+    symtable.enter(n.i1.s, new ClassInfo(n.line_number));
 
     n.i2.accept(this);
 
@@ -54,18 +48,14 @@ public class SymbolTableVisitor implements Visitor
   // MethodDeclList ml;
   public void visit(ClassDeclSimple n)
   {
-    ClassSymbolTable cst = new ClassSymbolTable();
-
-    gst.enter(n.i.s, cst);
     n.i.accept(this);
+    symtable.enter(n.i.s, new ClassInfo(n.line_number));
 
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        cst.enterField(n.vl.get(i).i.s, new VariableDeclList());
         n.vl.get(i).accept(this);
     }
 
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        cst.enterMethod(n.ml.get(i).i.s, new MethodSymbolTable());
         n.ml.get(i).accept(this);
     }
   }
@@ -76,23 +66,18 @@ public class SymbolTableVisitor implements Visitor
   // MethodDeclList ml;
   public void visit(ClassDeclExtends n)
   {
-    ClassSymbolTable cst = new ClassSymbolTable();
-
-    gst.enter(n.i.s, cst);
     n.i.accept(this);
+    symtable.enter(n.i.s, new ClassInfo(n.line_number));
 
     n.j.accept(this);
-    
+    symtable.lookup(n.i.s).baseClass = n.j.s;
+
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        cst.enterField(n.vl.get(i).i.s, null);
         n.vl.get(i).accept(this);
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        cst.enterMethod(n.ml.get(i).i.s, new MethodSymbolTable());
         n.ml.get(i).accept(this);
     }
-    
-    
   }
 
   // Type t;

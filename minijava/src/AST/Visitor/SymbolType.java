@@ -1,4 +1,5 @@
 package AST.Visitor;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -14,51 +15,51 @@ abstract public class SymbolType
     public IdentifierType idType;
 }
 
-class BaseSymType extends SymbolType
+class BaseSymbolType extends SymbolType
 {
-    BaseSymType()
+    BaseSymbolType()
     {
         idType = IdentifierType.ID_TYPE_VALUE;
     }
 }
 
-class CompoundSymType extends SymbolType
+class CompoundSymbolType extends SymbolType
 {
-    public CompoundSymType()
+    public CompoundSymbolType()
     {
         idType = IdentifierType.ID_TYPE_REFERENCE;
     }
 }
 
-class MethodSymType extends SymbolType
+class MethodSymbolType extends CompoundSymbolType
 {
     public SymbolType returnType;
     public ArrayList <SymbolType> paramListType;
-    public MethodSymType()
+    public MethodSymbolType()
     {
         idType = IdentifierType.ID_TYPE_REFERENCE;
     }
 }
 
-class IntSymType extends BaseSymType{}
-class BooleanSymType extends BaseSymType{}
-class VoidSymType extends BaseSymType{}
+class IntSymbolType extends BaseSymbolType{}
+class BooleanSymbolType extends BaseSymbolType{}
+class VoidSymbolType extends BaseSymbolType{}
 
-class UnknownSymType extends BaseSymType{}
+class UnknownSymbolType extends BaseSymbolType{}
 
-class LiteralSymType extends BaseSymType
+class LiteralSymbolType extends BaseSymbolType
 {
     public SymbolType valueType;
 }
 
-class ClassSymType extends CompoundSymType
+class ClassSymbolType extends CompoundSymbolType
 {
     public SymbolType baseClassType;
     public List<SymbolType> fields;
     public List<SymbolType> methods;
 }
 
-class ArraySymType extends CompoundSymType
+class ArraySymbolType extends CompoundSymbolType
 {
     public int dim;
     public SymbolType elementType;

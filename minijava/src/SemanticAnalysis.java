@@ -15,9 +15,9 @@ public class SemanticAnalysis
 
         try {
             p.accept(vis);
-            vis.gst.dump();
+            vis.symtable.dump();
         }
-        catch (Exception e)
+        catch (SemanticException e)
         {
             e.printStackTrace();
             err = ~NO_ERROR;
