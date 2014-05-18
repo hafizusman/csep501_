@@ -80,6 +80,14 @@ class UnknownSymbolType extends BaseSymbolType
     }
 }
 
+class IdentifierSymbolType extends SymbolType
+{
+    public String toString()
+    {
+        return "IdentifierSymbolType";
+    }
+}
+
 class LiteralSymbolType extends BaseSymbolType
 {
     public SymbolType valueType;

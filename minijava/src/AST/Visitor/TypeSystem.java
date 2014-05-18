@@ -13,6 +13,7 @@ public class TypeSystem
     public static MethodSymbolType methodt;
     public static UnknownSymbolType unknownt;
     public static VoidSymbolType voidt;
+    public static IdentifierSymbolType idt;
     public void init()
     {
         arrayt = new ArraySymbolType();
@@ -23,6 +24,7 @@ public class TypeSystem
         methodt = new MethodSymbolType();
         unknownt = new UnknownSymbolType();
         voidt = new VoidSymbolType();
+        idt = new IdentifierSymbolType();
     }
 
     public SymbolType lookup()

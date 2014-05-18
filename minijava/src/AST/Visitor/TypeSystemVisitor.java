@@ -191,7 +191,7 @@ public class TypeSystemVisitor implements Visitor {
 
   // String s;
   public void visit(IdentifierType n) {
-    
+      returnSymbolType = TypeSystem.idt;
   }
 
   // StatementList sl;

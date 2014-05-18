@@ -4,6 +4,13 @@ class Factorial{
     }
 }
 
+class Simplified
+{
+    public Foo getSimplified(Fac f)
+    {return 11;}
+}
+
+/*
 class Fac
         extends Factorial
 {
@@ -38,3 +45,4 @@ class Factorial2
         return c;
     }
 }
+*/
