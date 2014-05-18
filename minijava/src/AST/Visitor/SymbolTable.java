@@ -122,7 +122,7 @@ class MethodInfo
             System.out.println("    METHOD INFO: <FORMALS>");
             for (Map.Entry<String, FormalInfo> entry : formals.entrySet()) {
                 FormalInfo val = entry.getValue();
-                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
+                System.out.println("      " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
                 //val.dump();
             }
         }
@@ -130,7 +130,7 @@ class MethodInfo
             System.out.println("    METHOD INFO: <LOCALS>");
             for (Map.Entry<String, LocalInfo> entry : locals.entrySet()) {
                 LocalInfo val = entry.getValue();
-                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
+                System.out.println("      " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
                 //val.dump();
             }
         }
@@ -194,7 +194,7 @@ class ClassInfo
             System.out.println("  CLASS SYM TABLE: <FIELD>");
             for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
                 FieldInfo val = entry.getValue();
-                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.seqnum + " " + val.toString());
+                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.seqnum + " " + val.toString());
 
                 //val.dump();
             }
@@ -204,7 +204,7 @@ class ClassInfo
             System.out.println("  CLASS SYM TABLE: <METHOD>");
             for (Map.Entry<String, MethodInfo> entry : methods.entrySet()) {
                 MethodInfo val = entry.getValue();
-                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.ordinal + " " + val.toString());
+                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.ordinal + " " + val.toString());
                 val.dump();
             }
         }

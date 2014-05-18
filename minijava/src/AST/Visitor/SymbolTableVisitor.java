@@ -8,7 +8,7 @@ public class SymbolTableVisitor implements Visitor
 {
   private FieldInfo currentFI;
   private LocalInfo currentLI;
-  private VarInfo currentVI; // REMEMBER to set this before calling accept!
+  private VarInfo currentVI; // REMEMBER to set this base class reference before calling accept!
   private ClassInfo currentCI;
   private MethodInfo currentMI;
   public SymbolTable symtable;
