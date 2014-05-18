@@ -124,8 +124,7 @@ public class SymbolTableVisitor implements Visitor
     currentCI.enterMethod(n.i.s, currentMI);
 
     for ( int i = 0; i < n.fl.size(); i++ ) {
-        currentLI = new LocalInfo();
-        currentVI = currentLI;
+        currentVI = new FormalInfo();
         n.fl.get(i).accept(this);
     }
     
@@ -149,12 +148,10 @@ public class SymbolTableVisitor implements Visitor
     
     n.i.accept(this);
     currentVI.ln = n.i.line_number;
-    if(currentVI instanceof FieldInfo)
-        throw new RuntimeException(); //shouldn't happen! formal should always be LocalInfo or the like...
-        //currentCI.enterField(n.i.s, (FieldInfo)currentVI);
-    else if (currentVI instanceof LocalInfo)
-        currentMI.enterLocal(n.i.s, (LocalInfo)currentVI);
+    if(!(currentVI instanceof FormalInfo))
+        throw new RuntimeException(); //shouldn't happen! formal should always be FormalInfo
 
+    currentMI.enterFormal(n.i.s, (FormalInfo)currentVI);
   }
 
   public void visit(IntArrayType n) {

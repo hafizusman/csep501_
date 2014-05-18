@@ -19,7 +19,6 @@ public class SemanticAnalysis
         }
         catch (SemanticException e)
         {
-            e.printStackTrace();
             err = ~NO_ERROR;
         }
 

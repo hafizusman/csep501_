@@ -30,4 +30,9 @@ class Factorial2
     {
         return y;
     }
+    public int func3(int a)
+    {
+        int b;
+        return c;
+    }
 }

@@ -35,6 +35,18 @@ class LocalInfo extends VarInfo
     }
 }
 
+class FormalInfo extends VarInfo
+{
+    public FormalInfo(int line_number)
+    {
+        super(line_number);
+    }
+    public FormalInfo()
+    {
+        this(-1);
+    }
+}
+
 class FieldInfo extends VarInfo
 {
     public FieldInfo(int line_number)
@@ -53,14 +65,18 @@ class MethodInfo
     public int ln;
     public SymbolType returnType;
     int ordinal;
+    int formalsSeqNum;
     int localsSeqNum;
+    HashMap <String, FormalInfo> formals;
     HashMap <String, LocalInfo> locals;
 
     public MethodInfo(int line_number)
     {
         type = new MethodSymbolType();
         ln = line_number;
+        formalsSeqNum = 1;
         localsSeqNum = 1;
+        formals = new HashMap<String, FormalInfo>();
         locals = new HashMap<String, LocalInfo>();
         ordinal = -1;
     }
@@ -69,20 +85,47 @@ class MethodInfo
         this(-1);
     }
 
+    public void enterFormal(String s, FormalInfo fi)
+    {
+        if (formals.containsKey(s)) {
+            System.out.println("ERROR: duplicate formal/formal declaration of " + "\"" + s + "\"" + " at lines " + fi.ln + " and " + formals.get(s).ln);
+            throw new SemanticException();
+        }
+        if (locals.containsKey(s)) {
+            System.out.println("ERROR: duplicate formal/local declaration of " + "\"" + s + "\"" + " at lines " + fi.ln + " and " + locals.get(s).ln);
+            throw new SemanticException();
+        }
+        fi.seqnum = formalsSeqNum++;
+        formals.put(s, fi);
+    }
+
     public void enterLocal(String s, LocalInfo li)
     {
+        if (formals.containsKey(s)) {
+            System.out.println("ERROR: duplicate local/formal declaration of " + "\"" + s + "\"" + " at lines " + li.ln + " and " + formals.get(s).ln);
+            throw new SemanticException();
+        }
         if (locals.containsKey(s)) {
-            System.out.println("ERROR: duplicate local declaration of " + "\"" + s + "\"" + " at lines " + li.ln + " and " + locals.get(s).ln);
+            System.out.println("ERROR: duplicate local/local declaration of " + "\"" + s + "\"" + " at lines " + li.ln + " and " + locals.get(s).ln);
             throw new SemanticException();
         }
         li.seqnum = localsSeqNum++;
         locals.put(s, li);
     }
 
+
     public void dump()
     {
         //System.out.println("    METHOD INFO:"); //todo: open
         //System.out.println("      return type: " + returnType.toString());
+        if (formals.size() > 0) {
+            System.out.println("    METHOD INFO: <FORMALS>");
+            for (Map.Entry<String, FormalInfo> entry : formals.entrySet()) {
+                FormalInfo val = entry.getValue();
+                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
+                //val.dump();
+            }
+        }
         if (locals.size() > 0) {
             System.out.println("    METHOD INFO: <LOCALS>");
             for (Map.Entry<String, LocalInfo> entry : locals.entrySet()) {
