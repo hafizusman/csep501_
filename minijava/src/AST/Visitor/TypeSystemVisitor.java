@@ -138,7 +138,8 @@ public class TypeSystemVisitor implements Visitor {
   public void visit(MethodDecl n) {
     
     n.t.accept(this);
-    
+    currentci.lookupMethod(n.i.s).returnType = returnSymbolType;
+
     n.i.accept(this);
     
     for ( int i = 0; i < n.fl.size(); i++ ) {

@@ -124,8 +124,6 @@ class MethodInfo
 
     public void dump()
     {
-        //System.out.println("    METHOD INFO:"); //todo: open
-        //System.out.println("      return type: " + returnType.toString());
         if (formals.size() > 0) {
             System.out.println("    METHOD INFO: <FORMALS>");
             for (Map.Entry<String, FormalInfo> entry : formals.entrySet()) {
@@ -238,9 +236,10 @@ class ClassInfo
                         "    " +
                         entry.getKey() + " -> " +
                         "[" +
-                        "type: " + val.type.toString() + ", " +
-                        "line: " + val.ln + ", " +
-                        "ord: " + val.ordinal +
+                        "t: " + val.type.toString() + ", " +
+                        "l: " + val.ln + ", " +
+                        "o: " + val.ordinal + ", " +
+                        "r: " + val.returnType.toString() +
                         "]");
 
                 val.dump();

@@ -21,14 +21,14 @@ class Fac
 class Factorial2
 {
     int b;
-    int c;
+    boolean c;
     public int func()
     {
-        int y;
+        boolean y;
         int []myarray2;
         return x;
     }
-    public int func2(int y)
+    public int [] func2(int y)
     {
         return y;
     }
