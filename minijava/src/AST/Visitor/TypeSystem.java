@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class TypeSystem
 {
-    ArraySymbolType arrayt;
-    BooleanSymbolType boolt;
-    ClassSymbolType classt;
-    IntSymbolType intt;
-    LiteralSymbolType literalt;
-    MethodSymbolType methodt;
-    UnknownSymbolType unknownt;
-    VoidSymbolType voidt;
+    public static ArraySymbolType arrayt;
+    public static BooleanSymbolType boolt;
+    public static ClassSymbolType classt;
+    public static IntSymbolType intt;
+    public static LiteralSymbolType literalt;
+    public static MethodSymbolType methodt;
+    public static UnknownSymbolType unknownt;
+    public static VoidSymbolType voidt;
     public void init()
     {
         arrayt = new ArraySymbolType();

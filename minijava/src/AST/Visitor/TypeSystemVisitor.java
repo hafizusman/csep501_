@@ -7,6 +7,13 @@ import AST.*;
 
 public class TypeSystemVisitor implements Visitor {
   private SymbolTable symtable;
+  private ClassInfo currentci;
+  private FieldInfo currentfieldi;
+  private MethodInfo currentmi;
+  private FormalInfo currentformali;
+  private LocalInfo currentlocali;
+  private VarInfo currentvi;
+  private SymbolType returnSymbolType;
 
   public void setSymbolTable(SymbolTable st)
   {
@@ -35,14 +42,18 @@ public class TypeSystemVisitor implements Visitor {
   public void visit(MainClass n) {
     
     n.i1.accept(this);
-    
-    
+
+    currentci = symtable.lookup(n.i1.s);
+    currentci.type = TypeSystem.classt;
+
+    currentmi = currentci.lookupMethod("main");
+    currentmi.type = TypeSystem.methodt;
+    currentmi.returnType = TypeSystem.voidt;  // main always returns void
+
     n.i2.accept(this);
     
     
     n.s.accept(this);
-    
-    
   }
 
   // Identifier i;
@@ -51,14 +62,18 @@ public class TypeSystemVisitor implements Visitor {
   public void visit(ClassDeclSimple n) {
     
     n.i.accept(this);
-    
+
+    currentci = symtable.lookup(n.i.s);
+    currentci.type = TypeSystem.classt;
+
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        
+        currentfieldi = currentci.lookupField(n.vl.get(i).i.s);
+        currentvi = currentfieldi;
         n.vl.get(i).accept(this);
-        if ( i+1 < n.vl.size() ) {  }
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        
+        currentmi = currentci.lookupMethod(n.ml.get(i).i.s);
+        currentmi.type = TypeSystem.methodt;
         n.ml.get(i).accept(this);
     }
     
@@ -72,29 +87,46 @@ public class TypeSystemVisitor implements Visitor {
   public void visit(ClassDeclExtends n) {
     
     n.i.accept(this);
-    
+
+    currentci = symtable.lookup(n.i.s);
+    currentci.type = TypeSystem.classt;
+
     n.j.accept(this);
+      // todo: setup return type from type system by lookinup
     
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        
+        currentfieldi = currentci.lookupField(n.vl.get(i).i.s);
+        currentvi = currentfieldi;
         n.vl.get(i).accept(this);
-        if ( i+1 < n.vl.size() ) {  }
     }
     for ( int i = 0; i < n.ml.size(); i++ ) {
-        
+        currentmi = currentci.lookupMethod(n.ml.get(i).i.s);
+        currentmi.type = TypeSystem.methodt;
         n.ml.get(i).accept(this);
     }
-    
-    
   }
 
   // Type t;
   // Identifier i;
   public void visit(VarDecl n) {
     n.t.accept(this);
-    
+
+    if (currentvi instanceof FieldInfo) {
+        currentfieldi.type = returnSymbolType;
+    }
+    // formals handled in separate visit() function
+    //else if (currentvi instanceof FormalInfo) {
+    //    currentformali.type = returnSymbolType;
+    //}
+    else if (currentvi instanceof LocalInfo) {
+        currentlocali.type = returnSymbolType;
+    }
+    else {
+        throw new RuntimeException();
+    }
+
     n.i.accept(this);
-    
+
   }
 
   // Type t;
@@ -110,44 +142,50 @@ public class TypeSystemVisitor implements Visitor {
     n.i.accept(this);
     
     for ( int i = 0; i < n.fl.size(); i++ ) {
+        currentformali = currentmi.lookupFormal(n.fl.get(i).i.s);
+        currentvi = currentformali;
         n.fl.get(i).accept(this);
-        if (i+1 < n.fl.size()) {  }
     }
     
     for ( int i = 0; i < n.vl.size(); i++ ) {
-        
+        currentlocali = currentmi.lookupLocal(n.vl.get(i).i.s);
+        currentvi = currentlocali;
         n.vl.get(i).accept(this);
         
     }
     for ( int i = 0; i < n.sl.size(); i++ ) {
         
         n.sl.get(i).accept(this);
-        if ( i < n.sl.size() ) {  }
     }
     
     n.e.accept(this);
-    
-    
   }
 
   // Type t;
   // Identifier i;
   public void visit(Formal n) {
     n.t.accept(this);
-    
+
+    if (currentvi instanceof FormalInfo) {
+        currentformali.type = returnSymbolType;
+    }
+    else {
+        throw new RuntimeException();
+    }
+
     n.i.accept(this);
   }
 
   public void visit(IntArrayType n) {
-    
+      returnSymbolType = TypeSystem.arrayt;
   }
 
   public void visit(BooleanType n) {
-    
+      returnSymbolType = TypeSystem.boolt;
   }
 
   public void visit(IntegerType n) {
-    
+      returnSymbolType = TypeSystem.intt;
   }
 
   // String s;
@@ -299,7 +337,7 @@ public class TypeSystemVisitor implements Visitor {
   }
 
   public void visit(False n) {
-    
+
   }
 
   // String s;

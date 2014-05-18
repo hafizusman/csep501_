@@ -14,7 +14,7 @@ class VarInfo
     public VarInfo(int line_number)
     {
         seqnum = -1;
-        type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
+        type = TypeSystem.unknownt; //todo: figure out the actual type, i.e. is it a base type or a compound type
         ln = line_number;
     }
     public VarInfo()
@@ -72,7 +72,7 @@ class MethodInfo
 
     public MethodInfo(int line_number)
     {
-        type = new MethodSymbolType();
+        type = TypeSystem.unknownt;
         ln = line_number;
         formalsSeqNum = 1;
         localsSeqNum = 1;
@@ -113,6 +113,14 @@ class MethodInfo
         locals.put(s, li);
     }
 
+    public FormalInfo lookupFormal(String s)
+    {
+        return formals.get(s);
+    }
+    public LocalInfo lookupLocal(String s)
+    {
+        return locals.get(s);
+    }
 
     public void dump()
     {
@@ -122,16 +130,28 @@ class MethodInfo
             System.out.println("    METHOD INFO: <FORMALS>");
             for (Map.Entry<String, FormalInfo> entry : formals.entrySet()) {
                 FormalInfo val = entry.getValue();
-                System.out.println("      " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
-                //val.dump();
+                System.out.println(
+                        "      " +
+                        entry.getKey() + " -> " +
+                        "[" +
+                        "type: " + val.type.toString() + ", " +
+                        "line: " + val.ln + ", " +
+                        "ord: " + val.seqnum +
+                        "]");
             }
         }
         if (locals.size() > 0) {
             System.out.println("    METHOD INFO: <LOCALS>");
             for (Map.Entry<String, LocalInfo> entry : locals.entrySet()) {
                 LocalInfo val = entry.getValue();
-                System.out.println("      " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
-                //val.dump();
+                System.out.println(
+                        "      " +
+                        entry.getKey() + " -> " +
+                        "[" +
+                        "type: " + val.type.toString() + ", " +
+                        "line: " + val.ln + ", " +
+                        "ord: " + val.seqnum +
+                        "]");
             }
         }
 
@@ -140,7 +160,7 @@ class MethodInfo
 
 class ClassInfo
 {
-    SymbolType type;
+    public SymbolType type;
     public int ln;
     int fieldOrdinal;
     int methodOrdinal;
@@ -151,7 +171,7 @@ class ClassInfo
 
     public ClassInfo(int line_number)
     {
-        type = new ClassSymbolType();
+        type = TypeSystem.unknownt;
         ln = line_number;
         baseClass = null;
         fields = new HashMap<String, FieldInfo>();
@@ -184,6 +204,10 @@ class ClassInfo
         fields.put(s, fi);
     }
 
+    public FieldInfo lookupField(String s)
+    {
+        return fields.get(s);
+    }
     public MethodInfo lookupMethod(String s)
     {
         return methods.get(s);
@@ -194,8 +218,14 @@ class ClassInfo
             System.out.println("  CLASS SYM TABLE: <FIELD>");
             for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
                 FieldInfo val = entry.getValue();
-                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.seqnum + " " + val.toString());
-
+                System.out.println(
+                    "    " +
+                    entry.getKey() + " -> " +
+                    "[" +
+                    "type: " + val.type.toString() + ", " +
+                    "line: " + val.ln + ", " +
+                    "ord: " + val.seqnum +
+                    "]");
                 //val.dump();
             }
         }
@@ -204,7 +234,15 @@ class ClassInfo
             System.out.println("  CLASS SYM TABLE: <METHOD>");
             for (Map.Entry<String, MethodInfo> entry : methods.entrySet()) {
                 MethodInfo val = entry.getValue();
-                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.ordinal + " " + val.toString());
+                System.out.println(
+                        "    " +
+                        entry.getKey() + " -> " +
+                        "[" +
+                        "type: " + val.type.toString() + ", " +
+                        "line: " + val.ln + ", " +
+                        "ord: " + val.ordinal +
+                        "]");
+
                 val.dump();
             }
         }
@@ -239,7 +277,11 @@ public class SymbolTable
         System.out.println("GLOBAL SYM TABLE:");
         for (Map.Entry<String, ClassInfo> entry : st.entrySet()) {
             ClassInfo val = entry.getValue();
-            System.out.print(entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+            System.out.print(   entry.getKey() + " -> " +
+                                "[" +
+                                "type: " + val.type.toString() + ", " +
+                                "line: " + val.ln +
+                                "]");
             if (val.baseClass != null)
                 System.out.println(" extends " + val.baseClass);
             else

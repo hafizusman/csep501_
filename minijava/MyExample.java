@@ -10,7 +10,8 @@ class Fac
     int x;
     int j;
     int ComputeFac;
-    public int ComputeFac(int num){
+    int []arr1;
+    public int ComputeFac(int[] yarra){
         x = a * arr[1];
         return num_aux ;
     }
@@ -24,6 +25,7 @@ class Factorial2
     public int func()
     {
         int y;
+        int []myarray2;
         return x;
     }
     public int func2(int y)

@@ -17,7 +17,7 @@ public class SemanticAnalysis
         this.symtable = null;
     }
 
-    // build symbol table, check duplicate symbols
+    // build symbol table, check duplicate symbols, set line numbers for identifiers
     public int pass1(Program p)
     {
         int err = NO_ERROR;
@@ -26,7 +26,7 @@ public class SemanticAnalysis
         try {
             p.accept(vis);
             this.symtable = vis.getSymbolTable();
-            symtable.dump();
+            //symtable.dump();
         }
         catch (SemanticException e)
         {
@@ -49,6 +49,7 @@ public class SemanticAnalysis
         try {
             vis.setSymbolTable(this.symtable);
             p.accept(vis);
+            symtable.dump();
         }
         catch (SemanticException e)
         {
