@@ -5,7 +5,9 @@ class Factorial{
 }
 
 class Fac {
-
+    int x;
+    int j;
+    int ComputeFac;
     public int ComputeFac(int num){
         x = a * arr[1];
         return num_aux ;
