@@ -13,7 +13,7 @@ class LocalInfo
     public int seqnum;
     public LocalInfo(int line_number)
     {
-        seqnum = 0;
+        seqnum = -1;
         type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
         ln = line_number;
     }
@@ -23,8 +23,10 @@ class FieldInfo
 {
     SymbolType type;
     int ln;
+    public int seqnum;
     public FieldInfo(int line_number)
     {
+        seqnum = -1;
         type = new UnknownSymbolType(); //todo: figure out the actual type, i.e. is it a base type or a compound type
         ln = line_number;
     }
@@ -35,6 +37,7 @@ class MethodInfo
     SymbolType type;
     int ln;
     public SymbolType returnType;
+    int ordinal;
     int localsSeqNum;
     HashMap <String, LocalInfo> locals;
 
@@ -44,6 +47,7 @@ class MethodInfo
         ln = line_number;
         localsSeqNum = 1;
         locals = new HashMap<String, LocalInfo>();
+        ordinal = -1;
     }
 
     public void enterLocal(String s, LocalInfo li)
@@ -64,7 +68,7 @@ class MethodInfo
             System.out.println("    METHOD INFO: <LOCALS>");
             for (Map.Entry<String, LocalInfo> entry : locals.entrySet()) {
                 LocalInfo val = entry.getValue();
-                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+                System.out.println("    " + entry.getKey() + " (ln " + val.ln + ") :: " + "seqnum: " + val.seqnum + " " + val.toString());
                 //val.dump();
             }
         }
@@ -76,6 +80,8 @@ class ClassInfo
 {
     SymbolType type;
     int ln;
+    int fieldOrdinal;
+    int methodOrdinal;
     HashMap <String, FieldInfo> fields;
     HashMap <String, MethodInfo> methods;
 
@@ -88,6 +94,8 @@ class ClassInfo
         baseClass = null;
         fields = new HashMap<String, FieldInfo>();
         methods = new HashMap<String, MethodInfo>();
+        methodOrdinal = 1;
+        fieldOrdinal = 1;
     }
 
     public void enterMethod(String s, MethodInfo mi)
@@ -96,6 +104,7 @@ class ClassInfo
             System.out.println("ERROR: duplicate method declaration of " + "\"" + s + "\"" + " at lines " + mi.ln + " and " + methods.get(s).ln);
             throw new SemanticException();
         }
+        mi.ordinal = methodOrdinal++;
         methods.put(s, mi);
     }
 
@@ -105,6 +114,7 @@ class ClassInfo
             System.out.println("ERROR: duplicate field declaration of " + "\"" + s + "\"" + " at lines " + fi.ln + " and " + fields.get(s).ln);
             throw new SemanticException();
         }
+        fi.seqnum = fieldOrdinal++;
         fields.put(s, fi);
     }
 
@@ -118,7 +128,8 @@ class ClassInfo
             System.out.println("  CLASS SYM TABLE: <FIELD>");
             for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
                 FieldInfo val = entry.getValue();
-                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.seqnum + " " + val.toString());
+
                 //val.dump();
             }
         }
@@ -127,7 +138,7 @@ class ClassInfo
             System.out.println("  CLASS SYM TABLE: <METHOD>");
             for (Map.Entry<String, MethodInfo> entry : methods.entrySet()) {
                 MethodInfo val = entry.getValue();
-                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + val.toString());
+                System.out.println("  " + entry.getKey() + " (ln " + val.ln + ") :: " + "ord: " + val.ordinal + " " + val.toString());
                 val.dump();
             }
         }

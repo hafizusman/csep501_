@@ -61,7 +61,6 @@ public class SymbolTableVisitor implements Visitor
         FieldInfo fi = new FieldInfo(n.vl.get(i).line_number);
         ci.enterField(n.vl.get(i).i.s, fi);
     }
-
     for ( int i = 0; i < n.ml.size(); i++ ) {
         MethodInfo mi = new MethodInfo(n.ml.get(i).line_number);
         ci.enterMethod(n.ml.get(i).i.s, mi);
