@@ -13,8 +13,8 @@ class VarInfo
     public int seqnum;
     public VarInfo(int line_number)
     {
+        type = new UnknownSymbolType();
         seqnum = -1;
-        type = TypeSystem.unknownt; //todo: figure out the actual type, i.e. is it a base type or a compound type
         ln = line_number;
     }
     public VarInfo()
@@ -63,7 +63,6 @@ class MethodInfo
 {
     public SymbolType type;
     public int ln;
-    public SymbolType returnType;
     int ordinal;
     int formalsSeqNum;
     int localsSeqNum;
@@ -72,7 +71,7 @@ class MethodInfo
 
     public MethodInfo(int line_number)
     {
-        type = TypeSystem.unknownt;
+        type = new UnknownSymbolType();
         ln = line_number;
         formalsSeqNum = 1;
         localsSeqNum = 1;
@@ -130,12 +129,13 @@ class MethodInfo
                 FormalInfo val = entry.getValue();
                 System.out.println(
                         "      " +
-                        entry.getKey() + " -> " +
-                        "[" +
-                        "type: " + val.type.toString() + ", " +
-                        "line: " + val.ln + ", " +
-                        "ord: " + val.seqnum +
-                        "]");
+                                entry.getKey() + " -> " +
+                                "[" +
+                                "type: " + val.type.toString() + ", " +
+                                "line: " + val.ln + ", " +
+                                "ord: " + val.seqnum +
+                                "]"
+                );
             }
         }
         if (locals.size() > 0) {
@@ -144,12 +144,13 @@ class MethodInfo
                 LocalInfo val = entry.getValue();
                 System.out.println(
                         "      " +
-                        entry.getKey() + " -> " +
-                        "[" +
-                        "type: " + val.type.toString() + ", " +
-                        "line: " + val.ln + ", " +
-                        "ord: " + val.seqnum +
-                        "]");
+                                entry.getKey() + " -> " +
+                                "[" +
+                                "type: " + val.type.toString() + ", " +
+                                "line: " + val.ln + ", " +
+                                "ord: " + val.seqnum +
+                                "]"
+                );
             }
         }
 
@@ -169,9 +170,9 @@ class ClassInfo
 
     public ClassInfo(int line_number)
     {
-        type = TypeSystem.unknownt;
+        type = new UnknownSymbolType();
         ln = line_number;
-        baseClass = null;
+        baseClass = null; //todo: we don't need this! it'll be stored in teh typesystem
         fields = new HashMap<String, FieldInfo>();
         methods = new HashMap<String, MethodInfo>();
         methodOrdinal = 1;
@@ -217,13 +218,14 @@ class ClassInfo
             for (Map.Entry<String, FieldInfo> entry : fields.entrySet()) {
                 FieldInfo val = entry.getValue();
                 System.out.println(
-                    "    " +
-                    entry.getKey() + " -> " +
-                    "[" +
-                    "type: " + val.type.toString() + ", " +
-                    "line: " + val.ln + ", " +
-                    "ord: " + val.seqnum +
-                    "]");
+                        "    " +
+                                entry.getKey() + " -> " +
+                                "[" +
+                                "type: " + val.type.toString() + ", " +
+                                "line: " + val.ln + ", " +
+                                "ord: " + val.seqnum +
+                                "]"
+                );
                 //val.dump();
             }
         }
@@ -234,13 +236,14 @@ class ClassInfo
                 MethodInfo val = entry.getValue();
                 System.out.println(
                         "    " +
-                        entry.getKey() + " -> " +
-                        "[" +
-                        "t: " + val.type.toString() + ", " +
-                        "l: " + val.ln + ", " +
-                        "o: " + val.ordinal + ", " +
-                        "r: " + val.returnType.toString() +
-                        "]");
+                                entry.getKey() + " -> " +
+                                "[" +
+                                "t: " + val.type.toString() + ", " +
+                                "l: " + val.ln + ", " +
+                                "o: " + val.ordinal + ", " +
+                                //"r: " + val.returnType.toString() +
+                                "]"
+                );
 
                 val.dump();
             }

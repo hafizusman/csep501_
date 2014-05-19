@@ -6,24 +6,23 @@ import AST.*;
 // HP 10/11
 
 /*
-This visitor adds all the class declarations to the type system. At the end of this run, our Type system will have all
-the types.
+This visitor expects the caller to provide the symbol table as well as the type system objects
+
  */
-public class TypeSystemVisitor implements Visitor {
+public class TypeSystem2Visitor implements Visitor {
     private SymbolTable symtable;
     private TypeSystem typesys;
-    private ClassInfo currCI;
 
-    public TypeSystemVisitor()
-    {
-        typesys = new TypeSystem();
-        typesys.init();
-    }
+
     public TypeSystem getTypeSystem()
     {
         return this.typesys;
     }
 
+    public void setTypeSystem(TypeSystem ts)
+    {
+        this.typesys = ts;
+    }
     public void setSymbolTable(SymbolTable st)
     {
         this.symtable = st;
@@ -49,13 +48,6 @@ public class TypeSystemVisitor implements Visitor {
     // Identifier i1,i2;
     // Statement s;
     public void visit(MainClass n) {
-        currCI = symtable.lookup(n.i1.s);
-
-        // add this class to type system
-        ClassSymbolType cst = new ClassSymbolType();
-        typesys.enter(n.i1.s, cst);
-        currCI.type = cst;
-        currCI.baseClass = null;
 
         n.i1.accept(this);
         
@@ -70,12 +62,6 @@ public class TypeSystemVisitor implements Visitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public void visit(ClassDeclSimple n) {
-        currCI = symtable.lookup(n.i.s);
-
-        // add this class to type system
-        ClassSymbolType cst = new ClassSymbolType();
-        typesys.enter(n.i.s, cst);
-        currCI.type = cst;
 
         n.i.accept(this);
         
@@ -97,11 +83,6 @@ public class TypeSystemVisitor implements Visitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public void visit(ClassDeclExtends n) {
-        // add this class to type system
-        ClassSymbolType cst = new ClassSymbolType();
-        typesys.enter(n.i.s, cst);
-        currCI.type = cst;
-        currCI.baseClass = null;
 
         n.i.accept(this);
         

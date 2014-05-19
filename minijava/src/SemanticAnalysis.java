@@ -12,9 +12,8 @@ public class SemanticAnalysis
 
     public SemanticAnalysis()
     {
-        typesys = new TypeSystem();
-        typesys.init();
         this.symtable = null;
+        this.typesys = null;
     }
 
     // build symbol table, check duplicate symbols, set line numbers for identifiers
@@ -49,6 +48,35 @@ public class SemanticAnalysis
         try {
             vis.setSymbolTable(this.symtable);
             p.accept(vis);
+            this.typesys = vis.getTypeSystem();
+            //typesys.dumpTypes();
+            //symtable.dump();
+        }
+        catch (SemanticException e)
+        {
+            err = ~NO_ERROR;
+        }
+
+        return err;
+    }
+
+    public int pass3(Program p)
+    {
+        int err = NO_ERROR;
+        TypeSystem2Visitor vis = new TypeSystem2Visitor();
+
+        if (symtable == null || typesys == null) {
+            System.out.println("ERROR: run pass2 first");
+            throw new RuntimeException();
+        }
+
+        try {
+            vis.setSymbolTable(this.symtable);
+            vis.setTypeSystem(this.typesys);
+            p.accept(vis);
+
+            this.typesys = vis.getTypeSystem();
+            typesys.dumpTypes();
             symtable.dump();
         }
         catch (SemanticException e)

@@ -37,7 +37,9 @@ class MethodSymbolType extends CompoundSymbolType
     public ArrayList <SymbolType> paramListType;
     public MethodSymbolType()
     {
+        returnType = null;
         idType = IdentifierType.ID_TYPE_REFERENCE;
+        paramListType = new ArrayList<SymbolType>();
     }
     public String toString()
     {
@@ -96,8 +98,16 @@ class LiteralSymbolType extends BaseSymbolType
 class ClassSymbolType extends CompoundSymbolType
 {
     public SymbolType baseClassType;
-    public List<SymbolType> fields;
-    public List<SymbolType> methods;
+    public ArrayList<SymbolType> fields;
+    public ArrayList<SymbolType> methods;
+    public ClassSymbolType()
+    {
+        super();
+        fields = new ArrayList<SymbolType>();
+        methods = new ArrayList<SymbolType>();
+        baseClassType = null;
+    }
+
     public String toString()
     {
         return "ClassSymbolType";

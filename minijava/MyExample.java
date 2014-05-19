@@ -6,9 +6,18 @@ class Factorial{
 
 class Simplified
 {
-    public Foo getSimplified(Fac f)
-    {return 11;}
+    //Fac f;
+    int d;
+    //boolean c;
+    //int []yo;
+    public Foo getSimplified(boolean abc, int xyz)//, int []def, Bar lmn)
+    {
+        Fac y;
+        //y = !x;
+        return 11;
+    }
 }
+
 
 /*
 class Fac

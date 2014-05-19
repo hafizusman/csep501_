@@ -53,9 +53,12 @@ public class MyParser
 
         SemanticAnalysis sa = new SemanticAnalysis();
         error = sa.pass1(program);
-        if (error == NO_ERROR)
+        if (error == NO_ERROR) {
             error = sa.pass2(program);
-
+            if(error == NO_ERROR) {
+                error = sa.pass3(program);
+            }
+        }
         return error;
     }
 }
