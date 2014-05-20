@@ -34,8 +34,36 @@ public class TypeSystem2Visitor implements Visitor {
         if (lh == rh) {
             assignable = true;
         }
+        else if ( lh instanceof ClassSymbolType && rh instanceof  ClassSymbolType) {
+            if (isDerivedFrom((ClassSymbolType)lh, (ClassSymbolType)rh) == true) {
+                assignable = true;
+            }
+        }
 
         return assignable;
+    }
+
+    private boolean isDerivedFrom(ClassSymbolType base, ClassSymbolType derived)
+    {
+        boolean isderived = false;
+        boolean end = false;
+
+        while(!end) {
+            if (derived == null) {
+                end = true;
+            }
+            else if (derived.baseClassType == base &&
+                    derived.baseClassType != null &&
+                    base != null) {
+                isderived = true;
+                end = true;
+            }
+            else {
+                derived = (ClassSymbolType) derived.baseClassType;
+            }
+        }
+
+        return isderived;
     }
 
     private SymbolType validateIdentifierType(int linenum)
@@ -132,7 +160,13 @@ public class TypeSystem2Visitor implements Visitor {
         currCI = symtable.lookup(n.i.s);
 
         n.i.accept(this);
-        
+        ClassSymbolType cst = (ClassSymbolType)typesys.lookup(n.i.s);
+        if(typesys.lookup(n.j.s) == null) {
+            System.out.println("ERROR: " + n.j.s + ": cannot derive from class \"" + n.j.s + "\"");
+            throw new SemanticException();
+        }
+        cst.baseClassType = typesys.lookup(n.j.s);
+
         n.j.accept(this);
         
         for ( int i = 0; i < n.vl.size(); i++ ) {

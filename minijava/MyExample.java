@@ -1,22 +1,26 @@
 class Factorial{
     public static void main(String[] a)
     {
-        System.out.println(new Fac().ComputeFac(10));
+        System.out.println(new FacBase2().ComputeFac(10));
     }
 }
 
-class Fac extends Factorial
+class FacBase1 extends Factorial
+{}
+
+class FacBase2 extends FacBase1
 {}
 
 class Simplified
 {
     Factorial f;
     int d;
-    Fac mine;
+    FacBase1 mine1;
+    FacBase2 mine2;
     boolean c;
     int []yo;
 
-    public int[] getSimplified(boolean abc, int xyz, Fac x, Simplified z)//, int []def, Bar lmn)
+    public int[] getSimplified(boolean abc, int xyz, FacBase2 x, Simplified z)//, int []def, Bar lmn)
     {
         int y;
         boolean zyz;
@@ -25,12 +29,13 @@ class Simplified
         int []a;
         int def;
 
-        f = x;
-        x = mine;
+        f = mine1;
+        f = mine2;
+        x = mine2;
         y = a[10];
         y1 = new int[10];
         def = yo.length;
-        x = new Fac();
+        x = new FacBase2();
         z1 = new int[xyz];
 
         while(abc) {
