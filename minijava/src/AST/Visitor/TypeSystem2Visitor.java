@@ -274,53 +274,100 @@ public class TypeSystem2Visitor implements Visitor {
     public void visit(And n) {
         
         n.e1.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.BOOL)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": And l-operand must be boolean type" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.BOOL)) {
+            System.out.println("ERROR: " + n.e2.line_number + ": And r-operand must be boolean type" );
+            throw new SemanticException();
+        }
+
     }
 
     // Exp e1,e2;
     public void visit(LessThan n) {
         
         n.e1.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": LessThan l-operand must be int type" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e2.line_number + ": LessThan r-operand must be int type" );
+            throw new SemanticException();
+        }
+
     }
 
     // Exp e1,e2;
     public void visit(Plus n) {
         
         n.e1.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": Plus l-operand must be int type" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e2.line_number + ": Plus r-operand must be int type" );
+            throw new SemanticException();
+        }
+
     }
 
     // Exp e1,e2;
     public void visit(Minus n) {
         
         n.e1.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": Minus l-operand must be int type" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e2.line_number + ": Minus r-operand must be int type" );
+            throw new SemanticException();
+        }
+
     }
 
     // Exp e1,e2;
     public void visit(Times n) {
         
         n.e1.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": Multiply l-operand must be int type" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e2.line_number + ": Multiply r-operand must be int type" );
+            throw new SemanticException();
+        }
     }
 
     // Exp e1,e2;
     public void visit(ArrayLookup n) {
         n.e1.accept(this);
-        
+        if (returnedType != typesys.lookup(returnedString)) { //todo: fix this expression type!!!
+            System.out.println("ERROR: " + n.e1.line_number + ": Array type expected on lhs" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e2.line_number + ": Integer expected for array lookup" );
+            throw new SemanticException();
+        }
+
     }
 
     // Exp e;
@@ -346,15 +393,15 @@ public class TypeSystem2Visitor implements Visitor {
 
     // int i;
     public void visit(IntegerLiteral n) {
-        
+        returnedType = typesys.lookup(TypeSystem.INT);
     }
 
     public void visit(True n) {
-        
+        returnedType = typesys.lookup(TypeSystem.BOOL);
     }
 
     public void visit(False n) {
-        
+        returnedType = typesys.lookup(TypeSystem.BOOL);
     }
 
     // String s;
@@ -382,8 +429,11 @@ public class TypeSystem2Visitor implements Visitor {
 
     // Exp e;
     public void visit(Not n) {
-        
         n.e.accept(this);
+        if (returnedType != typesys.lookup(TypeSystem.BOOL)) {
+            System.out.println("ERROR: " + n.e.line_number + ": operand must be boolean type" );
+            throw new SemanticException();
+        }
     }
 
     // String s;

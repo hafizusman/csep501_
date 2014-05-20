@@ -15,8 +15,16 @@ class Simplified
     {
         Simplified y;
         boolean zyz;
-        int[] arry;
+        int[] y1;
 
+        y = 3 + 4;
+        y = 3 - 4;
+        y = 3 * 4;
+        //y = a[10];
+        y = 2 < (3-1);
+        y = true && false;
+
+        x = false;
         //y = !x;
         return 11;
     }
