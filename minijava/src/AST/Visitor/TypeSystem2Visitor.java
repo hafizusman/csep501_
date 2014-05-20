@@ -367,12 +367,38 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     // Exp e1,e2;
     public void visit(ArrayAssign n) {
+        SymbolType lh, rh;
+        VarInfo vi;
+
+        if ((vi = currMI.lookupLocal(n.i.s)) == null) {
+            if ((vi = currMI.lookupFormal(n.i.s)) == null) {
+                if ((vi = currCI.lookupField(n.i.s)) == null) {
+                    System.out.println("ERROR: " + n.line_number + ": Undefined symbol \"" + n.i.s + "\"");
+                    throw new SemanticException();
+                }
+            }
+        }
+        lh = vi.type;
+
         n.i.accept(this);
         
         n.e1.accept(this);
-        
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            validateIdentifierExp(n.e1.line_number);
+        }
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": array index must be int type" );
+            throw new SemanticException();
+        }
+
         n.e2.accept(this);
-        
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            validateIdentifierExp(n.e1.line_number);
+        }
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e1.line_number + ": array assignment rh must be int type" );
+            throw new SemanticException();
+        }
     }
 
     // Exp e1,e2;

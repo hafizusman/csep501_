@@ -29,6 +29,10 @@ class Simplified
         int []a;
         int def;
 
+        a[11] = xyz;
+        a[y] = xyz;
+        a[1] = z1[8];
+        a[d] = z1[8];
         f = mine1;
         f = mine2;
         x = mine2;
