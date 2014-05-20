@@ -28,6 +28,16 @@ public class TypeSystem2Visitor implements Visitor {
         return this.typesys;
     }
 
+    private boolean isAssignableTo(SymbolType lh, SymbolType rh)
+    {
+        boolean assignable = false;
+        if (lh == rh) {
+            assignable = true;
+        }
+
+        return assignable;
+    }
+
     private SymbolType validateIdentifierType(int linenum)
     {
         if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
@@ -293,10 +303,31 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     // Exp e;
     public void visit(Assign n) {
+        SymbolType lh, rh;
+        VarInfo vi;
+
+        if ((vi = currMI.lookupLocal(n.i.s)) == null) {
+            if ((vi = currMI.lookupFormal(n.i.s)) == null) {
+                if ((vi = currCI.lookupField(n.i.s)) == null) {
+                    System.out.println("ERROR: " + n.line_number + ": Undefined symbol \"" + n.i.s + "\"");
+                    throw new SemanticException();
+                }
+            }
+        }
+        lh = vi.type;
+
         n.i.accept(this);
-        
+
         n.e.accept(this);
-        
+        rh = returnedType;
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            rh = validateIdentifierExp(n.e.line_number);
+        }
+
+        if (!isAssignableTo(lh, rh)) {
+            System.out.println("ERROR: " + n.e.line_number + ": rhs not type compatible with lhs" );
+            throw new SemanticException();
+        }
     }
 
     // Identifier i;
@@ -426,9 +457,8 @@ public class TypeSystem2Visitor implements Visitor {
     // Exp e1,e2;
     public void visit(ArrayLookup n) {
         n.e1.accept(this);
-        if (returnedType != typesys.lookup(returnedString)) { //todo: fix this expression type!!!
-            System.out.println("ERROR: " + n.e1.line_number + ": Array type expected on lhs" );
-            throw new SemanticException();
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            validateIdentifierExp(n.e1.line_number);
         }
 
         n.e2.accept(this);
@@ -437,6 +467,7 @@ public class TypeSystem2Visitor implements Visitor {
             throw new SemanticException();
         }
 
+        returnedType = typesys.lookup(TypeSystem.INT); //todo: remove this HACK that's in place to make assignment work with arr lookup
     }
 
     // Exp e;
@@ -450,6 +481,7 @@ public class TypeSystem2Visitor implements Visitor {
             throw new SemanticException();
         }
 
+        returnedType = typesys.lookup(TypeSystem.INT); //todo: remove this HACK that's in place to make assignment work with arr.length
     }
 
     // Exp e;
@@ -487,7 +519,7 @@ public class TypeSystem2Visitor implements Visitor {
     }
 
     public void visit(This n) {
-        
+
     }
 
     // Exp e;
@@ -501,6 +533,7 @@ public class TypeSystem2Visitor implements Visitor {
             throw new SemanticException();
         }
 
+        returnedType = typesys.lookup(TypeSystem.ARRAY); //todo: remove this HACK that's in place to make assignment work with new arrays
     }
 
     // Identifier i;

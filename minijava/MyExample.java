@@ -1,30 +1,36 @@
 class Factorial{
     public static void main(String[] a)
     {
-        //System.out.println(new Fac().ComputeFac(10));
-        System.out.println(0);
+        System.out.println(new Fac().ComputeFac(10));
     }
 }
 
-class Fac
+class Fac extends Factorial
 {}
 
 class Simplified
 {
     Factorial f;
     int d;
+    Fac mine;
     boolean c;
     int []yo;
 
-    public int[] getSimplified(boolean abc, int xyz, Factorial x, Simplified z)//, int []def, Bar lmn)
+    public int[] getSimplified(boolean abc, int xyz, Fac x, Simplified z)//, int []def, Bar lmn)
     {
-        Simplified y;
+        int y;
         boolean zyz;
         int[] y1;
+        int [] z1;
+        int []a;
         int def;
 
-        x = new Fac();
+        f = x;
+        x = mine;
+        y = a[10];
         y1 = new int[10];
+        def = yo.length;
+        x = new Fac();
         z1 = new int[xyz];
 
         while(abc) {
@@ -32,22 +38,20 @@ class Simplified
             y = d + 4;
             y = def - d;
             System.out.println(12);
-            def = yo.length;
+
         }
         y = 3 * 4;
-        //y = a[10];
         y = 2 < (3-1);
-        y = true && false;
-        y = zyz && true;
+        zyz = true && false;
+        zyz = zyz && true;
 
 
         if (!c)
         {
-            x = false;
-            y = !abc;
+            abc = false;
+            c = !abc;
         }
         else {
-            x = y;
             System.out.println(xyz);
         }
 
