@@ -22,6 +22,7 @@ class Simplified
             y = 2 + def;
             y = d + 4;
             y = def - d;
+            System.out.println(12);
         }
         y = 3 * 4;
         //y = a[10];
@@ -37,6 +38,7 @@ class Simplified
         }
         else {
             x = y;
+            System.out.println(xyz);
         }
 
         return 11;
