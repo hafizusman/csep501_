@@ -12,11 +12,25 @@ This visitor expects the caller to provide the symbol table as well as the type 
 public class TypeSystem2Visitor implements Visitor {
     private SymbolTable symtable;
     private TypeSystem typesys;
+    private SymbolType returnedType;
+    private String returnedString;
 
+    private String currentID;
 
     public TypeSystem getTypeSystem()
     {
         return this.typesys;
+    }
+
+    private void validateIdentifierType()
+    {
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            returnedType = typesys.lookup(returnedString);
+            if (returnedType == null) {
+                System.out.println("ERROR: unknown type \"" + returnedString + "\"" );
+                throw new SemanticException();
+            }
+        }
     }
 
     public void setTypeSystem(TypeSystem ts)
@@ -105,7 +119,8 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     public void visit(VarDecl n) {
         n.t.accept(this);
-        
+        validateIdentifierType();
+
         n.i.accept(this);
         
     }
@@ -119,7 +134,8 @@ public class TypeSystem2Visitor implements Visitor {
     public void visit(MethodDecl n) {
 
         n.t.accept(this);
-        
+        validateIdentifierType();
+
         n.i.accept(this);
         
         for ( int i = 0; i < n.fl.size(); i++ ) {
@@ -147,25 +163,27 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     public void visit(Formal n) {
         n.t.accept(this);
-        
+        validateIdentifierType();
+
         n.i.accept(this);
     }
 
     public void visit(IntArrayType n) {
-        
+
     }
 
     public void visit(BooleanType n) {
-        
+        returnedType = typesys.lookup(TypeSystem.BOOL);
     }
 
     public void visit(IntegerType n) {
-        
+        returnedType = typesys.lookup(TypeSystem.BOOL);
     }
 
     // String s;
     public void visit(IdentifierType n) {
-        
+        returnedType = typesys.lookup(TypeSystem.UNKNOWN); //means it's an identifier
+        returnedString = n.s;
     }
 
     // StatementList sl;

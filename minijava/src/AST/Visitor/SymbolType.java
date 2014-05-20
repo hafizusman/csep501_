@@ -97,6 +97,7 @@ class LiteralSymbolType extends BaseSymbolType
 
 class ClassSymbolType extends CompoundSymbolType
 {
+    public String name;
     public SymbolType baseClassType;
     public ArrayList<SymbolType> fields;
     public ArrayList<SymbolType> methods;
@@ -106,11 +107,12 @@ class ClassSymbolType extends CompoundSymbolType
         fields = new ArrayList<SymbolType>();
         methods = new ArrayList<SymbolType>();
         baseClassType = null;
+        name = null;
     }
 
     public String toString()
     {
-        return "ClassSymbolType";
+        return ("ClassSymbolType: " + name);
     }
 
 }

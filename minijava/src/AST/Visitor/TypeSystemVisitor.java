@@ -53,6 +53,7 @@ public class TypeSystemVisitor implements Visitor {
 
         // add this class to type system
         ClassSymbolType cst = new ClassSymbolType();
+        cst.name = n.i1.s;
         typesys.enter(n.i1.s, cst);
         currCI.type = cst;
         currCI.baseClass = null;
@@ -74,6 +75,7 @@ public class TypeSystemVisitor implements Visitor {
 
         // add this class to type system
         ClassSymbolType cst = new ClassSymbolType();
+        cst.name = n.i.s;
         typesys.enter(n.i.s, cst);
         currCI.type = cst;
 
@@ -99,6 +101,7 @@ public class TypeSystemVisitor implements Visitor {
     public void visit(ClassDeclExtends n) {
         // add this class to type system
         ClassSymbolType cst = new ClassSymbolType();
+        cst.name = n.i.s;
         typesys.enter(n.i.s, cst);
         currCI.type = cst;
         currCI.baseClass = null;
