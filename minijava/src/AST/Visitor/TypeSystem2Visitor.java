@@ -118,8 +118,6 @@ public class TypeSystem2Visitor implements Visitor {
             currMI = currCI.lookupMethod(n.ml.get(i).i.s);
             n.ml.get(i).accept(this);
         }
-        
-        
     }
 
     // Type t;
@@ -150,14 +148,18 @@ public class TypeSystem2Visitor implements Visitor {
     public void visit(MethodDecl n) {
         currMI = currCI.lookupMethod(n.i.s);
 
+        MethodSymbolType mst = new MethodSymbolType();
+
         n.t.accept(this);
         validateIdentifierType(n.t.line_number);
+        mst.returnType = returnedType;
 
         n.i.accept(this);
-        
+
         for ( int i = 0; i < n.fl.size(); i++ ) {
             currVariableI = currFormalI = currMI.lookupFormal(n.fl.get(i).i.s);
             n.fl.get(i).accept(this);
+            mst.paramListType.add(i, returnedType);
         }
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
@@ -173,7 +175,7 @@ public class TypeSystem2Visitor implements Visitor {
         
         n.e.accept(this);
         
-        
+        currCI.lookupMethod(n.i.s).type = mst;
     }
 
     // Type t;

@@ -43,7 +43,13 @@ class MethodSymbolType extends CompoundSymbolType
     }
     public String toString()
     {
-        return "MethodSymbolType";
+        String s = "MethodSymbolType <" + returnType.toString() + ">";
+
+        for (int i  = 0; i < paramListType.size(); i++) {
+            s += (" " + paramListType.get(i).toString());
+        }
+
+        return s;
     }
 }
 

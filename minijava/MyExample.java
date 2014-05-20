@@ -11,7 +11,7 @@ class Simplified
     //boolean c;
     //int []yo;
 
-    public int[] getSimplified(boolean abc, int xyz)//, int []def, Bar lmn)
+    public int[] getSimplified(boolean abc, int xyz, Factorial x, Simplified z)//, int []def, Bar lmn)
     {
         Simplified y;
         boolean zyz;
