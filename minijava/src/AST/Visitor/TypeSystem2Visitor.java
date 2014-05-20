@@ -492,16 +492,24 @@ public class TypeSystem2Visitor implements Visitor {
 
     // Exp e;
     public void visit(NewArray n) {
-        
         n.e.accept(this);
-        
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            validateIdentifierExp(n.e.line_number);
+        }
+        if (returnedType != typesys.lookup(TypeSystem.INT)) {
+            System.out.println("ERROR: " + n.e.line_number + ": length must be int type" );
+            throw new SemanticException();
+        }
+
     }
 
     // Identifier i;
     public void visit(NewObject n) {
-        
-        
-        
+        returnedType = typesys.lookup(n.i.s);
+        if (returnedType == null) {
+            System.out.println("ERROR: " + n.i.line_number + ": unknown type \"" + n.i.s + "\"" );
+            throw new SemanticException();
+        }
     }
 
     // Exp e;
