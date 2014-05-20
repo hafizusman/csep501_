@@ -11,7 +11,7 @@ class FacBase1 extends Factorial
 class FacBase2 extends FacBase1
 {}
 
-class Simplified
+class Simplified extends FacBase2
 {
     Factorial f;
     int d;
@@ -29,6 +29,7 @@ class Simplified
         int []a;
         int def;
 
+        f = this;
         a[11] = xyz;
         a[y] = xyz;
         a[1] = z1[8];

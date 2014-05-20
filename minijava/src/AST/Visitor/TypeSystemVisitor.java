@@ -71,8 +71,8 @@ public class TypeSystemVisitor implements Visitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public void visit(ClassDeclSimple n) {
-        currCI = symtable.lookup(n.i.s);
 
+        currCI = symtable.lookup(n.i.s);
         // add this class to type system
         ClassSymbolType cst = new ClassSymbolType();
         cst.name = n.i.s;
@@ -99,6 +99,8 @@ public class TypeSystemVisitor implements Visitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public void visit(ClassDeclExtends n) {
+
+        currCI = symtable.lookup(n.i.s);
         // add this class to type system
         ClassSymbolType cst = new ClassSymbolType();
         cst.name = n.i.s;

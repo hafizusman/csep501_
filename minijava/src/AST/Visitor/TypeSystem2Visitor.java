@@ -579,7 +579,7 @@ public class TypeSystem2Visitor implements Visitor {
     }
 
     public void visit(This n) {
-
+        returnedType = currCI.type;
     }
 
     // Exp e;
