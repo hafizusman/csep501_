@@ -9,21 +9,11 @@ public class TypeSystem
 {
     public static final String BOOL = "boolean";
     public static final String INT = "int";
+    public static final String ARRAY = "int[]";
     public static final String UNKNOWN = "unknown";
     public static final String VOID = "void";
 
     private static int count = 0;
-/*
-    public ArraySymbolType arrayt;
-    public BooleanSymbolType boolt;
-    public ClassSymbolType classt;
-    public IntSymbolType intt;
-    public LiteralSymbolType literalt;
-    public MethodSymbolType methodt;
-    public UnknownSymbolType unknownt;
-    public VoidSymbolType voidt;
-    public IdentifierSymbolType idt;
-*/
     private HashMap<String, SymbolType> st;
 
     public void init()
@@ -33,10 +23,11 @@ public class TypeSystem
             throw new SemanticException();
         }
         st = new HashMap<String, SymbolType>();
-        st.put("boolean", new BooleanSymbolType());
-        st.put("int", new IntSymbolType());
-        st.put("unknown", new UnknownSymbolType());
-        st.put("void", new VoidSymbolType());
+        st.put(BOOL, new BooleanSymbolType());
+        st.put(INT, new IntSymbolType());
+        st.put(ARRAY, new ArraySymbolType());
+        st.put(UNKNOWN, new UnknownSymbolType());
+        st.put(VOID, new VoidSymbolType());
         count++;
     }
 

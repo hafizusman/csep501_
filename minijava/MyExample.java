@@ -11,10 +11,12 @@ class Simplified
     //boolean c;
     //int []yo;
 
-    public int getSimplified(boolean abc, int xyz)//, int []def, Bar lmn)
+    public int[] getSimplified(boolean abc, int xyz)//, int []def, Bar lmn)
     {
         Simplified y;
         boolean zyz;
+        int[] arry;
+
         //y = !x;
         return 11;
     }

@@ -12,22 +12,28 @@ This visitor expects the caller to provide the symbol table as well as the type 
 public class TypeSystem2Visitor implements Visitor {
     private SymbolTable symtable;
     private TypeSystem typesys;
+
     private SymbolType returnedType;
     private String returnedString;
 
-    private String currentID;
+    private ClassInfo currCI;
+    private MethodInfo currMI;
+    private VarInfo currVariableI;
+    private FormalInfo currFormalI;
+    private FieldInfo currFieldI;
+    private LocalInfo currLocalI;
 
     public TypeSystem getTypeSystem()
     {
         return this.typesys;
     }
 
-    private void validateIdentifierType()
+    private void validateIdentifierType(int linenum)
     {
         if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
             returnedType = typesys.lookup(returnedString);
             if (returnedType == null) {
-                System.out.println("ERROR: unknown type \"" + returnedString + "\"" );
+                System.out.println("ERROR: " + linenum + ": unknown type \"" + returnedString + "\"" );
                 throw new SemanticException();
             }
         }
@@ -62,13 +68,13 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i1,i2;
     // Statement s;
     public void visit(MainClass n) {
+        currCI = symtable.lookup(n.i1.s);
 
         n.i1.accept(this);
-        
-        
+
+        currMI = currCI.lookupMethod("main");
         n.i2.accept(this);
-        
-        
+
         n.s.accept(this);
     }
 
@@ -76,16 +82,17 @@ public class TypeSystem2Visitor implements Visitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public void visit(ClassDeclSimple n) {
+        currCI = symtable.lookup(n.i.s);
 
         n.i.accept(this);
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
-
+            currVariableI = currFieldI = currCI.lookupField(n.vl.get(i).i.s);
             n.vl.get(i).accept(this);
         }
 
         for ( int i = 0; i < n.ml.size(); i++ ) {
-            
+            currMI = currCI.lookupMethod(n.ml.get(i).i.s);
             n.ml.get(i).accept(this);
         }
         
@@ -97,18 +104,18 @@ public class TypeSystem2Visitor implements Visitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public void visit(ClassDeclExtends n) {
+        currCI = symtable.lookup(n.i.s);
 
         n.i.accept(this);
         
         n.j.accept(this);
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
-            
+            currVariableI = currFieldI = currCI.lookupField(n.vl.get(i).i.s);
             n.vl.get(i).accept(this);
-            if ( i+1 < n.vl.size() ) {  }
         }
         for ( int i = 0; i < n.ml.size(); i++ ) {
-            
+            currMI = currCI.lookupMethod(n.ml.get(i).i.s);
             n.ml.get(i).accept(this);
         }
         
@@ -119,10 +126,19 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     public void visit(VarDecl n) {
         n.t.accept(this);
-        validateIdentifierType();
+
+        validateIdentifierType(n.i.line_number);
+
+        if (currVariableI instanceof FieldInfo) {
+            currCI.lookupField(n.i.s).type = returnedType;
+        }
+        else if (currVariableI instanceof LocalInfo) {
+            currMI.lookupLocal(n.i.s).type = returnedType;
+        }
+        else {throw new RuntimeException("unknown variable info type");}
 
         n.i.accept(this);
-        
+
     }
 
     // Type t;
@@ -132,19 +148,20 @@ public class TypeSystem2Visitor implements Visitor {
     // StatementList sl;
     // Exp e;
     public void visit(MethodDecl n) {
+        currMI = currCI.lookupMethod(n.i.s);
 
         n.t.accept(this);
-        validateIdentifierType();
+        validateIdentifierType(n.t.line_number);
 
         n.i.accept(this);
         
         for ( int i = 0; i < n.fl.size(); i++ ) {
+            currVariableI = currFormalI = currMI.lookupFormal(n.fl.get(i).i.s);
             n.fl.get(i).accept(this);
-            if (i+1 < n.fl.size()) {  }
         }
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
-            
+            currVariableI = currLocalI = currMI.lookupLocal(n.vl.get(i).i.s);
             n.vl.get(i).accept(this);
             
         }
@@ -163,13 +180,18 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     public void visit(Formal n) {
         n.t.accept(this);
-        validateIdentifierType();
+
+        validateIdentifierType(n.i.line_number);
+        if (currVariableI instanceof FormalInfo) {
+            currMI.lookupFormal(n.i.s).type = returnedType;
+        }
+        else {throw new RuntimeException("unknown variable info type for formal\n");}
 
         n.i.accept(this);
     }
 
     public void visit(IntArrayType n) {
-
+        returnedType = typesys.lookup(TypeSystem.ARRAY);
     }
 
     public void visit(BooleanType n) {
@@ -177,7 +199,7 @@ public class TypeSystem2Visitor implements Visitor {
     }
 
     public void visit(IntegerType n) {
-        returnedType = typesys.lookup(TypeSystem.BOOL);
+        returnedType = typesys.lookup(TypeSystem.INT);
     }
 
     // String s;
