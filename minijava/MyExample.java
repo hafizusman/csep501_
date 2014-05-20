@@ -23,6 +23,7 @@ class Simplified
             y = d + 4;
             y = def - d;
             System.out.println(12);
+            def = yo.length;
         }
         y = 3 * 4;
         //y = a[10];

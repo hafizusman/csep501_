@@ -442,7 +442,14 @@ public class TypeSystem2Visitor implements Visitor {
     // Exp e;
     public void visit(ArrayLength n) {
         n.e.accept(this);
-        
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            validateIdentifierExp(n.e.line_number);
+        }
+        if (returnedType != typesys.lookup(TypeSystem.ARRAY)) {
+            System.out.println("ERROR: " + n.e.line_number + ": array operand required to get length" );
+            throw new SemanticException();
+        }
+
     }
 
     // Exp e;
