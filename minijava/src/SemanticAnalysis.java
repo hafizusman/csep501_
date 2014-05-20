@@ -63,7 +63,8 @@ public class SemanticAnalysis
     public int pass3(Program p)
     {
         int err = NO_ERROR;
-        TypeSystem2Visitor vis = new TypeSystem2Visitor();
+        TypeSystemMethodsVisitor vism = new TypeSystemMethodsVisitor();
+        TypeSystem2Visitor vis2 = new TypeSystem2Visitor();
 
         if (symtable == null || typesys == null) {
             System.out.println("ERROR: run pass2 first");
@@ -71,11 +72,25 @@ public class SemanticAnalysis
         }
 
         try {
-            vis.setSymbolTable(this.symtable);
-            vis.setTypeSystem(this.typesys);
-            p.accept(vis);
+            vism.setSymbolTable(this.symtable);
+            vism.setTypeSystem(this.typesys);
+            p.accept(vism);
+            //typesys.dumpTypes();
+            //symtable.dump();
 
-            this.typesys = vis.getTypeSystem();
+            this.typesys = vism.getTypeSystem();
+        }
+        catch (SemanticException e)
+        {
+            err = ~NO_ERROR;
+        }
+
+        try {
+            vis2.setSymbolTable(this.symtable);
+            vis2.setTypeSystem(this.typesys);
+            p.accept(vis2);
+
+            this.typesys = vis2.getTypeSystem();
             typesys.dumpTypes();
             symtable.dump();
         }

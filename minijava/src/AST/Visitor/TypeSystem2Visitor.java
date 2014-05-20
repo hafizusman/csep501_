@@ -18,14 +18,22 @@ public class TypeSystem2Visitor implements Visitor {
 
     private ClassInfo currCI;
     private MethodInfo currMI;
-    private VarInfo currVariableI;
-    private FormalInfo currFormalI;
-    private FieldInfo currFieldI;
-    private LocalInfo currLocalI;
+    //private VarInfo currVariableI;
+    //private FormalInfo currFormalI;
+    //private FieldInfo currFieldI;
+    //private LocalInfo currLocalI;
 
     public TypeSystem getTypeSystem()
     {
         return this.typesys;
+    }
+    public void setTypeSystem(TypeSystem ts)
+    {
+        this.typesys = ts;
+    }
+    public void setSymbolTable(SymbolTable st)
+    {
+        this.symtable = st;
     }
 
     private boolean isAssignableTo(SymbolType lh, SymbolType rh)
@@ -92,15 +100,6 @@ public class TypeSystem2Visitor implements Visitor {
         return (returnedType = vi.type);
     }
 
-    public void setTypeSystem(TypeSystem ts)
-    {
-        this.typesys = ts;
-    }
-    public void setSymbolTable(SymbolTable st)
-    {
-        this.symtable = st;
-    }
-
     // Display added for toy example language.  Not used in regular MiniJava
     public void visit(Display n) {
         
@@ -140,7 +139,7 @@ public class TypeSystem2Visitor implements Visitor {
         n.i.accept(this);
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
-            currVariableI = currFieldI = currCI.lookupField(n.vl.get(i).i.s);
+            //currVariableI = currFieldI = currCI.lookupField(n.vl.get(i).i.s);
             n.vl.get(i).accept(this);
         }
 
@@ -160,17 +159,11 @@ public class TypeSystem2Visitor implements Visitor {
         currCI = symtable.lookup(n.i.s);
 
         n.i.accept(this);
-        ClassSymbolType cst = (ClassSymbolType)typesys.lookup(n.i.s);
-        if(typesys.lookup(n.j.s) == null) {
-            System.out.println("ERROR: " + n.j.s + ": cannot derive from class \"" + n.j.s + "\"");
-            throw new SemanticException();
-        }
-        cst.baseClassType = typesys.lookup(n.j.s);
 
         n.j.accept(this);
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
-            currVariableI = currFieldI = currCI.lookupField(n.vl.get(i).i.s);
+            //currVariableI = currFieldI = currCI.lookupField(n.vl.get(i).i.s);
             n.vl.get(i).accept(this);
         }
         for ( int i = 0; i < n.ml.size(); i++ ) {
@@ -183,16 +176,6 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     public void visit(VarDecl n) {
         n.t.accept(this);
-
-        validateIdentifierType(n.i.line_number);
-
-        if (currVariableI instanceof FieldInfo) {
-            currCI.lookupField(n.i.s).type = returnedType;
-        }
-        else if (currVariableI instanceof LocalInfo) {
-            currMI.lookupLocal(n.i.s).type = returnedType;
-        }
-        else {throw new RuntimeException("unknown variable info type");}
 
         n.i.accept(this);
 
@@ -207,24 +190,16 @@ public class TypeSystem2Visitor implements Visitor {
     public void visit(MethodDecl n) {
         currMI = currCI.lookupMethod(n.i.s);
 
-        MethodSymbolType mst = new MethodSymbolType();
-
         n.t.accept(this);
-        validateIdentifierType(n.t.line_number);
-        mst.returnType = returnedType;
 
         n.i.accept(this);
 
         for ( int i = 0; i < n.fl.size(); i++ ) {
-            currVariableI = currFormalI = currMI.lookupFormal(n.fl.get(i).i.s);
             n.fl.get(i).accept(this);
-            mst.paramListType.add(i, returnedType);
         }
         
         for ( int i = 0; i < n.vl.size(); i++ ) {
-            currVariableI = currLocalI = currMI.lookupLocal(n.vl.get(i).i.s);
             n.vl.get(i).accept(this);
-            
         }
         for ( int i = 0; i < n.sl.size(); i++ ) {
             
@@ -233,20 +208,13 @@ public class TypeSystem2Visitor implements Visitor {
         }
         
         n.e.accept(this);
-        
-        currCI.lookupMethod(n.i.s).type = mst;
+
     }
 
     // Type t;
     // Identifier i;
     public void visit(Formal n) {
         n.t.accept(this);
-
-        validateIdentifierType(n.i.line_number);
-        if (currVariableI instanceof FormalInfo) {
-            currMI.lookupFormal(n.i.s).type = returnedType;
-        }
-        else {throw new RuntimeException("unknown variable info type for formal\n");}
 
         n.i.accept(this);
     }
@@ -548,15 +516,49 @@ public class TypeSystem2Visitor implements Visitor {
     // Identifier i;
     // ExpList el;
     public void visit(Call n) {
+        boolean methodfound = false;
+        MethodSymbolType mst = null;
+
         n.e.accept(this);
-        
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            returnedType = validateIdentifierExp(n.e.line_number);
+        }
+        if (!(returnedType instanceof ClassSymbolType)) {
+            System.out.println("ERROR: " + n.e.line_number + ": methods can only be invoked on class objects" );
+            throw new SemanticException();
+        }
+
+        for (int i = 0; i < ((ClassSymbolType) returnedType).methods.size(); i++) {
+            mst = (MethodSymbolType)((ClassSymbolType) returnedType).methods.get(i);
+            if (mst.name.equals(n.i.s)) {
+                methodfound = true;
+                break;
+            }
+        }
+        if (methodfound == false) {
+            System.out.println("ERROR: " + n.e.line_number + ": method doesn't exist on object" );
+            throw new SemanticException();
+        }
+
         n.i.accept(this);
         
+        if (n.el.size() != mst.paramListType.size()) {
+            System.out.println("ERROR: " + n.el.line_number + ": method invalid num parameters" );
+            throw new SemanticException();
+        }
+
         for ( int i = 0; i < n.el.size(); i++ ) {
             n.el.get(i).accept(this);
-            if ( i+1 < n.el.size() ) {  }
+            if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+                returnedType = validateIdentifierExp(n.e.line_number);
+            }
+            if (returnedType != mst.paramListType.get(i)) {
+                System.out.println("ERROR: " + n.el.line_number + ": method invalid arg type: " + (i+1) );
+                throw new SemanticException();
+            }
         }
-        
+
+        returnedType = mst.returnType; // todo: remove this HACK by checkin for return type
     }
 
     // int i;

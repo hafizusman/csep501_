@@ -9,7 +9,16 @@ class FacBase1 extends Factorial
 {}
 
 class FacBase2 extends FacBase1
-{}
+{
+    public int ComputeFac(int x)
+    {
+        return 11;
+    }
+    public int FacCompute(int x)
+    {
+        return 10;
+    }
+}
 
 class Simplified extends FacBase2
 {
@@ -29,6 +38,9 @@ class Simplified extends FacBase2
         int []a;
         int def;
 
+        y1 = z.getSimplified(true, 100, new FacBase2(), z);
+        mine2 = new FacBase2();
+        def = mine2.FacCompute(10);
         f = this;
         a[11] = xyz;
         a[y] = xyz;
@@ -64,7 +76,6 @@ class Simplified extends FacBase2
         else {
             System.out.println(xyz);
         }
-
         return 11;
     }
 

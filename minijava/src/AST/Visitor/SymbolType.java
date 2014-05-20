@@ -34,12 +34,14 @@ class CompoundSymbolType extends SymbolType
 class MethodSymbolType extends CompoundSymbolType
 {
     public SymbolType returnType;
+    public String name;
     public ArrayList <SymbolType> paramListType;
     public MethodSymbolType()
     {
         returnType = null;
         idType = IdentifierType.ID_TYPE_REFERENCE;
         paramListType = new ArrayList<SymbolType>();
+        name = null;
     }
     public String toString()
     {
