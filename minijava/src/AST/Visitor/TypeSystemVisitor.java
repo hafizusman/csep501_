@@ -204,23 +204,23 @@ public class TypeSystemVisitor implements Visitor {
     // Exp e;
     // Statement s1,s2;
     public void visit(If n) {
-        
+
         n.e.accept(this);
-        
-        
-        n.s1.accept(this);
-        
-        
-        n.s2.accept(this);
+
+        if (n.s1 !=null)
+            n.s1.accept(this);
+
+        if (n.s2 !=null)
+            n.s2.accept(this);
     }
 
     // Exp e;
     // Statement s;
     public void visit(While n) {
-        
+
         n.e.accept(this);
-        
-        n.s.accept(this);
+        if(n.s != null)
+            n.s.accept(this);
     }
 
     // Exp e;

@@ -18,17 +18,26 @@ class Simplified
         int[] y1;
         int def;
 
-        y = 2 + def;
-        y = d + 4;
-        y = def - d;
+        while(abc) {
+            y = 2 + def;
+            y = d + 4;
+            y = def - d;
+        }
         y = 3 * 4;
         //y = a[10];
         y = 2 < (3-1);
         y = true && false;
         y = zyz && true;
 
-        x = false;
-        y = !abc;
+
+        if (!c)
+        {
+            x = false;
+            y = !abc;
+        }
+        else {
+            x = y;
+        }
 
         return 11;
     }

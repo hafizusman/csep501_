@@ -193,11 +193,16 @@ public class PrettyPrintVisitor implements Visitor {
     System.out.print("if (");
     n.e.accept(this);
     System.out.println(") ");
-    System.out.print("    ");
-    n.s1.accept(this);
-    System.out.println();
-    System.out.print("    else ");
-    n.s2.accept(this);
+
+      if (n.s1 != null) {
+          System.out.print("    ");
+          n.s1.accept(this);
+          System.out.println();
+      }
+    if (n.s2 != null) {
+        System.out.print("    else ");
+        n.s2.accept(this);
+    }
   }
 
   // Exp e;
@@ -205,8 +210,10 @@ public class PrettyPrintVisitor implements Visitor {
   public void visit(While n) {
     System.out.print("while (");
     n.e.accept(this);
-    System.out.print(") ");
-    n.s.accept(this);
+      if (n.s !=null) {
+          System.out.print(") ");
+          n.s.accept(this);
+      }
   }
 
   // Exp e;

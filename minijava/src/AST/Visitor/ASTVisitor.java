@@ -308,20 +308,24 @@ public class ASTVisitor implements Visitor {
     n.e.accept(this);
     System.out.print("\n");
 
-    this.IndentLevel = localindent;
-    Indent();
-    System.out.print("ThenExpr:\n");
-    this.IndentLevel++;
-    Indent();
-    n.s1.accept(this);
-    System.out.print("\n");
+      if (n.s1 != null) {
+          this.IndentLevel = localindent;
+          Indent();
+          System.out.print("ThenExpr:\n");
+          this.IndentLevel++;
+          Indent();
+          n.s1.accept(this);
+          System.out.print("\n");
+      }
 
-    this.IndentLevel = localindent;
-    Indent();
-    System.out.print("ElseExpr:\n");
-    this.IndentLevel++;
-    Indent();
-    n.s2.accept(this);
+      if(n.s2 != null) {
+          this.IndentLevel = localindent;
+          Indent();
+          System.out.print("ElseExpr:\n");
+          this.IndentLevel++;
+          Indent();
+          n.s2.accept(this);
+      }
   }
 
   // Exp e;

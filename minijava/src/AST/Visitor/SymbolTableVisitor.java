@@ -193,11 +193,11 @@ public class SymbolTableVisitor implements Visitor
 
     n.e.accept(this);
 
+    if (n.s1 !=null)
+        n.s1.accept(this);
 
-    n.s1.accept(this);
-
-
-    n.s2.accept(this);
+    if (n.s2 !=null)
+        n.s2.accept(this);
   }
 
   // Exp e;
@@ -205,8 +205,8 @@ public class SymbolTableVisitor implements Visitor
   public void visit(While n) {
 
     n.e.accept(this);
-
-    n.s.accept(this);
+    if(n.s != null)
+        n.s.accept(this);
   }
 
   // Exp e;
