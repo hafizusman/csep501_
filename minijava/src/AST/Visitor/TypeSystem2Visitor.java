@@ -517,6 +517,7 @@ public class TypeSystem2Visitor implements Visitor {
     // ExpList el;
     public void visit(Call n) {
         boolean methodfound = false;
+        boolean end = false;
         MethodSymbolType mst = null;
 
         n.e.accept(this);
@@ -528,17 +529,25 @@ public class TypeSystem2Visitor implements Visitor {
             throw new SemanticException();
         }
 
-        for (int i = 0; i < ((ClassSymbolType) returnedType).methods.size(); i++) {
-            mst = (MethodSymbolType)((ClassSymbolType) returnedType).methods.get(i);
-            if (mst.name.equals(n.i.s)) {
-                methodfound = true;
-                break;
+        ClassSymbolType t = (ClassSymbolType)returnedType;
+        while(!end) {
+            for (int i = 0; i < t.methods.size(); i++) {
+                mst = (MethodSymbolType)t.methods.get(i);
+                if (mst.name.equals(n.i.s)) {
+                    methodfound = true;
+                    end = true;
+                    break;
+                }
+            }
+            if (methodfound == false) {
+                if (t.baseClassType == null) {
+                    System.out.println("ERROR: " + n.e.line_number + ": method doesn't exist on object");
+                    throw new SemanticException();
+                }
+                t = (ClassSymbolType)t.baseClassType;
             }
         }
-        if (methodfound == false) {
-            System.out.println("ERROR: " + n.e.line_number + ": method doesn't exist on object" );
-            throw new SemanticException();
-        }
+
 
         n.i.accept(this);
         

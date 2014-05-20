@@ -65,6 +65,7 @@ public class SemanticAnalysis
         int err = NO_ERROR;
         TypeSystemMethodsVisitor vism = new TypeSystemMethodsVisitor();
         TypeSystem2Visitor vis2 = new TypeSystem2Visitor();
+        TypeSystemOverridingVisitor visOver = new TypeSystemOverridingVisitor();
 
         if (symtable == null || typesys == null) {
             System.out.println("ERROR: run pass2 first");
@@ -91,6 +92,20 @@ public class SemanticAnalysis
             p.accept(vis2);
 
             this.typesys = vis2.getTypeSystem();
+            //typesys.dumpTypes();
+            //symtable.dump();
+        }
+        catch (SemanticException e)
+        {
+            err = ~NO_ERROR;
+        }
+
+        try {
+            visOver.setSymbolTable(this.symtable);
+            visOver.setTypeSystem(this.typesys);
+            p.accept(visOver);
+
+            this.typesys = visOver.getTypeSystem();
             typesys.dumpTypes();
             symtable.dump();
         }
@@ -99,8 +114,10 @@ public class SemanticAnalysis
             err = ~NO_ERROR;
         }
 
+
         return err;
     }
+
 }
 
 
