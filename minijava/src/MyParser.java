@@ -79,10 +79,19 @@ public class MyParser
         }
         return error;
     }
+
+    public static int CodeGeneration(Program program)
+    {
+        int error = ~NO_ERROR;
+
+        CodeGen cg = new CodeGen();
+
+
+        return error;
+    }
 }
 
 /*
 BEFORE SUBMISSION:
-. Revert 'scanner s = new scanner(' in main
 . Remove env set= from build.cmd for [see email]
  */
