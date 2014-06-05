@@ -14,9 +14,24 @@ public class MyParser
     public static void main(String [] args) {
         int error = 1;
         try {
-            // create a scanner on the input file
-            //scanner s = new scanner(System.in);
-            scanner s = new scanner(new FileReader("C:\\eclipse\\csep501_\\minijava\\MyExample.java"));
+            scanner s = null;
+
+/*
+            for (int i = 0; i < args.length; i++) {
+                System.out.println(args[i]);
+            }
+*/
+            if (args.length == 2) {
+                s = new scanner(new FileReader(args[1]));
+            }
+            else if (args.length == 1) {
+                // create a scanner on the input file
+                s = new scanner(System.in);
+            }
+            else {
+                throw new Exception("Invalid ArgsLength: " + args.length);
+            }
+
             parser p = new parser(s);
             Symbol root;
             // replace p.parse() with p.debug_parse() in next line to see trace of
@@ -34,6 +49,9 @@ public class MyParser
             }
             else if (args[0].startsWith("check")) {
                 error = SemanticChecks(program);
+            }
+            else if (args[0].startsWith("minijava")) {
+                //error = CodeGen(program); //todo!
             }
         } catch (Exception e) {
             // yuck: some kind of error in the compiler implementation
