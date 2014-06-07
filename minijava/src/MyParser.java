@@ -48,10 +48,14 @@ public class MyParser
                 program.accept(new PrettyPrintVisitor());
             }
             else if (args[0].startsWith("check")) {
-                error = SemanticChecks(program);
+                error = SemanticChecks(program, true);
             }
             else if (args[0].startsWith("minijava")) {
-                //error = CodeGen(program); //todo!
+                error = SemanticChecks(program, false); // we want to do semantic checks before code gen
+                if (error == NO_ERROR)
+                {
+                    error = CodeGeneration(program);
+                }
             }
         } catch (Exception e) {
             // yuck: some kind of error in the compiler implementation
@@ -65,16 +69,16 @@ public class MyParser
         System.exit(error);
     }
 
-    public static int SemanticChecks(Program program)
+    public static int SemanticChecks(Program program, boolean debug)
     {
         int error = ~NO_ERROR;
 
         SemanticAnalysis sa = new SemanticAnalysis();
-        error = sa.pass1(program);
+        error = sa.pass1(program, debug);
         if (error == NO_ERROR) {
-            error = sa.pass2(program);
+            error = sa.pass2(program, debug);
             if(error == NO_ERROR) {
-                error = sa.pass3(program);
+                error = sa.pass3(program, debug);
             }
         }
         return error;
@@ -86,6 +90,7 @@ public class MyParser
 
         CodeGen cg = new CodeGen();
 
+        cg.GenerateASMx86Code(program);
 
         return error;
     }
@@ -95,3 +100,4 @@ public class MyParser
 BEFORE SUBMISSION:
 . Remove env set= from build.cmd for [see email]
  */
+

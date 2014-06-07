@@ -17,7 +17,7 @@ public class SemanticAnalysis
     }
 
     // build symbol table, check duplicate symbols, set line numbers for identifiers
-    public int pass1(Program p)
+    public int pass1(Program p, boolean debug)
     {
         int err = NO_ERROR;
         SymbolTableVisitor vis = new SymbolTableVisitor();
@@ -25,7 +25,9 @@ public class SemanticAnalysis
         try {
             p.accept(vis);
             this.symtable = vis.getSymbolTable();
-            //symtable.dump();
+            if (debug) {
+                //symtable.dump();
+            }
         }
         catch (SemanticException e)
         {
@@ -35,7 +37,7 @@ public class SemanticAnalysis
         return err;
     }
 
-    public int pass2(Program p)
+    public int pass2(Program p, boolean debug)
     {
         int err = NO_ERROR;
         TypeSystemVisitor vis = new TypeSystemVisitor();
@@ -49,8 +51,10 @@ public class SemanticAnalysis
             vis.setSymbolTable(this.symtable);
             p.accept(vis);
             this.typesys = vis.getTypeSystem();
-            //typesys.dumpTypes();
-            //symtable.dump();
+            if (debug) {
+                //typesys.dumpTypes();
+                //symtable.dump();
+            }
         }
         catch (SemanticException e)
         {
@@ -60,7 +64,7 @@ public class SemanticAnalysis
         return err;
     }
 
-    public int pass3(Program p)
+    public int pass3(Program p, boolean debug)
     {
         int err = NO_ERROR;
         TypeSystemMethodsVisitor vism = new TypeSystemMethodsVisitor();
@@ -76,8 +80,10 @@ public class SemanticAnalysis
             vism.setSymbolTable(this.symtable);
             vism.setTypeSystem(this.typesys);
             p.accept(vism);
-            //typesys.dumpTypes();
-            //symtable.dump();
+            if (debug) {
+                //typesys.dumpTypes();
+                //symtable.dump();
+            }
 
             this.typesys = vism.getTypeSystem();
         }
@@ -92,8 +98,10 @@ public class SemanticAnalysis
             p.accept(vis2);
 
             this.typesys = vis2.getTypeSystem();
-            //typesys.dumpTypes();
-            //symtable.dump();
+            if (debug) {
+                //typesys.dumpTypes();
+                //symtable.dump();
+            }
         }
         catch (SemanticException e)
         {
@@ -106,8 +114,10 @@ public class SemanticAnalysis
             p.accept(visOver);
 
             this.typesys = visOver.getTypeSystem();
-            typesys.dumpTypes();
-            symtable.dump();
+            if (debug) {
+                typesys.dumpTypes();
+                symtable.dump();
+            }
         }
         catch (SemanticException e)
         {
