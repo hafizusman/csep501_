@@ -51,7 +51,8 @@ public class MyParser
                 error = SemanticChecks(program, true);
             }
             else if (args[0].startsWith("minijava")) {
-                error = SemanticChecks(program, false); // we want to do semantic checks before code gen
+                // error = SemanticChecks(program, false); // we want to do semantic checks before code gen // todo: open
+                error = NO_ERROR; // todo: remove
                 if (error == NO_ERROR)
                 {
                     error = CodeGeneration(program);
@@ -99,5 +100,6 @@ public class MyParser
 /*
 BEFORE SUBMISSION:
 . Remove env set= from build.cmd for [see email]
+. Remove the file writer from Codegen
  */
 
