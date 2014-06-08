@@ -12,24 +12,29 @@ INCLUDELIB OLDNAMES
 
 PUBLIC	_asm_main 
 EXTRN	_put:PROC 
-EXTRN	_get:PROC 
+EXTRN  _get:PROC 
 EXTRN  _mjmalloc:PROC 
 
-_TEXT	SEGMENT 
-_argc$ = 8                       ; size = 4 
-_argv$ = 12                      ; size = 4 
+_DATA	SEGMENT
+BadContravariantParams$$:
+	DD 0	;  no base class
+	DD _asm_main	;  BadContravariantParams::main
 
-_asm_main PROC
+_DATA	ENDS
+
+_TEXT	SEGMENT 
+
+_asm_main PROC	; main
 ; Line 3
 push	ebp
 mov		ebp, esp
-push	19
+push	3
 call	_put
 add		esp, 4
 mov		esp, ebp
 pop		ebp
 ret
 
-_asm_main ENDP
+_asm_main ENDP	; main
 _TEXT	ENDS 
 END 

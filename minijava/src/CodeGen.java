@@ -1,15 +1,26 @@
 import AST.Program;
 import AST.Visitor.CodeGenVisitor;
 import AST.Visitor.SemanticException;
+import AST.Visitor.SymbolTable;
+import AST.Visitor.TypeSystem;
+
+
+
+import java.util.Map;
 
 /**
  * Created by Muhammad on 6/4/2014.
  */
 public class CodeGen {
     private final static int NO_ERROR = 0;
+    private SymbolTable symtable = null;
+    private TypeSystem typesys = null;
 
-    public CodeGen()
-    {}
+    public CodeGen(SymbolTable st, TypeSystem ts)
+    {
+        this.symtable = st;
+        this.typesys = ts;
+    }
 
     public int GenerateASMx86Code(Program p)
     {
@@ -19,6 +30,11 @@ public class CodeGen {
 
         try
         {
+            viscg.setTypeSystem(typesys);
+            viscg.setSymbolTable(symtable);
+            viscg.createVTableNames();
+
+            viscg.initGen();
             p.accept(viscg);
         }
         catch (SemanticException e)

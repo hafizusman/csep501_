@@ -47,6 +47,7 @@ public class SymbolTableVisitor implements Visitor
   {
     n.i1.accept(this);
     currentCI.ln = n.i1.line_number;
+    currentCI.containsStaticMain = true;
     symtable.enter(n.i1.s, currentCI);
 
     currentMI = new MethodInfo(n.i2.line_number); //line number is a guess since main keyword doesn't return line number

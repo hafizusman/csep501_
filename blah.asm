@@ -12,14 +12,8 @@ INCLUDELIB OLDNAMES
 
 PUBLIC	_asm_main 
 EXTRN	_put:PROC 
-EXTRN	_get:PROC 
+EXTRN  _get:PROC 
 EXTRN  _mjmalloc:PROC 
 
-_TEXT	SEGMENT 
-_argc$ = 8                       ; size = 4 
-_argv$ = 12                      ; size = 4 
-
-_asm_main PROC
-; Line 3
-push	ebp
-mov		ebp, esp
+_DATA	SEGMENT
+D$$:

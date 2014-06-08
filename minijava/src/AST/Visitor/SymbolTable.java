@@ -66,6 +66,7 @@ class MethodInfo
     int ordinal;
     int formalsSeqNum;
     int localsSeqNum;
+    String vtName;
     HashMap <String, FormalInfo> formals;
     HashMap <String, LocalInfo> locals;
 
@@ -78,6 +79,7 @@ class MethodInfo
         formals = new HashMap<String, FormalInfo>();
         locals = new HashMap<String, LocalInfo>();
         ordinal = -1;
+        vtName = null; // will be filled in during code gen
     }
     public MethodInfo()
     {
@@ -163,20 +165,28 @@ class ClassInfo
     public int ln;
     int fieldOrdinal;
     int methodOrdinal;
+    String vtName;
+    String vtCtorName;
+    boolean containsStaticMain;
     HashMap <String, FieldInfo> fields;
     HashMap <String, MethodInfo> methods;
 
     public String baseClass;
+    public boolean getIsStaticMainClass()
+    {return containsStaticMain;}
 
     public ClassInfo(int line_number)
     {
         type = new UnknownSymbolType();
         ln = line_number;
-        baseClass = null; //todo: we don't need this! it'll be stored in teh typesystem
+        baseClass = null; //todo: we don't need this! it'll be stored in the typesystem
         fields = new HashMap<String, FieldInfo>();
         methods = new HashMap<String, MethodInfo>();
         methodOrdinal = 1;
         fieldOrdinal = 1;
+        vtName = null; // will be filled in during code gen
+        vtCtorName = null; // will be filled in during code gen
+        containsStaticMain = false;
     }
     public ClassInfo()
     {
@@ -254,7 +264,7 @@ class ClassInfo
 
 public class SymbolTable
 {
-    HashMap<String, ClassInfo> st;
+    public HashMap<String, ClassInfo> st;
 
     public SymbolTable()
     {

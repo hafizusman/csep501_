@@ -7,8 +7,8 @@ import java.util.HashMap;
 public class SemanticAnalysis
 {
     private final static int NO_ERROR = 0;
-    private SymbolTable symtable;
-    private TypeSystem typesys;
+    public SymbolTable symtable;
+    public TypeSystem typesys;
 
     public SemanticAnalysis()
     {

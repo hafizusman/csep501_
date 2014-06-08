@@ -10,9 +10,12 @@ import java.util.*;
 public class MyParser
 {
     private final static int NO_ERROR = 0;
+    private static SymbolTable st = null;
+    private static TypeSystem ts = null;
 
     public static void main(String [] args) {
         int error = 1;
+
         try {
             scanner s = null;
 
@@ -51,11 +54,10 @@ public class MyParser
                 error = SemanticChecks(program, true);
             }
             else if (args[0].startsWith("minijava")) {
-                // error = SemanticChecks(program, false); // we want to do semantic checks before code gen // todo: open
-                error = NO_ERROR; // todo: remove
+                error = SemanticChecks(program, false); // we want to do semantic checks before code gen
                 if (error == NO_ERROR)
                 {
-                    error = CodeGeneration(program);
+                    error = CodeGeneration(program, st, ts);
                 }
             }
         } catch (Exception e) {
@@ -82,14 +84,17 @@ public class MyParser
                 error = sa.pass3(program, debug);
             }
         }
+        st = sa.symtable;
+        ts = sa.typesys;
+
         return error;
     }
 
-    public static int CodeGeneration(Program program)
+    public static int CodeGeneration(Program program, SymbolTable st, TypeSystem ts)
     {
         int error = ~NO_ERROR;
 
-        CodeGen cg = new CodeGen();
+        CodeGen cg = new CodeGen(st, ts);
 
         cg.GenerateASMx86Code(program);
 
