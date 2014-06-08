@@ -93,7 +93,7 @@ public class CGHelper {
         // return value (if any) will be in eax. store if needed from eax to memory[ebp+offset-n]
         //
         if (cbArgs > 0) {
-            gen("add\t\tesp, " + Integer.toString(cbArgs));
+            gen("add\tesp, " + Integer.toString(cbArgs));
             gen("\r\n");
         }
     }
@@ -102,19 +102,19 @@ public class CGHelper {
     {
         gen("push\tebp");
         gen("\r\n");
-        gen("mov\t\tebp, esp");
+        gen("mov\tebp, esp");
         gen("\r\n");
         if (cbTotalLocals != 0) {
-            gen("sub\t\tesp, " + Integer.toString(cbTotalLocals));
+            gen("sub\tesp, " + Integer.toString(cbTotalLocals));
             gen("\r\n");
         }
     }
 
     public void genCalleeEpilog()
     {
-        gen("mov\t\tesp, ebp");
+        gen("mov\tesp, ebp");
         gen("\r\n");
-        gen("pop\t\tebp");
+        gen("pop\tebp");
         gen("\r\n");
         gen("ret");
         gen("\r\n");
@@ -122,9 +122,6 @@ public class CGHelper {
 
     public void genAsmPostamble()
     {
-        gen(
-            "_TEXT	ENDS \r\n" +
-            "END \r\n"
-        );
+        gen("END \r\n");
     }
 }

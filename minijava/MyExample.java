@@ -1,20 +1,22 @@
 class BadContravariantParams {
     public static void main(String[] args) {
-        System.out.println(3);
+        System.out.println(new B().my2());
     }
 }
-/*
+
 class B
 {
-    public int myFunc()
+    public int my()
     {
         return 9;
     }
-    public int funcBarr()
+    public int my2()
     {
         return 9;
     }
 }
+
+/*
 class D extends B
 {
     public int myFunc()

@@ -15,11 +15,17 @@ import java.util.Set;
 public class CodeGenVisitor implements Visitor {
     private SymbolTable symtable;
     private TypeSystem typesys;
+    private ClassInfo currCI;
+    private MethodInfo currMI;
+    private String retClassName;
 
     public static final int SIZE_INTEGER = 4;
     public static final int SIZE_BOOLEAN = 4;
+    public static final int SIZE_ARRAY_REF = 4;
+    public static final int SIZE_OBJECT_REF = 4;
 
     public static final String NAME_PROC_MAIN = "_asm_main";
+    public static final String NAME_PROC_MALLOC = "_mjmalloc";
     public static final String NAME_PROC_PRINT = "_put";
 
     private int retIntegerLiteral = 0;
@@ -30,6 +36,25 @@ public class CodeGenVisitor implements Visitor {
     public void setSymbolTable(SymbolTable st)
     {
         this.symtable = st;
+    }
+
+    private void setupSymbolTableSizes()
+    {
+        // first setup the sizes of the fields within a class
+        for (Map.Entry<String, ClassInfo> classentry : symtable.st.entrySet()) {
+            ClassInfo cval = classentry.getValue();
+            cval.type.bytes = 0;
+            for (Map.Entry<String, FieldInfo> fieldentry : cval.fields.entrySet()) {
+                cval.type.bytes += 4; //todo: make more dynamic but for now everything is 4 bytes (int, int[], bool and obj ref)
+            }
+        }
+    }
+
+    private int getObjectSize(ClassInfo ci)
+    {
+        int retSize = 4; //for the 'this' pointer
+
+        return retSize;
     }
 
     public CGHelper cgh = new CGHelper();
@@ -66,6 +91,9 @@ public class CodeGenVisitor implements Visitor {
                 cgh.genCommentLine(" no base class");
             }
             else {
+                //
+                // todo: need to make sure that vtable entries for derived class are in the same order as base class
+                //
                 ClassSymbolType base = (ClassSymbolType)((ClassSymbolType)cval.type).baseClassType;
                 ClassInfo baseCI = symtable.lookup(base.name);
                 cgh.gen("\tDD " + baseCI.vtName);
@@ -81,11 +109,14 @@ public class CodeGenVisitor implements Visitor {
             cgh.gen("\t");
             cgh.genCommentLine(" " + classentry.getKey() + " ctor");
 */
+            int vtableoffset = 1; // first 4 bytes are for base class vtable hence starting from 1
             for (Map.Entry<String, MethodInfo> methodentry : cval.methods.entrySet()) {
                 MethodInfo mval = methodentry.getValue();
                 cgh.gen("\tDD " + mval.vtName);
                 cgh.gen("\t");
                 cgh.genCommentLine(" " + classentry.getKey() +"::"+ methodentry.getKey());
+                mval.ordinal = vtableoffset * 4;
+                vtableoffset++;
             }
         }
         cgh.gen("\r\n");
@@ -97,6 +128,9 @@ public class CodeGenVisitor implements Visitor {
     public void initGen()
     {
         cgh.initWriter(); // todo: remove me
+
+        setupSymbolTableSizes(); //todo: move to some semantics check visitor
+
         cgh.genAsmPreamble();
         genVtableEntries();
         cgh.gen("_TEXT	SEGMENT \r\n" +
@@ -122,6 +156,9 @@ public class CodeGenVisitor implements Visitor {
             n.cl.get(i).accept(this);
         }
 
+        cgh.gen("\r\n");
+        cgh.gen("_TEXT	ENDS");
+        cgh.gen("\r\n");
         cgh.genAsmPostamble();
     }
 
@@ -133,18 +170,19 @@ public class CodeGenVisitor implements Visitor {
         cgh.genCommentLine("main");
         n.i1.accept(this);
 
-        n.i2.accept(this);
+        currCI = symtable.lookup(n.i1.s);
 
+        n.i2.accept(this);
 
         cgh.genCommentLine("Line " + n.s.line_number);
 
         cgh.genCalleeProlog(0);
 
+        currMI = currCI.lookupMethod("main");
         n.s.accept(this);
 
         cgh.genCalleeEpilog();
 
-        cgh.gen("\r\n");
         cgh.gen(NAME_PROC_MAIN + " ENDP");
         cgh.gen("\t");
         cgh.genCommentLine("main");
@@ -157,6 +195,8 @@ public class CodeGenVisitor implements Visitor {
 
         n.i.accept(this);
 
+        currCI = symtable.lookup(n.i.s);
+
         for (int i = 0; i < n.vl.size(); i++) {
 
             n.vl.get(i).accept(this);
@@ -164,7 +204,7 @@ public class CodeGenVisitor implements Visitor {
             }
         }
         for (int i = 0; i < n.ml.size(); i++) {
-
+            currMI = currCI.lookupMethod(n.ml.get(i).i.s);
             n.ml.get(i).accept(this);
         }
 
@@ -179,6 +219,8 @@ public class CodeGenVisitor implements Visitor {
 
         n.i.accept(this);
 
+        currCI = symtable.lookup(n.i.s);
+
         n.j.accept(this);
 
         for (int i = 0; i < n.vl.size(); i++) {
@@ -188,7 +230,7 @@ public class CodeGenVisitor implements Visitor {
             }
         }
         for (int i = 0; i < n.ml.size(); i++) {
-
+            currMI = currCI.lookupMethod(n.ml.get(i).i.s);
             n.ml.get(i).accept(this);
         }
 
@@ -403,16 +445,45 @@ public class CodeGenVisitor implements Visitor {
     // Identifier i;
     // ExpList el;
     public void visit(Call n) {
+        MethodInfo mi = null;
+
         n.e.accept(this);
 
+        if (retClassName.equals("this")) {
+            mi = currCI.lookupMethod(n.i.s);
+        }
+        else {
+            mi = symtable.lookup(retClassName).lookupMethod(n.i.s);
+        }
+        int offsetmeth = mi.ordinal;
+
         n.i.accept(this);
+/*
+        <push arguments from right to left> 	; (as needed)
+        mov    ecx, [ebp+offsetobj]	  	; get pointer to object
+        mov    eax, [ecx]		  	; get pointer to vtable
+        call     dword ptr [eax+offsetmeth]  	; call indirect via vtable
+        <pop arguments>		  	; (if needed)
+        mov    ecx, [ebp+offsetecxtemp] 		; (restore if needed)
+*/
 
         for (int i = 0; i < n.el.size(); i++) {
             n.el.get(i).accept(this);
             if (i + 1 < n.el.size()) {
             }
         }
+        // finally push the 'this' pointer
+        // make sure 'this' is in ecx
+        cgh.gen("push\tecx"); cgh.gen("\r\n");
 
+        cgh.genCommentLine("Line " + Integer.toString(n.i.line_number));
+        // <push arguments from right to left> 	; (as needed)
+
+        //cgh.gen("mov\tecx, [ebp+offsetobj]"); cgh.gen("\r\n");//	  	; get pointer to object
+        cgh.gen("mov\teax, [ecx]"); cgh.gen("\r\n");//		  	; get pointer to vtable
+        cgh.gen("call\tdword ptr [eax+"+ offsetmeth + "]"); cgh.gen("\r\n");//  	; call indirect via vtable
+        //<pop arguments>		  	; (if needed)
+        //cgh.gen("mov\tecx, [ebp+offsetecxtemp]"); cgh.gen("\r\n");// 		; (restore if needed) todo: open?
     }
 
     // int i;
@@ -434,7 +505,7 @@ public class CodeGenVisitor implements Visitor {
     }
 
     public void visit(This n) {
-
+        retClassName = "this";
     }
 
     // Exp e;
@@ -446,8 +517,39 @@ public class CodeGenVisitor implements Visitor {
 
     // Identifier i;
     public void visit(NewObject n) {
+        cgh.genCommentLine("Line " + Integer.toString(n.i.line_number));
 
+        int numBytes = typesys.lookup(n.i.s).bytes + 4; //+ 4 for the this pointer
+        String vtableAddress = symtable.lookup(n.i.s).vtName;
 
+/*
+        push   numBytes		; size-of-B + 4
+        call	   malloc			; addr of bits returned in eax
+        add     esp, 4			; pop numBytes
+
+        lea	      edx, B$$		; get vtable address
+        mov    [eax], edx		; store vtable pointer into 1st object slot
+        mov    ecx, eax		; set up this for constructor
+        push   ecx			; save ecx (constructor might clobber it)
+        <push constructor arguments>	; arguments (if needed)
+        call     B$B			; call constructor (no vtable lookup needed)
+        <pop constructor arguments>	; (if needed)
+        pop    eax			; recover pointer to object
+        mov   [ebp+offsetb],eax		; store object reference in variable b
+*/
+        cgh.gen("push\t" + Integer.toString(numBytes)); cgh.gen("\r\n");
+        cgh.gen("call\t" + NAME_PROC_MALLOC); cgh.gen("\r\n");
+        cgh.gen("add\tesp, 4"); cgh.gen("\r\n");
+        cgh.gen("lea\tedx, " + vtableAddress); cgh.gen("\r\n");
+        cgh.gen("mov\t[eax], edx"); cgh.gen("\r\n");
+        cgh.gen("mov\tecx, eax"); cgh.gen("\r\n");
+        //cgh.gen("push\tecx"); cgh.gen("\r\n");
+        //<push constructor arguments>	; arguments (if needed)
+        //cgh.gen("call     B$B			; call constructor (no vtable lookup needed)
+        //<pop constructor arguments>	; (if needed)
+        //cgh.gen("pop\teax"); cgh.gen("\r\n");
+        //cgh.gen("mov\t[ebp+offsetb],eax"); cgh.gen("\r\n");
+        retClassName = n.i.s;
     }
 
     // Exp e;

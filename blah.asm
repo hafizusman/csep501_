@@ -16,4 +16,18 @@ EXTRN  _get:PROC
 EXTRN  _mjmalloc:PROC 
 
 _DATA	SEGMENT
-D$$:
+BadContravariantParams$$:
+	DD 0	;  no base class
+	DD _asm_main	;  BadContravariantParams::main
+B$$:
+	DD 0	;  no base class
+	DD B$my	;  B::my
+
+_DATA	ENDS
+
+_TEXT	SEGMENT 
+
+_asm_main PROC	; main
+; Line 3
+push	ebp
+mov	ebp, esp

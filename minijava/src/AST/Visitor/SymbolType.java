@@ -13,6 +13,7 @@ abstract public class SymbolType
     }
 
     public IdentifierType idType;
+    public int bytes;
 }
 
 class BaseSymbolType extends SymbolType
@@ -57,6 +58,11 @@ class MethodSymbolType extends CompoundSymbolType
 
 class IntSymbolType extends BaseSymbolType
 {
+    public IntSymbolType()
+    {
+        super();
+        bytes = 4;
+    }
     public String toString()
     {
         return "IntSymbolType";
@@ -66,6 +72,11 @@ class IntSymbolType extends BaseSymbolType
 
 class BooleanSymbolType extends BaseSymbolType
 {
+    public BooleanSymbolType()
+    {
+        super();
+        bytes = 4;
+    }
     public String toString()
     {
         return "BooleanSymbolType";
@@ -75,6 +86,11 @@ class BooleanSymbolType extends BaseSymbolType
 
 class VoidSymbolType extends BaseSymbolType
 {
+    public VoidSymbolType()
+    {
+        super();
+        bytes = 4; //todo: change?
+    }
     public String toString()
     {
         return "VoidSymbolType";
@@ -84,6 +100,11 @@ class VoidSymbolType extends BaseSymbolType
 
 class UnknownSymbolType extends BaseSymbolType
 {
+    public UnknownSymbolType()
+    {
+        super();
+        bytes = 0; //todo: change?
+    }
     public String toString()
     {
         return "UnknownSymbolType";
@@ -116,6 +137,7 @@ class ClassSymbolType extends CompoundSymbolType
         methods = new ArrayList<SymbolType>();
         baseClassType = null;
         name = null;
+        bytes = -1; //will be computed during bring-up of type system
     }
 
     public String toString()
@@ -128,6 +150,11 @@ class ClassSymbolType extends CompoundSymbolType
 class ArraySymbolType extends CompoundSymbolType
 {
     public int dim;
+    public ArraySymbolType()
+    {
+        super();
+        bytes = 4;
+    }
     public SymbolType elementType;
     public String toString()
     {
