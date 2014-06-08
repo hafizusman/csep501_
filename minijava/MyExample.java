@@ -1,5 +1,5 @@
 class BadContravariantParams {
     public static void main(String[] args) {
-        System.out.println(543210);
+        System.out.println(10*2+1-2);
     }
 }

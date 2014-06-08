@@ -1,5 +1,7 @@
 package AST.Visitor;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.io.FileWriter;
 
 /**
@@ -73,6 +75,53 @@ public class CGHelper {
             "_argv$ = 12                      ; size = 4 \n" +
             "\n"
         );
+    }
+
+    public void genCallerProlog(int [] Args, String funcName)
+    {
+        //
+        // push args right to left (decrement stack)
+        // call (note that the hardware will push the return address (i.e. eip) into the stack then do the jump for u)
+        //
+        for (int i = Args.length; i > 0; i--) {
+            gen("push\t" + Integer.toString(Args[i-1]));
+            gen("\n");
+        }
+        gen("call\t"+funcName.toString());
+        gen("\n");
+    }
+    public void genCallerEpilog(int cbArgs)
+    {
+        //
+        // pop args (simply increment stack by total number of args size)
+        // return value (if any) will be in eax. store if needed from eax to memory[ebp+offset-n]
+        //
+        if (cbArgs > 0) {
+            gen("add\t\tesp, " + Integer.toString(cbArgs));
+            gen("\n");
+        }
+    }
+
+    public void genCalleeProlog(int cbTotalLocals)
+    {
+        gen("push\tebp");
+        gen("\n");
+        gen("mov\t\tebp, esp");
+        gen("\n");
+        if (cbTotalLocals != 0) {
+            gen("sub\t\tesp, " + Integer.toString(cbTotalLocals));
+            gen("\n");
+        }
+    }
+
+    public void genCalleeEpilog()
+    {
+        gen("mov\t\tesp, ebp");
+        gen("\n");
+        gen("pop\t\tebp");
+        gen("\n");
+        gen("ret");
+        gen("\n");
     }
 
     public void genAsmPostamble()

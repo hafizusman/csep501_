@@ -6,6 +6,12 @@ import AST.*;
 // HP 10/11
 
 public class CodeGenVisitor implements Visitor {
+    public static final int SIZE_INTEGER = 4;
+    public static final int SIZE_BOOLEAN = 4;
+
+    public static final String NAME_PRINTFUNC = "_put";
+    private int retIntegerLiteral = 0;
+
     public CGHelper cgh = new CGHelper();
 
     // Display added for toy example language.  Not used in regular MiniJava
@@ -41,7 +47,12 @@ public class CodeGenVisitor implements Visitor {
 
 
         cgh.genCommentLine("Line " + n.s.line_number);
+
+        cgh.genCalleeProlog(0);
+
         n.s.accept(this);
+
+        cgh.genCalleeEpilog();
 
         cgh.gen("\n");
         cgh.gen("_asm_main ENDP");
@@ -197,16 +208,13 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e;
     public void visit(Print n) {
-        cgh.gen("push\t");
+        int [] temp = new int [1];
 
         n.e.accept(this);
-        cgh.gen("\n");
+        temp[0] = retIntegerLiteral;
+        cgh.genCallerProlog(temp, NAME_PRINTFUNC);
 
-        cgh.gen("call\t_put");
-        cgh.gen("\n");
-
-        cgh.gen("add\tesp, 4");
-        cgh.gen("\n");
+        cgh.genCallerEpilog(SIZE_INTEGER); // we can only push one integer argument for the print method!
     }
 
     // Identifier i;
@@ -249,28 +257,40 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(Plus n) {
+        int temp;
 
         n.e1.accept(this);
+        temp = retIntegerLiteral;
 
         n.e2.accept(this);
+        temp += retIntegerLiteral;
 
+        retIntegerLiteral = temp;
     }
 
     // Exp e1,e2;
     public void visit(Minus n) {
+        int temp = 0;
 
         n.e1.accept(this);
+        temp = retIntegerLiteral;
 
         n.e2.accept(this);
+        temp -= retIntegerLiteral;
+        retIntegerLiteral = temp;
 
     }
 
     // Exp e1,e2;
     public void visit(Times n) {
+        int temp = 0;
 
         n.e1.accept(this);
+        temp = retIntegerLiteral;
 
         n.e2.accept(this);
+        temp *= retIntegerLiteral;
+        retIntegerLiteral = temp;
 
     }
 
@@ -306,8 +326,7 @@ public class CodeGenVisitor implements Visitor {
 
     // int i;
     public void visit(IntegerLiteral n) {
-
-        cgh.gen(Integer.toString(n.i));
+        retIntegerLiteral = n.i;
     }
 
     public void visit(True n) {

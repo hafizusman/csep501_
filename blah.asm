@@ -23,13 +23,3 @@ _asm_main PROC
 ; Line 3
 push	ebp
 mov		ebp, esp
-push	19
-call	_put
-add		esp, 4
-mov		esp, ebp
-pop		ebp
-ret
-
-_asm_main ENDP
-_TEXT	ENDS 
-END 
