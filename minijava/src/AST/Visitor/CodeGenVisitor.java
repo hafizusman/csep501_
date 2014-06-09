@@ -28,6 +28,9 @@ public class CodeGenVisitor implements Visitor {
     public static final String NAME_PROC_MALLOC = "_mjmalloc";
     public static final String NAME_PROC_PRINT = "_put";
 
+    public static final int VALUE_BOOL_TRUE = 1;
+    public static final int VALUE_BOOL_FALSE = 0;
+
     public void setTypeSystem(TypeSystem ts)
     {
         this.typesys = ts;
@@ -35,6 +38,37 @@ public class CodeGenVisitor implements Visitor {
     public void setSymbolTable(SymbolTable st)
     {
         this.symtable = st;
+    }
+
+    private FormalInfo getFormal(HashMap <String, FormalInfo> formals, int seqnum)
+    {
+        FormalInfo retfi = null;
+
+        for (Map.Entry<String, FormalInfo> formalentry : formals.entrySet()) {
+            FormalInfo fi = formalentry.getValue();
+            if (fi.seqnum == seqnum) {
+                retfi = fi;
+            }
+        }
+
+        return retfi;
+    }
+    private void setupFormalsOffsets(HashMap <String, FormalInfo> formals)
+    {
+        for (Map.Entry<String, FormalInfo> formalentry : formals.entrySet()) {
+            FormalInfo fi = formalentry.getValue();
+            // remember that offset ebp+8 contains the 'this' pointer
+            fi.ebpoffset = (8 + (fi.seqnum*4));
+        }
+    }
+
+    private void setupLocalsOffsets(HashMap <String, LocalInfo> locals)
+    {
+        for (Map.Entry<String, LocalInfo> localentry : locals.entrySet()) {
+            LocalInfo li = localentry.getValue();
+            // remember that offset ebp+8 contains the 'this' pointer
+            li.ebpoffset = -(4*li.seqnum);
+        }
     }
 
     private void setupSymbolTableSizes()
@@ -116,6 +150,9 @@ public class CodeGenVisitor implements Visitor {
                 cgh.genCommentLine(" " + classentry.getKey() +"::"+ methodentry.getKey());
                 mval.ordinal = vtableoffset * 4;
                 vtableoffset++;
+
+                setupFormalsOffsets(mval.formals);
+                setupLocalsOffsets(mval.locals);
             }
         }
         cgh.gen("\r\n");
@@ -266,6 +303,7 @@ public class CodeGenVisitor implements Visitor {
         ret
         _TEXT	ENDS
 */
+        int localsBytes = currMI.locals.size()*4;
 
         cgh.gen("_TEXT\tSEGMENT"); cgh.gen("\r\n");
         cgh.gen(vtableMethodName + ":"); cgh.gen("\r\n");
@@ -273,6 +311,8 @@ public class CodeGenVisitor implements Visitor {
         cgh.genCommentLine(" Line: " + n.i.line_number);
         cgh.gen("push\tebp"); cgh.gen("\r\n");
         cgh.gen("mov\tebp, esp"); cgh.gen("\r\n");
+        cgh.gen("sub\tesp, " + localsBytes); cgh.gen("\r\n"); // allocate space for locals
+
         n.t.accept(this);
 
         n.i.accept(this);
@@ -373,10 +413,21 @@ public class CodeGenVisitor implements Visitor {
     // Identifier i;
     // Exp e;
     public void visit(Assign n) {
+        cgh.genCommentLine(" Line: " + n.i.line_number);
         n.i.accept(this);
 
-        n.e.accept(this);
+        VarInfo vi = currMI.lookupLocal(n.i.s);
+        if (vi == null) {
+            vi = currMI.lookupFormal(n.i.s);
+        }
 
+        n.e.accept(this);
+        if (vi.ebpoffset < 0) {
+            cgh.gen("mov\t[ebp " + vi.ebpoffset +"], eax"); cgh.gen("\r\n");
+        }
+        else {
+            cgh.gen("mov\t[ebp +" + vi.ebpoffset +"], eax"); cgh.gen("\r\n");
+        }
     }
 
     // Identifier i;
@@ -396,7 +447,6 @@ public class CodeGenVisitor implements Visitor {
         n.e1.accept(this);
 
         n.e2.accept(this);
-
     }
 
     // Exp e1,e2;
@@ -487,13 +537,24 @@ public class CodeGenVisitor implements Visitor {
         mov    ecx, [ebp+offsetecxtemp] 		; (restore if needed)
 */
 
-        for (int i = 0; i < n.el.size(); i++) {
-            n.el.get(i).accept(this);
-            if (i + 1 < n.el.size()) {
+        if (true) { //todo: fix this reverse arg evaluation hack
+            for (int i = n.el.size()-1; i >= 0 ; i--) {
+                n.el.get(i).accept(this);
+                cgh.gen("push\teax");
+                cgh.gen("\r\n");
             }
         }
+        else
+        {
+            for (int i = 0; i < n.el.size(); i++) {
+                n.el.get(i).accept(this);
+                cgh.gen("push\teax");
+                cgh.gen("\r\n");
+            }
+        }
+
         // finally push the 'this' pointer
-        // make sure 'this' is in ecx
+        // make sure 'this' is in ecx also???
         cgh.gen("push\tecx"); cgh.gen("\r\n");
 
         cgh.genCommentLine("Line " + Integer.toString(n.i.line_number));
@@ -512,16 +573,25 @@ public class CodeGenVisitor implements Visitor {
     }
 
     public void visit(True n) {
-
+        cgh.gen("mov\teax, " + Integer.toString(VALUE_BOOL_TRUE)); cgh.gen("\r\n");
     }
 
     public void visit(False n) {
-
+        cgh.gen("mov\teax, " + Integer.toString(VALUE_BOOL_FALSE)); cgh.gen("\r\n");
     }
 
     // String s;
     public void visit(IdentifierExp n) {
-
+        VarInfo vi = currMI.lookupLocal(n.s);
+        if (vi == null) {
+            vi = currMI.lookupFormal(n.s);
+        }
+        if (vi.ebpoffset < 0) {
+            cgh.gen("mov\teax, [ebp " + vi.ebpoffset +"]"); cgh.gen("\r\n");
+        }
+        else {
+            cgh.gen("mov\teax, [ebp +" + vi.ebpoffset +"]"); cgh.gen("\r\n");
+        }
     }
 
     public void visit(This n) {

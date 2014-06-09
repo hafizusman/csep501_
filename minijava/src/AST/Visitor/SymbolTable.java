@@ -11,6 +11,7 @@ class VarInfo
     public SymbolType type;
     public int ln;
     public int seqnum;
+    public int ebpoffset; //set during code gen
     public VarInfo(int line_number)
     {
         type = new UnknownSymbolType();

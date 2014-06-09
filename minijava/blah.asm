@@ -21,7 +21,6 @@ BadContravariantParams$$:
 	DD _asm_main	;  BadContravariantParams::main
 B$$:
 	DD 0	;  no base class
-	DD B$my2	;  B::my2
 	DD B$my	;  B::my
 
 _DATA	ENDS
@@ -39,6 +38,18 @@ add	esp, 4
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
+;  Line: 3
+mov	eax, 4
+push	eax
+mov	eax, 4
+mov	edx, eax
+pop	eax
+add	eax, edx
+push	eax
+mov	eax, 0
+push	eax
+mov	eax, 2
+push	eax
 push	ecx
 ; Line 3
 mov	eax, [ecx]
@@ -56,58 +67,26 @@ B$my:
 ;  Line: 9
 push	ebp
 mov	ebp, esp
-;  Line: 11
-;  Line: 11
-mov	eax, 2
-push	eax
-mov	eax, 2
-mov	edx, eax
-pop	eax
-imul	eax, edx
-push	eax
-mov	eax, 1
-mov	edx, eax
-pop	eax
-sub	eax, edx
-push	eax
-call	_put
-add	esp,4
-mov	eax, 9
-mov	esp, ebp
-pop	ebp
-ret
-_TEXT	ENDS
-_TEXT	SEGMENT
-B$my2:
-;  Line: 14
-push	ebp
-mov	ebp, esp
+sub	esp, 12
+;  Line: 15
+mov	eax, [ebp +12]
+mov	[ebp -4], eax
 ;  Line: 16
-mov	eax, 2
+mov	eax, [ebp +20]
+mov	[ebp -8], eax
+;  Line: 17
+mov	eax, [ebp +16]
+mov	[ebp -12], eax
+;  Line: 18
+;  Line: 18
+mov	eax, [ebp -4]
 push	eax
-mov	eax, 1
+mov	eax, [ebp +20]
 mov	edx, eax
 pop	eax
-sub	eax, edx
+add	eax, edx
 push	eax
-call	_put
-add	esp,4
-;  Line: 17
-;  Line: 17
-;  Line: 17
-mov	eax, 10
-push	eax
-mov	eax, 100
-mov	edx, eax
-pop	eax
-imul	eax, edx
-push	eax
-mov	eax, 9
-mov	edx, eax
-pop	eax
-sub	eax, edx
-push	eax
-mov	eax, 4
+mov	eax, [ebp -8]
 mov	edx, eax
 pop	eax
 add	eax, edx

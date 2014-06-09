@@ -31,3 +31,54 @@ _asm_main PROC	; main
 ; Line 3
 push	ebp
 mov	ebp, esp
+; Line 3
+push	4
+call	_mjmalloc
+add	esp, 4
+lea	edx, B$$
+mov	[eax], edx
+mov	ecx, eax
+;  Line: 3
+mov	eax, 4
+push	eax
+mov	eax, 4
+mov	edx, eax
+pop	eax
+add	eax, edx
+push	eax
+mov	eax, 3
+push	eax
+mov	eax, 2
+push	eax
+push	ecx
+; Line 3
+mov	eax, [ecx]
+call	dword ptr [eax+4]
+push	eax
+call	_put
+add	esp,4
+mov	esp, ebp
+pop	ebp
+ret
+_asm_main ENDP	; main
+_TEXT	ENDS
+_TEXT	SEGMENT
+B$my:
+;  Line: 9
+push	ebp
+mov	ebp, esp
+sub	esp, 8
+;  Line: 14
+mov	eax, [ebp +12]
+;  Line: 15
+mov	eax, [ebp -4]
+push	eax
+mov	eax, [ebp +20]
+mov	edx, eax
+pop	eax
+add	eax, edx
+mov	esp, ebp
+pop	ebp
+ret
+_TEXT	ENDS
+END 
