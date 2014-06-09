@@ -156,9 +156,6 @@ public class CodeGenVisitor implements Visitor {
             n.cl.get(i).accept(this);
         }
 
-        cgh.gen("\r\n");
-        cgh.gen("_TEXT	ENDS");
-        cgh.gen("\r\n");
         cgh.genAsmPostamble();
     }
 
@@ -186,6 +183,8 @@ public class CodeGenVisitor implements Visitor {
         cgh.gen(NAME_PROC_MAIN + " ENDP");
         cgh.gen("\t");
         cgh.genCommentLine("main");
+        cgh.gen("_TEXT	ENDS");
+        cgh.gen("\r\n");
     }
 
     // Identifier i;
@@ -253,7 +252,28 @@ public class CodeGenVisitor implements Visitor {
     // StatementList sl;
     // Exp e;
     public void visit(MethodDecl n) {
+        String vtableMethodName = currMI.vtName;
 
+/*
+        _TEXT	SEGMENT
+        B$my2:
+        push	ebp
+        mov	ebp, esp
+        push	789
+        call	_put
+        add	esp, 4
+        mov	esp, ebp
+        pop	ebp
+        ret
+        _TEXT	ENDS
+*/
+
+        cgh.gen("_TEXT\tSEGMENT"); cgh.gen("\r\n");
+        cgh.gen(vtableMethodName + ":"); cgh.gen("\r\n");
+
+        cgh.genCommentLine(" Line: " + n.i.line_number);
+        cgh.gen("push\tebp"); cgh.gen("\r\n");
+        cgh.gen("mov\tebp, esp"); cgh.gen("\r\n");
         n.t.accept(this);
 
         n.i.accept(this);
@@ -277,8 +297,13 @@ public class CodeGenVisitor implements Visitor {
         }
 
         n.e.accept(this);
+        // result of above should be in eax
+        cgh.gen("mov\teax, " + retIntegerLiteral); cgh.gen("\r\n");//todo: remove me
 
-
+        cgh.gen("mov\tesp, ebp"); cgh.gen("\r\n");
+        cgh.gen("pop\tebp"); cgh.gen("\r\n");
+        cgh.gen("ret"); cgh.gen("\r\n");
+        cgh.gen("_TEXT\tENDS"); cgh.gen("\r\n");
     }
 
     // Type t;
@@ -341,13 +366,10 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e;
     public void visit(Print n) {
-        int [] temp = new int [1];
-
         n.e.accept(this);
-        temp[0] = retIntegerLiteral;
-        cgh.genCallerProlog(temp, NAME_PROC_PRINT);
-
-        cgh.genCallerEpilog(SIZE_INTEGER); // we can only push one integer argument for the print method!
+        cgh.gen("push\teax"); cgh.gen("\r\n");
+        cgh.gen("call\t" + NAME_PROC_PRINT); cgh.gen("\r\n");
+        cgh.gen("add\tesp,4"); cgh.gen("\r\n");
     }
 
     // Identifier i;

@@ -1,6 +1,6 @@
 class BadContravariantParams {
     public static void main(String[] args) {
-        System.out.println(new B().my2());
+        System.out.println(new B().my());
     }
 }
 
@@ -12,7 +12,7 @@ class B
     }
     public int my2()
     {
-        return 9;
+        return 10;
     }
 }
 

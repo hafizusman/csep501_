@@ -42,14 +42,33 @@ mov	ecx, eax
 push	ecx
 ; Line 3
 mov	eax, [ecx]
-call	dword ptr [eax+4]
-push	0
+call	dword ptr [eax+8]
+push	eax
 call	_put
-add	esp, 4
+add	esp,4
 mov	esp, ebp
 pop	ebp
 ret
 _asm_main ENDP	; main
-
+_TEXT	ENDS
+_TEXT	SEGMENT
+B$my:
+;  Line: 9
+push	ebp
+mov	ebp, esp
+mov	eax, 9
+mov	esp, ebp
+pop	ebp
+ret
+_TEXT	ENDS
+_TEXT	SEGMENT
+B$my2:
+;  Line: 13
+push	ebp
+mov	ebp, esp
+mov	eax, 10
+mov	esp, ebp
+pop	ebp
+ret
 _TEXT	ENDS
 END 
