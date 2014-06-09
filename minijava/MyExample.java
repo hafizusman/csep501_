@@ -1,35 +1,27 @@
 class BadContravariantParams {
     public static void main(String[] args) {
-        System.out.println(new B().my(2, false, (4+4)));
+        System.out.println(new B().my());
     }
 }
 
 class B
 {
-    public int my(int x, boolean y,  int z)
+    public int my()
     {
-        int a;
-        int b;
         int i;
-        boolean c;
+        i = 3;
 
-        a = x+3*z;
-        b = z;
-        c = y;
-        i = 10;
-
-        while(0 < i) {
-            //System.out.println(777);
-            if (5 < i) {
-                System.out.println(333);
+        while (i < 11) {
+            if ( (i < 6) && (i < 5)) {
+                System.out.println(123);
             }
             else {
-                System.out.println(555);
+                System.out.println(456);
             }
-            i = i - 1;
+            i = i + 1;
         }
 
-        return (a*z-b+1);
+        return i;
     }
 
 }

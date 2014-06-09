@@ -31,6 +31,7 @@ _asm_main PROC	; main
 ; Line 3
 push	ebp
 mov	ebp, esp
+;  Line: 3
 ; Line 3
 push	4
 call	_mjmalloc
@@ -38,17 +39,6 @@ add	esp, 4
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
-mov	eax, 4
-push	eax
-mov	eax, 4
-mov	edx, eax
-pop	eax
-add	eax, edx
-push	eax
-mov	eax, 0
-push	eax
-mov	eax, 2
-push	eax
 push	ecx
 ; Line 3
 mov	eax, [ecx]
@@ -66,83 +56,59 @@ B$my:
 ;  Line: 9
 push	ebp
 mov	ebp, esp
-sub	esp, 16
-;  Line: 16
-mov	eax, [ebp +12]
-push	eax
+sub	esp, 4
+;  Line: 12
 mov	eax, 3
-push	eax
-mov	eax, [ebp +20]
-mov	edx, eax
-pop	eax
-imul	eax, edx
-mov	edx, eax
-pop	eax
-add	eax, edx
 mov	[ebp -4], eax
-;  Line: 17
-mov	eax, [ebp +20]
-mov	[ebp -8], eax
-;  Line: 18
-mov	eax, [ebp +16]
-mov	[ebp -16], eax
-;  Line: 19
-mov	eax, 10
-mov	[ebp -12], eax
-;  Line: 21
+;  Line: 14
 L0:
-mov	eax, 0
+mov	eax, [ebp -4]
 push	eax
-mov	eax, [ebp -12]
+mov	eax, 11
 mov	edx, eax
 pop	eax
 cmp	eax, edx
 jge	L1
-;  Line: 23
-mov	eax, 5
+;  Line: 15
+mov	eax, [ebp -4]
 push	eax
-mov	eax, [ebp -12]
+mov	eax, 6
 mov	edx, eax
 pop	eax
 cmp	eax, edx
 jge	L2
-mov	eax, 333
+mov	eax, [ebp -4]
+push	eax
+mov	eax, 5
+mov	edx, eax
+pop	eax
+cmp	eax, edx
+jge	L2
+jge	L2
+;  Line: 16
+mov	eax, 123
 push	eax
 call	_put
 add	esp,4
 jmp	L3
 L2:
-mov	eax, 555
+;  Line: 19
+mov	eax, 456
 push	eax
 call	_put
 add	esp,4
 L3:
-;  Line: 29
-mov	eax, [ebp -12]
-push	eax
-mov	eax, 1
-mov	edx, eax
-pop	eax
-sub	eax, edx
-mov	[ebp -12], eax
-jmp	L0
-L1:
+;  Line: 21
 mov	eax, [ebp -4]
-push	eax
-mov	eax, [ebp +20]
-mov	edx, eax
-pop	eax
-imul	eax, edx
-push	eax
-mov	eax, [ebp -8]
-mov	edx, eax
-pop	eax
-sub	eax, edx
 push	eax
 mov	eax, 1
 mov	edx, eax
 pop	eax
 add	eax, edx
+mov	[ebp -4], eax
+jmp	L0
+L1:
+mov	eax, [ebp -4]
 mov	esp, ebp
 pop	ebp
 ret

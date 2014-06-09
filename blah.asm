@@ -38,7 +38,6 @@ add	esp, 4
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
-;  Line: 3
 mov	eax, 4
 push	eax
 mov	eax, 4
@@ -46,7 +45,6 @@ mov	edx, eax
 pop	eax
 add	eax, edx
 push	eax
-mov	eax, 0
 push	eax
 mov	eax, 2
 push	eax
@@ -69,10 +67,8 @@ push	ebp
 mov	ebp, esp
 sub	esp, 16
 ;  Line: 16
-;  Line: 16
 mov	eax, [ebp +12]
 push	eax
-;  Line: 16
 mov	eax, 3
 push	eax
 mov	eax, [ebp +20]
@@ -92,4 +88,3 @@ mov	[ebp -16], eax
 ;  Line: 19
 mov	eax, 10
 mov	[ebp -12], eax
-;  Line: 20
