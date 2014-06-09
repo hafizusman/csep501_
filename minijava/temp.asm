@@ -83,7 +83,7 @@ $LN6@main:
 	mov	eax, DWORD PTR tv74[ebp]
 	mov	DWORD PTR _t$[ebp], eax
 ; Line 25
-	push	100					; 00000064H
+	push	4
 	mov	ecx, DWORD PTR _m$[ebp]
 	call	?set@My@@QAEXH@Z			; My::set
 ; Line 26
@@ -91,7 +91,7 @@ $LN6@main:
 	call	?get@My@@QAEHXZ				; My::get
 	mov	DWORD PTR _x$[ebp], eax
 ; Line 28
-	push	300					; 0000012cH
+	push	3
 	mov	ecx, DWORD PTR _t$[ebp]
 	call	?setT@Their@@QAEXH@Z			; Their::setT
 ; Line 29
@@ -137,9 +137,14 @@ _i$ = 8							; size = 4
 	mov	ebp, esp
 	push	ecx
 	mov	DWORD PTR _this$[ebp], ecx
-	mov	eax, DWORD PTR _this$[ebp]
-	mov	ecx, DWORD PTR _i$[ebp]
-	mov	DWORD PTR [eax+8], ecx
+$LN2@setT:
+	cmp	DWORD PTR _i$[ebp], 0
+	jl	SHORT $LN3@setT
+	mov	eax, DWORD PTR _i$[ebp]
+	sub	eax, 1
+	mov	DWORD PTR _i$[ebp], eax
+	jmp	SHORT $LN2@setT
+$LN3@setT:
 	mov	esp, ebp
 	pop	ebp
 	ret	4

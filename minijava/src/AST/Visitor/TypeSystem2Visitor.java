@@ -413,6 +413,7 @@ public class TypeSystem2Visitor implements Visitor {
             throw new SemanticException();
         }
 
+        returnedType = typesys.lookup(TypeSystem.BOOL); // less than comparison completed with INT types, now promote ret type to bool
     }
 
     // Exp e1,e2;
@@ -490,6 +491,9 @@ public class TypeSystem2Visitor implements Visitor {
         }
 
         n.e2.accept(this);
+        if (returnedType == typesys.lookup(TypeSystem.UNKNOWN)) {
+            validateIdentifierExp(n.e1.line_number);
+        }
         if (returnedType != typesys.lookup(TypeSystem.INT)) {
             System.out.println("ERROR: " + n.e2.line_number + ": Integer expected for array lookup" );
             throw new SemanticException();

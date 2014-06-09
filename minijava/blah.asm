@@ -67,26 +67,72 @@ B$my:
 ;  Line: 9
 push	ebp
 mov	ebp, esp
-sub	esp, 12
-;  Line: 15
-mov	eax, [ebp +12]
-mov	[ebp -4], eax
+sub	esp, 16
 ;  Line: 16
+;  Line: 16
+mov	eax, [ebp +12]
+push	eax
+;  Line: 16
+mov	eax, 3
+push	eax
+mov	eax, [ebp +20]
+mov	edx, eax
+pop	eax
+imul	eax, edx
+mov	edx, eax
+pop	eax
+add	eax, edx
+mov	[ebp -4], eax
+;  Line: 17
 mov	eax, [ebp +20]
 mov	[ebp -8], eax
-;  Line: 17
+;  Line: 18
 mov	eax, [ebp +16]
+mov	[ebp -16], eax
+;  Line: 19
+mov	eax, 5
 mov	[ebp -12], eax
-;  Line: 18
-;  Line: 18
+;  Line: 21
+L0:
+;  Line: 21
+mov	eax, 0
+push	eax
+mov	eax, [ebp -12]
+mov	edx, eax
+pop	eax
+cmp	eax, edx
+jge	L1
+;  Line: 22
+;  Line: 22
+mov	eax, [ebp -12]
+push	eax
+mov	eax, 1
+mov	edx, eax
+pop	eax
+sub	eax, edx
+mov	[ebp -12], eax
+mov	eax, 777
+push	eax
+call	_put
+add	esp,4
+jmp	L0
+L1:
+;  Line: 25
+;  Line: 25
+;  Line: 25
 mov	eax, [ebp -4]
 push	eax
 mov	eax, [ebp +20]
 mov	edx, eax
 pop	eax
-add	eax, edx
+imul	eax, edx
 push	eax
 mov	eax, [ebp -8]
+mov	edx, eax
+pop	eax
+sub	eax, edx
+push	eax
+mov	eax, 1
 mov	edx, eax
 pop	eax
 add	eax, edx

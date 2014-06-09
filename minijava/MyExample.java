@@ -10,12 +10,19 @@ class B
     {
         int a;
         int b;
+        int i;
         boolean c;
 
-        a = x;
+        a = x+3*z;
         b = z;
         c = y;
-        return (a+z+b);
+        i = 5;
+
+        while(0 < i) {
+            i = i - 1;
+            System.out.println(777);
+        }
+        return (a*z-b+1);
     }
 
 }

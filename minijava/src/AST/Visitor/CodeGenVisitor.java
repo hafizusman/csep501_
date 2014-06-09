@@ -18,6 +18,8 @@ public class CodeGenVisitor implements Visitor {
     private ClassInfo currCI;
     private MethodInfo currMI;
     private String retClassName;
+    private int labelCounter = 0;
+    private String currFalseLabel = null;
 
     public static final int SIZE_INTEGER = 4;
     public static final int SIZE_BOOLEAN = 4;
@@ -38,6 +40,11 @@ public class CodeGenVisitor implements Visitor {
     public void setSymbolTable(SymbolTable st)
     {
         this.symtable = st;
+    }
+
+    private String genNewLabel()
+    {
+        return ("L" + labelCounter++);
     }
 
     private FormalInfo getFormal(HashMap <String, FormalInfo> formals, int seqnum)
@@ -395,10 +402,20 @@ public class CodeGenVisitor implements Visitor {
     // Exp e;
     // Statement s;
     public void visit(While n) {
+        cgh.genCommentLine(" Line: " + n.e.line_number);
+
+        String startLabel = genNewLabel();
+        String doneLabel = genNewLabel();
+        currFalseLabel = doneLabel;
+
+        cgh.gen(startLabel + ":"); cgh.gen("\r\n");
 
         n.e.accept(this);
 
         n.s.accept(this);
+
+        cgh.gen("jmp\t" + startLabel); cgh.gen("\r\n");
+        cgh.gen(doneLabel+ ":"); cgh.gen("\r\n");
     }
 
     // Exp e;
@@ -451,11 +468,17 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(LessThan n) {
+        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
+        cgh.gen("push\teax"); cgh.gen("\r\n");
 
         n.e2.accept(this);
+        cgh.gen("mov\tedx, eax"); cgh.gen("\r\n");
+        cgh.gen("pop\teax"); cgh.gen("\r\n");
+        cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
 
+        cgh.gen("jge\t" + currFalseLabel); cgh.gen("\r\n");
     }
 
     // Exp e1,e2;

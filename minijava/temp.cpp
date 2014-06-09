@@ -14,7 +14,7 @@ class Their: public My
 
     public:
 
-    void setT(int i) { this->x = i;}
+    void setT(int i) { while(i>=0) i--; }
     int getT(void) {return this->x;}
 };
 
@@ -22,9 +22,9 @@ int main()
 {
 	class My *m = new My();
 	class Their *t = new Their();
-	m->set(100);
+	m->set(4);
 	int x = m->get();
 
-	t->setT(300);
+	t->setT(3);
 	int y = t->getT();
 }
