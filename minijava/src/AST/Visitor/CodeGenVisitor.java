@@ -28,7 +28,6 @@ public class CodeGenVisitor implements Visitor {
     public static final String NAME_PROC_MALLOC = "_mjmalloc";
     public static final String NAME_PROC_PRINT = "_put";
 
-    private int retIntegerLiteral = 0;
     public void setTypeSystem(TypeSystem ts)
     {
         this.typesys = ts;
@@ -290,7 +289,6 @@ public class CodeGenVisitor implements Visitor {
 
         }
         for (int i = 0; i < n.sl.size(); i++) {
-
             n.sl.get(i).accept(this);
             if (i < n.sl.size()) {
             }
@@ -298,7 +296,6 @@ public class CodeGenVisitor implements Visitor {
 
         n.e.accept(this);
         // result of above should be in eax
-        cgh.gen("mov\teax, " + retIntegerLiteral); cgh.gen("\r\n");//todo: remove me
 
         cgh.gen("mov\tesp, ebp"); cgh.gen("\r\n");
         cgh.gen("pop\tebp"); cgh.gen("\r\n");
@@ -367,6 +364,7 @@ public class CodeGenVisitor implements Visitor {
     // Exp e;
     public void visit(Print n) {
         n.e.accept(this);
+
         cgh.gen("push\teax"); cgh.gen("\r\n");
         cgh.gen("call\t" + NAME_PROC_PRINT); cgh.gen("\r\n");
         cgh.gen("add\tesp,4"); cgh.gen("\r\n");
@@ -412,41 +410,41 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(Plus n) {
-        int temp;
+        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
-        temp = retIntegerLiteral;
+        cgh.gen("push\teax"); cgh.gen("\r\n");
 
         n.e2.accept(this);
-        temp += retIntegerLiteral;
-
-        retIntegerLiteral = temp;
+        cgh.gen("mov\tedx, eax"); cgh.gen("\r\n");
+        cgh.gen("pop\teax"); cgh.gen("\r\n");
+        cgh.gen("add\teax, edx"); cgh.gen("\r\n");
     }
 
     // Exp e1,e2;
     public void visit(Minus n) {
-        int temp = 0;
+        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
-        temp = retIntegerLiteral;
+        cgh.gen("push\teax"); cgh.gen("\r\n");
 
         n.e2.accept(this);
-        temp -= retIntegerLiteral;
-        retIntegerLiteral = temp;
-
+        cgh.gen("mov\tedx, eax"); cgh.gen("\r\n");
+        cgh.gen("pop\teax"); cgh.gen("\r\n");
+        cgh.gen("sub\teax, edx"); cgh.gen("\r\n");
     }
 
     // Exp e1,e2;
     public void visit(Times n) {
-        int temp = 0;
+        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
-        temp = retIntegerLiteral;
+        cgh.gen("push\teax"); cgh.gen("\r\n");
 
         n.e2.accept(this);
-        temp *= retIntegerLiteral;
-        retIntegerLiteral = temp;
-
+        cgh.gen("mov\tedx, eax"); cgh.gen("\r\n");
+        cgh.gen("pop\teax"); cgh.gen("\r\n");
+        cgh.gen("imul\teax, edx"); cgh.gen("\r\n");
     }
 
     // Exp e1,e2;
@@ -510,7 +508,7 @@ public class CodeGenVisitor implements Visitor {
 
     // int i;
     public void visit(IntegerLiteral n) {
-        retIntegerLiteral = n.i;
+        cgh.gen("mov\teax, " + n.i); cgh.gen("\r\n");
     }
 
     public void visit(True n) {

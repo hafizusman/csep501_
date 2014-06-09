@@ -26,15 +26,11 @@
       <file leaf-file-name="MyExample.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/minijava/MyExample.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.04822695" vertical-offset="0" max-vertical-offset="705">
-              <caret line="2" column="37" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.3858156" vertical-offset="0" max-vertical-offset="705">
+              <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
               <folding>
                 <element signature="e#74#75#0" expanded="true" />
-                <element signature="e#122#123#0" expanded="true" />
-                <element signature="e#161#162#0" expanded="true" />
-                <element signature="e#185#186#0" expanded="true" />
-                <element signature="e#212#213#0" expanded="true" />
-                <element signature="e#237#238#0" expanded="true" />
+                <element signature="e#123#124#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -43,14 +39,16 @@
       <file leaf-file-name="CodeGenVisitor.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/CodeGenVisitor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="6018" max-vertical-offset="9979">
-              <caret line="371" column="28" selection-start-line="371" selection-start-column="28" selection-end-line="371" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="8434" max-vertical-offset="10047">
+              <caret line="511" column="0" selection-start-line="511" selection-start-column="0" selection-end-line="511" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#12719#12720#0" expanded="true" />
-                <element signature="e#12758#12759#0" expanded="true" />
-                <element signature="e#12938#12939#0" expanded="true" />
-                <element signature="e#12975#12976#0" expanded="true" />
+                <element signature="e#937#938#0" expanded="true" />
+                <element signature="e#970#971#0" expanded="true" />
+                <element signature="e#1023#1024#0" expanded="true" />
+                <element signature="e#1057#1058#0" expanded="true" />
+                <element signature="e#13221#13222#0" expanded="true" />
+                <element signature="e#13258#13259#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -107,8 +105,8 @@
       <file leaf-file-name="blah.asm" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/minijava/blah.asm">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="1360">
-              <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="1802">
+              <caret line="77" column="0" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -650,7 +648,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23828125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="6.510417E-4" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="6.510417E-4" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287858" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -690,7 +688,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/minijava/src/AST/Visitor/CodeGenVisitor.java</url>
-          <line>469</line>
+          <line>437</line>
           <properties />
           <option name="timeStamp" value="113" />
         </line-breakpoint>
@@ -1075,8 +1073,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/minijava/blah.asm">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="1360">
-          <caret line="51" column="0" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1122" max-vertical-offset="1802">
+          <caret line="77" column="0" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1109,29 +1107,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/minijava/src/AST/Visitor/CodeGenVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6018" max-vertical-offset="9979">
-          <caret line="371" column="28" selection-start-line="371" selection-start-column="28" selection-end-line="371" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="8434" max-vertical-offset="10047">
+          <caret line="511" column="0" selection-start-line="511" selection-start-column="0" selection-end-line="511" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#12719#12720#0" expanded="true" />
-            <element signature="e#12758#12759#0" expanded="true" />
-            <element signature="e#12938#12939#0" expanded="true" />
-            <element signature="e#12975#12976#0" expanded="true" />
+            <element signature="e#937#938#0" expanded="true" />
+            <element signature="e#970#971#0" expanded="true" />
+            <element signature="e#1023#1024#0" expanded="true" />
+            <element signature="e#1057#1058#0" expanded="true" />
+            <element signature="e#13221#13222#0" expanded="true" />
+            <element signature="e#13258#13259#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/minijava/MyExample.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.04822695" vertical-offset="0" max-vertical-offset="705">
-          <caret line="2" column="37" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.3858156" vertical-offset="0" max-vertical-offset="705">
+          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
           <folding>
             <element signature="e#74#75#0" expanded="true" />
-            <element signature="e#122#123#0" expanded="true" />
-            <element signature="e#161#162#0" expanded="true" />
-            <element signature="e#185#186#0" expanded="true" />
-            <element signature="e#212#213#0" expanded="true" />
-            <element signature="e#237#238#0" expanded="true" />
+            <element signature="e#123#124#0" expanded="true" />
           </folding>
         </state>
       </provider>

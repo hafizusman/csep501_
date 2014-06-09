@@ -42,7 +42,7 @@ mov	ecx, eax
 push	ecx
 ; Line 3
 mov	eax, [ecx]
-call	dword ptr [eax+8]
+call	dword ptr [eax+4]
 push	eax
 call	_put
 add	esp,4
@@ -56,6 +56,22 @@ B$my:
 ;  Line: 9
 push	ebp
 mov	ebp, esp
+;  Line: 11
+;  Line: 11
+mov	eax, 2
+push	eax
+mov	eax, 2
+mov	edx, eax
+pop	eax
+imul	eax, edx
+push	eax
+mov	eax, 1
+mov	edx, eax
+pop	eax
+sub	eax, edx
+push	eax
+call	_put
+add	esp,4
 mov	eax, 9
 mov	esp, ebp
 pop	ebp
@@ -63,10 +79,38 @@ ret
 _TEXT	ENDS
 _TEXT	SEGMENT
 B$my2:
-;  Line: 13
+;  Line: 14
 push	ebp
 mov	ebp, esp
+;  Line: 16
+mov	eax, 2
+push	eax
+mov	eax, 1
+mov	edx, eax
+pop	eax
+sub	eax, edx
+push	eax
+call	_put
+add	esp,4
+;  Line: 17
+;  Line: 17
+;  Line: 17
 mov	eax, 10
+push	eax
+mov	eax, 100
+mov	edx, eax
+pop	eax
+imul	eax, edx
+push	eax
+mov	eax, 9
+mov	edx, eax
+pop	eax
+sub	eax, edx
+push	eax
+mov	eax, 4
+mov	edx, eax
+pop	eax
+add	eax, edx
 mov	esp, ebp
 pop	ebp
 ret
