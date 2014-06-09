@@ -39,6 +39,8 @@ add	esp, 4
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
+mov	eax, 0
+push	eax
 push	ecx
 ; Line 3
 mov	eax, [ecx]
@@ -68,7 +70,15 @@ mov	eax, 11
 mov	edx, eax
 pop	eax
 cmp	eax, edx
-jge	L1
+jge	L2
+mov	eax, 1
+jmp	L3
+L2:
+mov	eax, 0
+L3:
+mov	edx, 0
+cmp	eax, edx
+je	L1
 ;  Line: 15
 mov	eax, [ebp -4]
 push	eax
@@ -76,29 +86,67 @@ mov	eax, 6
 mov	edx, eax
 pop	eax
 cmp	eax, edx
-jge	L2
+jge	L7
+mov	eax, 1
+jmp	L8
+L7:
+mov	eax, 0
+L8:
+mov	edx, 0
+cmp	eax, edx
+mov	eax, 0
+je	L6
 mov	eax, [ebp -4]
 push	eax
 mov	eax, 5
 mov	edx, eax
 pop	eax
 cmp	eax, edx
-jge	L2
-jge	L2
+jge	L9
+mov	eax, 1
+jmp	L10
+L9:
+mov	eax, 0
+L10:
+L6:
+mov	edx, 0
+cmp	eax, edx
+je	L4
 ;  Line: 16
+mov	eax, [ebp +12]
+mov	edx, 0
+cmp	eax, edx
+je	L13
+mov	eax, 0
+jmp	L14
+L13:
+mov	eax, 1
+L14:
+mov	edx, 0
+cmp	eax, edx
+je	L11
+;  Line: 17
 mov	eax, 123
 push	eax
 call	_put
 add	esp,4
-jmp	L3
-L2:
-;  Line: 19
+jmp	L12
+L11:
+;  Line: 20
+mov	eax, 321
+push	eax
+call	_put
+add	esp,4
+L12:
+jmp	L5
+L4:
+;  Line: 24
 mov	eax, 456
 push	eax
 call	_put
 add	esp,4
-L3:
-;  Line: 21
+L5:
+;  Line: 26
 mov	eax, [ebp -4]
 push	eax
 mov	eax, 1

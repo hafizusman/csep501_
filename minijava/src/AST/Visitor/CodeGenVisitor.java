@@ -20,7 +20,6 @@ public class CodeGenVisitor implements Visitor {
     private MethodInfo currMI;
     private String retClassName;
     private int labelCounter = 0;
-    private String falseJumpLabel = null;
 
     public static final int SIZE_INTEGER = 4;
     public static final int SIZE_BOOLEAN = 4;
@@ -394,9 +393,10 @@ public class CodeGenVisitor implements Visitor {
         String elseLabel = genNewLabel();
         String doneLabel = genNewLabel();
 
-        falseJumpLabel = elseLabel;
-        n.e.accept(this);
-        cgh.gen("jge\t" + elseLabel); cgh.gen("\r\n");
+        n.e.accept(this); //eax will have either 0 or 1 in it (i.e. false, true)
+        cgh.gen("mov\tedx, " + VALUE_BOOL_FALSE); cgh.gen("\r\n");
+        cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+        cgh.gen("je\t" + elseLabel); cgh.gen("\r\n");
 
         n.s1.accept(this);
         cgh.gen("jmp\t" + doneLabel); cgh.gen("\r\n");
@@ -416,12 +416,12 @@ public class CodeGenVisitor implements Visitor {
         String startLabel = genNewLabel();
         String doneLabel = genNewLabel();
 
-        falseJumpLabel = doneLabel;
-
         cgh.gen(startLabel + ":"); cgh.gen("\r\n");
 
-        n.e.accept(this);
-        cgh.gen("jge\t" + doneLabel); cgh.gen("\r\n");
+        n.e.accept(this); //eax will have either 0 or 1 in it (i.e. false, true)
+        cgh.gen("mov\tedx, " + VALUE_BOOL_FALSE); cgh.gen("\r\n");
+        cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+        cgh.gen("je\t" + doneLabel); cgh.gen("\r\n");
 
         n.s.accept(this);
 
@@ -472,15 +472,22 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(And n) {
-        n.e1.accept(this);
-        cgh.gen("jge\t" + falseJumpLabel); cgh.gen("\r\n");
+        String doneLabel = genNewLabel();
 
-        n.e2.accept(this);
-        cgh.gen("jge\t" + falseJumpLabel); cgh.gen("\r\n");
+        n.e1.accept(this); //eax will have either 0 or 1 in it (i.e. false, true)
+        cgh.gen("mov\tedx, " + VALUE_BOOL_FALSE); cgh.gen("\r\n");
+        cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+        cgh.gen("mov\teax, " + VALUE_BOOL_FALSE); cgh.gen("\r\n"); // make sure eax has false in it
+        cgh.gen("je\t" + doneLabel); cgh.gen("\r\n");
+
+        n.e2.accept(this); //eax will have either 0 or 1 in it (i.e. false, true)
+        cgh.gen(doneLabel + ":"); cgh.gen("\r\n");
     }
 
     // Exp e1,e2;
     public void visit(LessThan n) {
+        String falseLabel = genNewLabel();
+        String doneLabel = genNewLabel();
 
         n.e1.accept(this);
         cgh.gen("push\teax"); cgh.gen("\r\n");
@@ -489,6 +496,14 @@ public class CodeGenVisitor implements Visitor {
         cgh.gen("mov\tedx, eax"); cgh.gen("\r\n");
         cgh.gen("pop\teax"); cgh.gen("\r\n");
         cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+
+        cgh.gen("jge\t" + falseLabel); cgh.gen("\r\n");
+        cgh.gen("mov\teax, " + VALUE_BOOL_TRUE); cgh.gen("\r\n");
+        cgh.gen("jmp\t" + doneLabel); cgh.gen("\r\n");
+
+        cgh.gen(falseLabel + ":");cgh.gen("\r\n");
+        cgh.gen("mov\teax, " + VALUE_BOOL_FALSE); cgh.gen("\r\n");
+        cgh.gen(doneLabel + ":"); cgh.gen("\r\n");
     }
 
     // Exp e1,e2;
@@ -684,8 +699,18 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e;
     public void visit(Not n) {
+        String trueLabel = genNewLabel();
+        String doneLabel = genNewLabel();
 
-        n.e.accept(this);
+        n.e.accept(this); // eax has the bool value setup correctly
+        cgh.gen("mov\tedx, " + VALUE_BOOL_FALSE); cgh.gen("\r\n");
+        cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+        cgh.gen("je\t" + trueLabel); cgh.gen("\r\n");
+        cgh.gen("mov\teax, " + VALUE_BOOL_FALSE); cgh.gen("\r\n");
+        cgh.gen("jmp\t" + doneLabel); cgh.gen("\r\n");
+        cgh.gen(trueLabel + ":"); cgh.gen("\r\n");
+        cgh.gen("mov\teax, " + VALUE_BOOL_TRUE); cgh.gen("\r\n");
+        cgh.gen(doneLabel + ":"); cgh.gen("\r\n");
     }
 
     // String s;
