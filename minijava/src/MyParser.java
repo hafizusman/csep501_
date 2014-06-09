@@ -104,7 +104,9 @@ public class MyParser
 
 /*
 BEFORE SUBMISSION:
+todo:
 . Remove env set= from build.cmd for [see email]
 . Remove the file writer from Codegen
+. todo: figure out why negative int literals cause syntax errors!!!
  */
 

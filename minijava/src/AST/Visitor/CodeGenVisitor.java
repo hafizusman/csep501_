@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 
+
 // Sample print visitor from MiniJava web site with small modifications for UW CSE.
 // HP 10/11
 
@@ -389,14 +390,21 @@ public class CodeGenVisitor implements Visitor {
     // Exp e;
     // Statement s1,s2;
     public void visit(If n) {
+        cgh.genCommentLine(" Line: " + n.e.line_number);
+        String elseLabel = genNewLabel();
+        String doneLabel = genNewLabel();
+        currFalseLabel = elseLabel;
 
         n.e.accept(this);
 
-
         n.s1.accept(this);
+        cgh.gen("jmp\t" + doneLabel); cgh.gen("\r\n");
 
 
+        cgh.gen(elseLabel + ":"); cgh.gen("\r\n");
+        currFalseLabel = doneLabel;
         n.s2.accept(this);
+        cgh.gen(doneLabel + ":"); cgh.gen("\r\n");
     }
 
     // Exp e;
@@ -468,7 +476,6 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(LessThan n) {
-        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
         cgh.gen("push\teax"); cgh.gen("\r\n");
@@ -483,7 +490,6 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(Plus n) {
-        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
         cgh.gen("push\teax"); cgh.gen("\r\n");
@@ -496,7 +502,6 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(Minus n) {
-        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
         cgh.gen("push\teax"); cgh.gen("\r\n");
@@ -509,7 +514,6 @@ public class CodeGenVisitor implements Visitor {
 
     // Exp e1,e2;
     public void visit(Times n) {
-        cgh.genCommentLine(" Line: " + n.e1.line_number);
 
         n.e1.accept(this);
         cgh.gen("push\teax"); cgh.gen("\r\n");

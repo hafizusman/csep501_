@@ -46,7 +46,7 @@ mov	edx, eax
 pop	eax
 add	eax, edx
 push	eax
-mov	eax, 3
+mov	eax, 0
 push	eax
 mov	eax, 2
 push	eax
@@ -67,18 +67,29 @@ B$my:
 ;  Line: 9
 push	ebp
 mov	ebp, esp
-sub	esp, 8
-;  Line: 14
+sub	esp, 16
+;  Line: 16
+;  Line: 16
 mov	eax, [ebp +12]
-;  Line: 15
-mov	eax, [ebp -4]
+push	eax
+;  Line: 16
+mov	eax, 3
 push	eax
 mov	eax, [ebp +20]
 mov	edx, eax
 pop	eax
+imul	eax, edx
+mov	edx, eax
+pop	eax
 add	eax, edx
-mov	esp, ebp
-pop	ebp
-ret
-_TEXT	ENDS
-END 
+mov	[ebp -4], eax
+;  Line: 17
+mov	eax, [ebp +20]
+mov	[ebp -8], eax
+;  Line: 18
+mov	eax, [ebp +16]
+mov	[ebp -16], eax
+;  Line: 19
+mov	eax, 10
+mov	[ebp -12], eax
+;  Line: 20

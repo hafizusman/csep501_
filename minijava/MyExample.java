@@ -16,12 +16,19 @@ class B
         a = x+3*z;
         b = z;
         c = y;
-        i = 5;
+        i = 10;
 
         while(0 < i) {
+            //System.out.println(777);
+            if (5 < i) {
+                System.out.println(333);
+            }
+            else {
+                System.out.println(555);
+            }
             i = i - 1;
-            System.out.println(777);
         }
+
         return (a*z-b+1);
     }
 
