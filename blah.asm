@@ -32,12 +32,15 @@ _asm_main PROC	; main
 push	ebp
 mov	ebp, esp
 ; Line 3
-push	4
+push	12
 call	_mjmalloc
 add	esp, 4
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
+<<<<<<< HEAD
+mov	eax, 432
+=======
 mov	eax, 4
 push	eax
 mov	eax, 4
@@ -47,6 +50,7 @@ add	eax, edx
 push	eax
 push	eax
 mov	eax, 2
+>>>>>>> parent of 4a18511... can read/write fields from our own class
 push	eax
 push	ecx
 ; Line 3
@@ -62,6 +66,18 @@ _asm_main ENDP	; main
 _TEXT	ENDS
 _TEXT	SEGMENT
 B$my:
+<<<<<<< HEAD
+;  Line: 11
+push	ebp
+mov	ebp, esp
+sub	esp, 4
+mov	eax, [ebp +12]
+mov	esp, ebp
+pop	ebp
+ret
+_TEXT	ENDS
+END 
+=======
 ;  Line: 9
 push	ebp
 mov	ebp, esp
@@ -88,3 +104,4 @@ mov	[ebp -16], eax
 ;  Line: 19
 mov	eax, 10
 mov	[ebp -12], eax
+>>>>>>> parent of 4a18511... can read/write fields from our own class

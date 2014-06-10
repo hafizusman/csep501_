@@ -60,6 +60,19 @@ public class CodeGenVisitor implements Visitor {
 
         return retfi;
     }
+<<<<<<< HEAD
+
+    private void setupFieldsOffsets(HashMap <String, FieldInfo> fields)
+    {
+        for (Map.Entry<String, FieldInfo> fieldentry : fields.entrySet()) {
+            FieldInfo fi = fieldentry.getValue();
+            // remember that offset obj+0 contains the pointer to the vtable
+            fi.objoffset = fi.seqnum * 4;
+        }
+    }
+
+=======
+>>>>>>> parent of 4a18511... can read/write fields from our own class
     private void setupFormalsOffsets(HashMap <String, FormalInfo> formals)
     {
         for (Map.Entry<String, FormalInfo> formalentry : formals.entrySet()) {
@@ -73,11 +86,15 @@ public class CodeGenVisitor implements Visitor {
     {
         for (Map.Entry<String, LocalInfo> localentry : locals.entrySet()) {
             LocalInfo li = localentry.getValue();
-            // remember that offset ebp+8 contains the 'this' pointer
+            // remember that offset ebp+0 contains the old ebp
             li.ebpoffset = -(4*li.seqnum);
         }
     }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> parent of 4a18511... can read/write fields from our own class
     private void setupSymbolTableSizes()
     {
         // first setup the sizes of the fields within a class
@@ -149,6 +166,12 @@ public class CodeGenVisitor implements Visitor {
             cgh.gen("\t");
             cgh.genCommentLine(" " + classentry.getKey() + " ctor");
 */
+<<<<<<< HEAD
+
+            setupFieldsOffsets(cval.fields);
+
+=======
+>>>>>>> parent of 4a18511... can read/write fields from our own class
             int vtableoffset = 1; // first 4 bytes are for base class vtable hence starting from 1
             for (Map.Entry<String, MethodInfo> methodentry : cval.methods.entrySet()) {
                 MethodInfo mval = methodentry.getValue();
@@ -434,20 +457,33 @@ public class CodeGenVisitor implements Visitor {
         cgh.genCommentLine(" Line: " + n.e.line_number);
         n.e.accept(this);
 
+        cgh.gen("push\tecx"); cgh.gen("\r\n");
         cgh.gen("push\teax"); cgh.gen("\r\n");
         cgh.gen("call\t" + NAME_PROC_PRINT); cgh.gen("\r\n");
         cgh.gen("add\tesp,4"); cgh.gen("\r\n");
+        cgh.gen("pop\tecx"); cgh.gen("\r\n");
     }
 
     // Identifier i;
     // Exp e;
     public void visit(Assign n) {
+<<<<<<< HEAD
+        boolean isField = false;
+=======
+>>>>>>> parent of 4a18511... can read/write fields from our own class
         cgh.genCommentLine(" Line: " + n.i.line_number);
         n.i.accept(this);
 
         VarInfo vi = currMI.lookupLocal(n.i.s);
         if (vi == null) {
             vi = currMI.lookupFormal(n.i.s);
+<<<<<<< HEAD
+            if (vi == null) {
+                vi = currCI.lookupField(n.i.s);
+                isField = true;
+            }
+=======
+>>>>>>> parent of 4a18511... can read/write fields from our own class
         }
 
         n.e.accept(this);
@@ -455,7 +491,13 @@ public class CodeGenVisitor implements Visitor {
             cgh.gen("mov\t[ebp " + vi.ebpoffset +"], eax"); cgh.gen("\r\n");
         }
         else {
+<<<<<<< HEAD
+            // this is in ecx
+            cgh.gen("mov\t[ecx +" + vi.objoffset + "], eax");
+            cgh.gen("\r\n");
+=======
             cgh.gen("mov\t[ebp +" + vi.ebpoffset +"], eax"); cgh.gen("\r\n");
+>>>>>>> parent of 4a18511... can read/write fields from our own class
         }
     }
 
@@ -620,23 +662,48 @@ public class CodeGenVisitor implements Visitor {
     public void visit(True n) {
         cgh.gen("mov\teax, " + Integer.toString(VALUE_BOOL_TRUE)); cgh.gen("\r\n"); //todo: needed?
 //        cgh.gen("mov\tedx, 0"); cgh.gen("\r\n");
- //       cgh.gen("mov\teax, 0"); cgh.gen("\r\n");
-  //      cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+        //       cgh.gen("mov\teax, 0"); cgh.gen("\r\n");
+        //      cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
 
-    //    cgh.gen("jge\t" + currFalseLabel); cgh.gen("\r\n");
+        //    cgh.gen("jge\t" + currFalseLabel); cgh.gen("\r\n");
     }
 
     public void visit(False n) {
         cgh.gen("mov\teax, " + Integer.toString(VALUE_BOOL_FALSE)); cgh.gen("\r\n"); //todo: needed?
 //        cgh.gen("mov\tedx, 1"); cgh.gen("\r\n");
- //       cgh.gen("mov\teax, 0"); cgh.gen("\r\n");
-  //      cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
+        //       cgh.gen("mov\teax, 0"); cgh.gen("\r\n");
+        //      cgh.gen("cmp\teax, edx"); cgh.gen("\r\n");
 
         //cgh.gen("jge\t" + currFalseLabel); cgh.gen("\r\n");
     }
 
     // String s;
     public void visit(IdentifierExp n) {
+<<<<<<< HEAD
+        boolean isField= false;
+        VarInfo vi = currMI.lookupLocal(n.s);
+        if (vi == null) {
+            vi = currMI.lookupFormal(n.s);
+            if (vi == null) {
+                vi = currCI.lookupField(n.s);
+                isField = true;
+            }
+        }
+
+        if (isField == false) {
+            if (vi.ebpoffset < 0) {
+                cgh.gen("mov\teax, [ebp " + vi.ebpoffset + "]");
+                cgh.gen("\r\n");
+            } else {
+                cgh.gen("mov\teax, [ebp +" + vi.ebpoffset + "]");
+                cgh.gen("\r\n");
+            }
+        }
+        else {
+            // this pointer is in ecx
+            cgh.gen("mov\teax, [ecx +" + vi.objoffset + "]");
+            cgh.gen("\r\n");
+=======
         VarInfo vi = currMI.lookupLocal(n.s);
         if (vi == null) {
             vi = currMI.lookupFormal(n.s);
@@ -646,6 +713,7 @@ public class CodeGenVisitor implements Visitor {
         }
         else {
             cgh.gen("mov\teax, [ebp +" + vi.ebpoffset +"]"); cgh.gen("\r\n");
+>>>>>>> parent of 4a18511... can read/write fields from our own class
         }
     }
 
@@ -682,9 +750,14 @@ public class CodeGenVisitor implements Visitor {
         pop    eax			; recover pointer to object
         mov   [ebp+offsetb],eax		; store object reference in variable b
 */
+        cgh.gen("push\tecx"); cgh.gen("\r\n");
+
         cgh.gen("push\t" + Integer.toString(numBytes)); cgh.gen("\r\n");
         cgh.gen("call\t" + NAME_PROC_MALLOC); cgh.gen("\r\n");
         cgh.gen("add\tesp, 4"); cgh.gen("\r\n");
+
+        cgh.gen("pop\tecx"); cgh.gen("\r\n");
+
         cgh.gen("lea\tedx, " + vtableAddress); cgh.gen("\r\n");
         cgh.gen("mov\t[eax], edx"); cgh.gen("\r\n");
         cgh.gen("mov\tecx, eax"); cgh.gen("\r\n");
@@ -718,3 +791,4 @@ public class CodeGenVisitor implements Visitor {
 
     }
 }
+

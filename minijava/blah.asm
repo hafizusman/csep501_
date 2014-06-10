@@ -33,21 +33,33 @@ push	ebp
 mov	ebp, esp
 ;  Line: 3
 ; Line 3
+<<<<<<< HEAD
+push	ecx
+push	12
+=======
 push	4
+>>>>>>> parent of 4a18511... can read/write fields from our own class
 call	_mjmalloc
 add	esp, 4
+pop	ecx
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
+<<<<<<< HEAD
+mov	eax, 432
+=======
 mov	eax, 0
+>>>>>>> parent of 4a18511... can read/write fields from our own class
 push	eax
 push	ecx
 ; Line 3
 mov	eax, [ecx]
 call	dword ptr [eax+4]
+push	ecx
 push	eax
 call	_put
 add	esp,4
+pop	ecx
 mov	esp, ebp
 pop	ebp
 ret
@@ -55,6 +67,38 @@ _asm_main ENDP	; main
 _TEXT	ENDS
 _TEXT	SEGMENT
 B$my:
+<<<<<<< HEAD
+;  Line: 11
+push	ebp
+mov	ebp, esp
+sub	esp, 4
+;  Line: 15
+mov	eax, [ebp +12]
+mov	[ecx +4], eax
+;  Line: 16
+mov	eax, [ecx +4]
+push	ecx
+push	eax
+call	_put
+add	esp,4
+pop	ecx
+;  Line: 18
+mov	eax, 555
+push	eax
+mov	eax, [ecx +4]
+mov	edx, eax
+pop	eax
+add	eax, edx
+mov	[ecx +8], eax
+;  Line: 19
+mov	eax, [ecx +8]
+push	ecx
+push	eax
+call	_put
+add	esp,4
+pop	ecx
+mov	eax, [ebp +12]
+=======
 ;  Line: 9
 push	ebp
 mov	ebp, esp
@@ -157,6 +201,7 @@ mov	[ebp -4], eax
 jmp	L0
 L1:
 mov	eax, [ebp -4]
+>>>>>>> parent of 4a18511... can read/write fields from our own class
 mov	esp, ebp
 pop	ebp
 ret
