@@ -1,0 +1,27 @@
+diff --git a/build.xml b/build.xml
+index c427d76..129426f 100644
+--- a/build.xml
++++ b/build.xml
+@@ -37,10 +37,18 @@
+     </condition>
+   </target>
+ 
+-  <target name="gen-parser" depends="check.parse.files"
+-	  unless="parser.uptodate">
+-    <java jar="lib/CUP.jar" fork="true" failonerror="true">
+-      <arg value="-destdir"/> <arg value="src/Parser"/>
++  <target name="gen-parser"
++          depends="check.parse.files"
++          unless="parser.uptodate">
++    <java jar="lib/CUP.jar"
++          fork="true"
++          failonerror="true"
++          output="src/Parser/cup.out">
++      <arg value="-dump_states"/>
++      <arg value="-dump_grammar"/>
++      <arg value="-dump_tables"/>
++      <arg value="-destdir"/>
++      <arg value="src/Parser"/>
+       <arg value="src/Parser/minijava.cup"/>
+     </java>
+   </target>

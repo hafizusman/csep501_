@@ -1,0 +1,308 @@
+/*
+/*
+ * CUP specification for the parser for a simple demo language.
+ * Change this into the parser for your implementation of MiniJava.
+ * CSE 401/P501 Au11.
+ */
+
+package Parser;
+
+import AST.*;
+import java.util.*;
+import java_cup.runtime.*;
+
+/* Code in the following section is included in the generated parser */
+
+parser code {:
+  /* Override default error message routine to handle line numbers correctly */
+  /* This routine is also called in the process of handling fatal errors. */
+
+  /** Report a non fatal error (or warning).  This method takes a message 
+   *  string and an additional object (to be used by specializations 
+   *  implemented in subclasses).  Prints the same simple error message
+   *  as the base class version, but correctly labels the line number.
+   *
+   * @param message an error message.
+   * @param info    an extra object reserved for use by specialized subclasses.
+   */
+  public void report_error(String message, Object info)
+    {
+      System.err.print(message);
+      System.err.flush();
+      if (info instanceof Symbol)
+	if (((Symbol)info).left != -1)
+	  System.err.println(" at line " + ((Symbol)info).left +
+			     " of input");
+	else System.err.println("");
+      else System.err.println("");
+    }
+:};  
+
+/* end of code included in generated parser
+
+
+/* Terminals (tokens returned by the scanner) */
+
+/* reserved words: */
+terminal DISPLAY, CLASS, PUBLIC, STATIC, VOID, NEW, RETURN, THIS, IF, ELSE, TRUE, FALSE, WHILE, EXTENDS, MAIN, LENGTH;
+
+/* operators: */
+terminal MULTIPLY, PLUS, MINUS, LESSTHAN, LOGICAL_AND, LOGICAL_NOT, BECOMES;
+
+/* delimiters: */
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMICOLON, DOT, COMMA;
+
+/* basic types */
+terminal INTEGER_TYPE, BOOLEAN_TYPE, STRING_TYPE;
+
+/* tokens with values: */
+terminal String IDENTIFIER;
+terminal String INTEGER_LITERAL;
+
+
+/* Nonterminals */
+
+nonterminal Program Program;
+nonterminal Statement Statement;
+nonterminal StatementList BlockStatements;
+nonterminal Exp Expression;
+nonterminal ExpList ExpressionList;
+nonterminal Identifier Identifier;
+nonterminal Formal FormalDeclaration;
+nonterminal FormalList FormalDeclarationList;
+nonterminal VarDecl VariableDeclaration;
+nonterminal VarDeclList VariableDeclarationList;
+nonterminal Type Type;
+nonterminal MethodDecl MethodDeclaration;
+nonterminal MethodDeclList MethodDeclarationList;
+nonterminal ClassDecl ClassDeclaration;
+nonterminal ClassDeclList ClassDeclarationList;
+nonterminal MainClass MainClassDecl;
+
+/* Precedence declarations */
+
+precedence nonassoc LESSTHAN;
+precedence left LOGICAL_AND;
+precedence left PLUS, MINUS;
+precedence nonassoc LOGICAL_NOT;
+precedence nonassoc DOT;
+precedence left MULTIPLY;
+precedence left LBRACKET;
+
+
+/* Productions */
+
+//Goal	::=	MainClass ( ClassDeclaration )* <EOF>
+Program             ::= MainClassDecl:mcd ClassDeclarationList:cdl
+                        {: RESULT=new Program(mcd, cdl, mcdleft); :}
+                    ;
+
+//MainClass	::=	"class" Identifier "{" "public" "static" "void" "main" "(" "String" "[" "]" Identifier ")" "{" Statement "}" "}"
+MainClassDecl       ::= CLASS:c Identifier:id1 LCURLY
+                            PUBLIC STATIC VOID MAIN LPAREN STRING_TYPE LBRACKET RBRACKET Identifier:id2 RPAREN
+                            LCURLY Statement:s RCURLY
+                            RCURLY
+                        {: RESULT = new MainClass(id1, id2, s, cleft); :}
+                    ;
+
+ClassDeclarationList::=/* empty */
+                    | ClassDeclarationList:cdl ClassDeclaration:c
+                        {:
+                        if (cdl == null)
+                        {
+                            cdl = new ClassDeclList(cleft);
+                        }
+                        cdl.add(c);
+                        RESULT = cdl;
+                        :}
+                    ;
+//ClassDeclaration	::=	"class" Identifier ( "extends" Identifier )? "{" ( VarDeclaration )* ( MethodDeclaration )* "}"
+ClassDeclaration    ::= CLASS:c Identifier:id1 EXTENDS Identifier:id2
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            MethodDeclarationList:mdl
+                        RCURLY
+                        {: RESULT = new ClassDeclExtends(id1, id2, vdl, mdl, cleft); :}
+                    | CLASS:c Identifier:id
+                        LCURLY
+                          VariableDeclarationList:vdl
+                          MethodDeclarationList:mdl
+                        RCURLY
+                        {: RESULT = new ClassDeclSimple(id, vdl, mdl, cleft); :}
+                    ;
+
+// Type	::=	"int" "[" "]"
+//      |	"boolean"
+//      |	"int"
+//      |	Identifier
+Type                ::= INTEGER_TYPE:ln LBRACKET RBRACKET
+                        {: RESULT = new IntArrayType(lnleft); :}
+                    | BOOLEAN_TYPE:ln
+                        {: RESULT = new BooleanType(lnleft); :}
+                    | INTEGER_TYPE:ln
+                        {: RESULT = new IntegerType(lnleft); :}
+                    | IDENTIFIER:name
+                        {: RESULT = new IdentifierType(name, nameleft); :}
+                    ;
+
+MethodDeclarationList::=/* empty */
+                    | MethodDeclarationList:mdl MethodDeclaration:m
+                        {:
+                        if (mdl == null)
+                        {
+                            mdl = new MethodDeclList(mleft);
+                        }
+                        mdl.add(m);
+                        RESULT = mdl;
+                        :}
+                    ;
+
+// MethodDeclaration	::=	"public" Type Identifier "(" ( Type Identifier ( "," Type Identifier )* )? ")" "{" ( VarDeclaration )* ( Statement )* "return" Expression ";" "}"
+MethodDeclaration   ::= PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            BlockStatements:s
+                            RETURN Expression:retexp SEMICOLON
+                        RCURLY
+                        {: RESULT = new MethodDecl(t, name, fdl, vdl, s, retexp, tleft); :}
+                        | PUBLIC Type:t Identifier:name LPAREN FormalDeclarationList:fdl RPAREN
+                        LCURLY
+                            VariableDeclarationList:vdl
+                            RETURN Expression:retexp SEMICOLON
+                        RCURLY
+                        {: RESULT = new MethodDecl(t, name, fdl, vdl, null, retexp, tleft); :}
+                        ;
+FormalDeclarationList::= /* empty */
+                    | FormalDeclaration:f
+                        {:
+                        FormalList fd = new FormalList(fleft);
+                        fd.add(f);
+                        RESULT = fd;
+                        :}
+                    | FormalDeclarationList:fdl COMMA FormalDeclaration:fd
+                        {:
+                        fdl.add(fd);
+                        RESULT = fdl;
+                        :}
+                    ;
+FormalDeclaration   ::= Type:t Identifier:id
+                        {: RESULT = new Formal(t, id, tleft); :}
+                    ;
+
+VariableDeclarationList::= /* empty */
+                    | VariableDeclarationList:vdl VariableDeclaration:v
+                        {:
+                        if (vdl == null)
+                        {
+                            vdl = new VarDeclList(vleft);
+                        }
+                        vdl.add(v);
+                        RESULT = vdl;
+                        :}
+                    ;
+// VarDeclaration	::=	Type Identifier ";"
+VariableDeclaration ::= Type:t Identifier:id SEMICOLON
+                        {: RESULT = new VarDecl(t, id, tleft); :}
+                    ;
+
+//Identifier	    ::=	<IDENTIFIER>
+Identifier          ::= IDENTIFIER:id
+                        {: RESULT = new Identifier(id, idleft); :}
+                    ;
+
+// Statement	::=	"{" ( Statement )* "}"
+//      |	"if" "(" Expression ")" Statement "else" Statement
+//      |	"while" "(" Expression ")" Statement
+//      |	"System.out.println" "(" Expression ")" ";"
+//      |	Identifier "=" Expression ";"
+//      |	Identifier "[" Expression "]" "=" Expression ";"
+Statement           ::= LCURLY RCURLY
+                    | LCURLY BlockStatements:bs RCURLY
+                        {: RESULT = new Block(bs, bsleft); :}
+                    | IF:i LPAREN Expression:ifexpr RPAREN Statement:thenstmt ELSE Statement:elsestmt
+                        {: RESULT = new If(ifexpr, thenstmt, elsestmt, ileft); :}
+                    | WHILE:w LPAREN Expression:expr RPAREN Statement:stmt
+                        {: RESULT = new While(expr, stmt, wleft); :}
+                    | DISPLAY:d LPAREN Expression:expr RPAREN SEMICOLON
+                        {: RESULT = new Print(expr, dleft); :}
+                    | Identifier:name BECOMES Expression:expr SEMICOLON
+                        {: RESULT = new Assign(name, expr, nameleft); :}
+                    | Identifier:name LBRACKET Expression:expr1 RBRACKET BECOMES Expression:expr2 SEMICOLON
+                        {: RESULT = new ArrayAssign(name, expr1, expr2, nameleft); :}
+                    ;
+BlockStatements     ::= Statement:s
+                        {:
+                        StatementList sl = new StatementList(sleft);
+                        sl.add(s);
+                        RESULT = sl;
+                        :}
+                    | BlockStatements:bs Statement:s
+                        {:
+                        bs.add(s);
+                        RESULT = bs;
+                        :}
+                    ;
+
+// Expression	::=	Expression ( "&&" | "<" | "+" | "-" | "*" ) Expression
+//      |	Expression "[" Expression "]"
+//      |	Expression "." "length"
+//      |	Expression "." Identifier "(" ( Expression ( "," Expression )* )? ")"
+//      |	<INTEGER_LITERAL>
+//      |	"true"
+//      |	"false"
+//      |	Identifier
+//      |	"this"
+//      |	"new" "int" "[" Expression "]"
+//      |	"new" Identifier "(" ")"
+//      |	"!" Expression
+//      |	"(" Expression ")"
+Expression          ::= Expression:arg1 LOGICAL_AND Expression:arg2
+                        {: RESULT = new And(arg1, arg2, arg1left); :}
+                    | Expression:arg1 LESSTHAN Expression:arg2
+                        {: RESULT = new LessThan(arg1, arg2, arg1left); :}
+                    | Expression:arg1 PLUS Expression:arg2
+                        {: RESULT = new Plus(arg1, arg2, arg1left); :}
+                    | Expression:arg1 MINUS Expression:arg2
+                        {: RESULT = new Minus(arg1, arg2, arg1left); :}
+                    | Expression:arg1 MULTIPLY Expression:arg2
+                        {: RESULT = new Times(arg1, arg2, arg1left); :}
+                    | Expression:arg1 LBRACKET Expression:arg2 RBRACKET
+                        {: RESULT = new ArrayLookup(arg1, arg2, arg1left); :}
+                    | Expression:arg1 DOT LENGTH
+                        {: RESULT = new ArrayLength(arg1, arg1left); :}
+                    | Expression:expr DOT Identifier:name LPAREN ExpressionList:exprlist RPAREN
+                        {: RESULT = new Call(expr, name, exprlist, exprleft); :}
+                    | INTEGER_LITERAL:val
+                        {: RESULT = new IntegerLiteral(Integer.parseInt(val), valleft); :}
+                    | TRUE:ln
+                        {: RESULT = new True(lnleft); :}
+                    | FALSE:ln
+                        {: RESULT = new False(lnleft); :}
+                    | IDENTIFIER:name
+                        {: RESULT = new IdentifierExp(name, nameleft); :}
+                    | THIS:ln
+                        {: RESULT = new This(lnleft); :}
+                    | NEW INTEGER_TYPE LBRACKET Expression:expr RBRACKET
+                        {: RESULT = new NewArray(expr, exprleft); :} /* CHECK!!!! */
+                    | NEW Identifier:name LPAREN RPAREN
+                        {: RESULT = new NewObject(name, nameleft); :} /* CHECK!!!! */
+                    | LOGICAL_NOT Expression:arg1
+                        {: RESULT = new Not(arg1, arg1left); :}
+                    | LPAREN Expression:expr RPAREN
+                        {: RESULT = expr; :}
+                    ;
+
+//      |	Expression "." Identifier "(" ( Expression ( "," Expression )* )? ")"
+ExpressionList      ::= /* empty */
+                    | Expression:expr
+                        {:
+                        ExpList e = new ExpList(exprleft);
+                        e.add(expr);
+                        RESULT = e;
+                        :}
+                    | ExpressionList:exprn COMMA Expression:expr
+                        {:
+                        exprn.add(expr);
+                        RESULT = exprn;
+                        :}
+                    ;
