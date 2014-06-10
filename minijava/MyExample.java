@@ -1,16 +1,11 @@
 class BadContravariantParams {
     public static void main(String[] args) {
-<<<<<<< HEAD
         System.out.println(new B().my(432));
-=======
-        System.out.println(new B().my(false));
->>>>>>> parent of 4a18511... can read/write fields from our own class
     }
 }
 
 class B
 {
-<<<<<<< HEAD
     int x1;
     int x2;
     public int my(int y)
@@ -27,40 +22,6 @@ class B
 }
 
 
-/*
-class B
-{
-=======
->>>>>>> parent of 4a18511... can read/write fields from our own class
-    public int my(boolean c)
-    {
-        int i;
-        i = 3;
-
-        while (i < 11) {
-            if ( (i < 6) && (i < 5)) {
-                if (!c) {
-                    System.out.println(123);
-                }
-                else {
-                    System.out.println(321);
-                }
-            }
-            else {
-                System.out.println(456);
-            }
-            i = i + 1;
-        }
-
-        return i;
-    }
-
-}
-<<<<<<< HEAD
-*/
-=======
-
->>>>>>> parent of 4a18511... can read/write fields from our own class
 /*
 class B
 {

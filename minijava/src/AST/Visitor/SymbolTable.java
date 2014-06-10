@@ -11,12 +11,15 @@ class VarInfo
     public SymbolType type;
     public int ln;
     public int seqnum;
-    public int ebpoffset; //set during code gen
+    public int ebpoffset; //set during code gen for locals and formals
+    public int objoffset; //set during code gen for fields
     public VarInfo(int line_number)
     {
         type = new UnknownSymbolType();
         seqnum = -1;
         ln = line_number;
+        ebpoffset = -1;
+        objoffset = -1;
     }
     public VarInfo()
     {

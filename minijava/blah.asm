@@ -33,23 +33,15 @@ push	ebp
 mov	ebp, esp
 ;  Line: 3
 ; Line 3
-<<<<<<< HEAD
 push	ecx
 push	12
-=======
-push	4
->>>>>>> parent of 4a18511... can read/write fields from our own class
 call	_mjmalloc
 add	esp, 4
 pop	ecx
 lea	edx, B$$
 mov	[eax], edx
 mov	ecx, eax
-<<<<<<< HEAD
 mov	eax, 432
-=======
-mov	eax, 0
->>>>>>> parent of 4a18511... can read/write fields from our own class
 push	eax
 push	ecx
 ; Line 3
@@ -67,7 +59,6 @@ _asm_main ENDP	; main
 _TEXT	ENDS
 _TEXT	SEGMENT
 B$my:
-<<<<<<< HEAD
 ;  Line: 11
 push	ebp
 mov	ebp, esp
@@ -98,110 +89,6 @@ call	_put
 add	esp,4
 pop	ecx
 mov	eax, [ebp +12]
-=======
-;  Line: 9
-push	ebp
-mov	ebp, esp
-sub	esp, 4
-;  Line: 12
-mov	eax, 3
-mov	[ebp -4], eax
-;  Line: 14
-L0:
-mov	eax, [ebp -4]
-push	eax
-mov	eax, 11
-mov	edx, eax
-pop	eax
-cmp	eax, edx
-jge	L2
-mov	eax, 1
-jmp	L3
-L2:
-mov	eax, 0
-L3:
-mov	edx, 0
-cmp	eax, edx
-je	L1
-;  Line: 15
-mov	eax, [ebp -4]
-push	eax
-mov	eax, 6
-mov	edx, eax
-pop	eax
-cmp	eax, edx
-jge	L7
-mov	eax, 1
-jmp	L8
-L7:
-mov	eax, 0
-L8:
-mov	edx, 0
-cmp	eax, edx
-mov	eax, 0
-je	L6
-mov	eax, [ebp -4]
-push	eax
-mov	eax, 5
-mov	edx, eax
-pop	eax
-cmp	eax, edx
-jge	L9
-mov	eax, 1
-jmp	L10
-L9:
-mov	eax, 0
-L10:
-L6:
-mov	edx, 0
-cmp	eax, edx
-je	L4
-;  Line: 16
-mov	eax, [ebp +12]
-mov	edx, 0
-cmp	eax, edx
-je	L13
-mov	eax, 0
-jmp	L14
-L13:
-mov	eax, 1
-L14:
-mov	edx, 0
-cmp	eax, edx
-je	L11
-;  Line: 17
-mov	eax, 123
-push	eax
-call	_put
-add	esp,4
-jmp	L12
-L11:
-;  Line: 20
-mov	eax, 321
-push	eax
-call	_put
-add	esp,4
-L12:
-jmp	L5
-L4:
-;  Line: 24
-mov	eax, 456
-push	eax
-call	_put
-add	esp,4
-L5:
-;  Line: 26
-mov	eax, [ebp -4]
-push	eax
-mov	eax, 1
-mov	edx, eax
-pop	eax
-add	eax, edx
-mov	[ebp -4], eax
-jmp	L0
-L1:
-mov	eax, [ebp -4]
->>>>>>> parent of 4a18511... can read/write fields from our own class
 mov	esp, ebp
 pop	ebp
 ret

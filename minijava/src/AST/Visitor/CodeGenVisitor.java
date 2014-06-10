@@ -60,7 +60,6 @@ public class CodeGenVisitor implements Visitor {
 
         return retfi;
     }
-<<<<<<< HEAD
 
     private void setupFieldsOffsets(HashMap <String, FieldInfo> fields)
     {
@@ -71,8 +70,6 @@ public class CodeGenVisitor implements Visitor {
         }
     }
 
-=======
->>>>>>> parent of 4a18511... can read/write fields from our own class
     private void setupFormalsOffsets(HashMap <String, FormalInfo> formals)
     {
         for (Map.Entry<String, FormalInfo> formalentry : formals.entrySet()) {
@@ -91,10 +88,7 @@ public class CodeGenVisitor implements Visitor {
         }
     }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of 4a18511... can read/write fields from our own class
     private void setupSymbolTableSizes()
     {
         // first setup the sizes of the fields within a class
@@ -166,12 +160,9 @@ public class CodeGenVisitor implements Visitor {
             cgh.gen("\t");
             cgh.genCommentLine(" " + classentry.getKey() + " ctor");
 */
-<<<<<<< HEAD
 
             setupFieldsOffsets(cval.fields);
 
-=======
->>>>>>> parent of 4a18511... can read/write fields from our own class
             int vtableoffset = 1; // first 4 bytes are for base class vtable hence starting from 1
             for (Map.Entry<String, MethodInfo> methodentry : cval.methods.entrySet()) {
                 MethodInfo mval = methodentry.getValue();
@@ -467,37 +458,33 @@ public class CodeGenVisitor implements Visitor {
     // Identifier i;
     // Exp e;
     public void visit(Assign n) {
-<<<<<<< HEAD
         boolean isField = false;
-=======
->>>>>>> parent of 4a18511... can read/write fields from our own class
         cgh.genCommentLine(" Line: " + n.i.line_number);
         n.i.accept(this);
 
         VarInfo vi = currMI.lookupLocal(n.i.s);
         if (vi == null) {
             vi = currMI.lookupFormal(n.i.s);
-<<<<<<< HEAD
             if (vi == null) {
                 vi = currCI.lookupField(n.i.s);
                 isField = true;
             }
-=======
->>>>>>> parent of 4a18511... can read/write fields from our own class
         }
 
         n.e.accept(this);
-        if (vi.ebpoffset < 0) {
-            cgh.gen("mov\t[ebp " + vi.ebpoffset +"], eax"); cgh.gen("\r\n");
+        if (isField == false) {
+            if (vi.ebpoffset < 0) {
+                cgh.gen("mov\t[ebp " + vi.ebpoffset + "], eax");
+                cgh.gen("\r\n");
+            } else {
+                cgh.gen("mov\t[ebp +" + vi.ebpoffset + "], eax");
+                cgh.gen("\r\n");
+            }
         }
         else {
-<<<<<<< HEAD
             // this is in ecx
             cgh.gen("mov\t[ecx +" + vi.objoffset + "], eax");
             cgh.gen("\r\n");
-=======
-            cgh.gen("mov\t[ebp +" + vi.ebpoffset +"], eax"); cgh.gen("\r\n");
->>>>>>> parent of 4a18511... can read/write fields from our own class
         }
     }
 
@@ -679,7 +666,6 @@ public class CodeGenVisitor implements Visitor {
 
     // String s;
     public void visit(IdentifierExp n) {
-<<<<<<< HEAD
         boolean isField= false;
         VarInfo vi = currMI.lookupLocal(n.s);
         if (vi == null) {
@@ -703,17 +689,6 @@ public class CodeGenVisitor implements Visitor {
             // this pointer is in ecx
             cgh.gen("mov\teax, [ecx +" + vi.objoffset + "]");
             cgh.gen("\r\n");
-=======
-        VarInfo vi = currMI.lookupLocal(n.s);
-        if (vi == null) {
-            vi = currMI.lookupFormal(n.s);
-        }
-        if (vi.ebpoffset < 0) {
-            cgh.gen("mov\teax, [ebp " + vi.ebpoffset +"]"); cgh.gen("\r\n");
-        }
-        else {
-            cgh.gen("mov\teax, [ebp +" + vi.ebpoffset +"]"); cgh.gen("\r\n");
->>>>>>> parent of 4a18511... can read/write fields from our own class
         }
     }
 
